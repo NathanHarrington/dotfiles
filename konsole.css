@@ -1,0 +1,36 @@
+/* Set this in Konsole->Settings->Configure Konsole-> Tab Bar-> User
+ * defined stylesheet
+ */
+
+/* Originals from
+ * https://docs.kde.org/stable5/en/applications/konsole/tabbarstylsheet.html
+ *
+QTabBar::tab::selected {
+    background: #999999;
+    color: red;
+    min-width: 200px;
+}
+QTabBar::tab {
+    min-width: 100px
+}
+*/
+
+// gray highlighting of selected tab
+QTabBar::tab::selected {
+    background: #484848;
+    color: red;
+    min-width: 200px;
+}
+
+// deselected tabs are black
+QTabBar::tab {
+    background: #000000;
+    color: grey;
+    min-width: 100px
+}
+
+
+// Tab bar is natively black
+QTabBar {
+    background: #000000;
+}
