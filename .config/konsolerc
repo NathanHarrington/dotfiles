@@ -4,13 +4,17 @@ DefaultProfile=greenish.profile
 [Favorite Profiles]
 Favorites=greenish.profile
 
+[KonsoleWindow]
+ShowMenuBarByDefault=false
+
 [MainWindow]
-Height 1080=671
+Height 1080=1024
 MenuBar=Disabled
-State=AAAA/wAAAAD9AAAAAAAAAvMAAAKfAAAABAAAAAQAAAAIAAAACPwAAAAA
+State=AAAA/wAAAAD9AAAAAAAABLMAAAQAAAAABAAAAAQAAAAIAAAACPwAAAAA
 ToolBarsMovable=Disabled
-Width 1920=755
+Width 1920=1203
 
 [TabBar]
 TabBarUseUserStyleSheet=true
 TabBarUserStyleSheetFile=file:///home/nharrington/projects/dotfiles/konsole.qss
+TabBarVisibility=ShowTabBarWhenNeeded
