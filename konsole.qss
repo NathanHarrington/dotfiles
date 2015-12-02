@@ -1,0 +1,19 @@
+/* tab bar active is grayish */
+QTabBar::tab::selected {
+    background: #484848;
+    color: red;
+    min-width: 200px;
+}
+
+/* tab bar inactive is black */
+QTabBar::tab {
+    background: #000000;
+    color: grey;
+    min-width: 100px
+}
+
+
+/* Tab bar is natively black */
+QTabBar {
+    background: #000000;
+}
