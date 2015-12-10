@@ -1,4 +1,33 @@
 " Based heavily on: https://github.com/rmk135/vimrc
+"
+" To install on windows, run the following in a git-bash window 
+" same install procedure for linux:
+"
+" git clone https://github.com/rmk135/vimrc.git ~/vimrc
+"
+" " This is the only deviation from the origin instructions, just use
+" this .vimrc file
+" cp .vimrc ~/.vimrc
+" 
+" mkdir ~/.vim && cp -r ~/vimrc/.vim ~/
+" git clone https://github.com/gmarik/Vundle.vim.git " ~/.vim/bundle/Vundle.vim
+"
+" Run vim, ignore erros
+" vim
+" 
+" Install VIM Plugins (inside VIM)
+" :PluginInstall
+"
+" Restart vim
+"
+" At the start of every vim session, run :NERDTreeTabsToggle twice, and
+" the nerd tree will always be on the right, on every buffer/tab
+"
+"
+"
+"
+"
+"
 " Be iMproved
 set nocompatible
 
