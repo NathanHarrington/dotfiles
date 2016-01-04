@@ -1,18 +1,18 @@
 " Based heavily on: https://github.com/rmk135/vimrc
 "
 " To install on windows, run the following in a git-bash window 
-" same install procedure for linux:
+" same install procedure as for linux:
 "
 " git clone https://github.com/rmk135/vimrc.git ~/vimrc
 "
-" " This is the only deviation from the origin instructions, just use
-" this .vimrc file
+" This is the only deviation from the original instructions, just use
+" the .vimrc file supplied in this dotfiles project.
 " cp .vimrc ~/.vimrc
 " 
 " mkdir ~/.vim && cp -r ~/vimrc/.vim ~/
 " git clone https://github.com/gmarik/Vundle.vim.git " ~/.vim/bundle/Vundle.vim
 "
-" Run vim, ignore erros
+" Run vim, ignore errors
 " vim
 " 
 " Install VIM Plugins (inside VIM)
