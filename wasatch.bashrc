@@ -14,7 +14,8 @@ alias l='ls -la'
 alias vi='vim'
 
 # visual differentiator for core computer
-export PS1="# \W # "
+source $HOME/projects/dotfiles/git-prompt.sh
+export PS1="# \W$(__git_ps1) # "
 
 LOGO_BLOCK="
 ██╗    ██╗ █████╗ ███████╗ █████╗ ████████╗ ██████╗██╗  ██╗             
