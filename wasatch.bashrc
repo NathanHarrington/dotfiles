@@ -14,8 +14,13 @@ alias l='ls -la'
 alias vi='vim'
 
 # visual differentiator for core computer
-source $HOME/projects/dotfiles/git-prompt.sh
-export PS1="# \W$(__git_ps1) # "
+#PS1="# \W # "
+export GITAWAREPROMPT=~/projects/dotfiles/.bash/git-aware-prompt
+source "${GITAWAREPROMPT}/main.sh"
+
+export PS1="\${debian_chroot:+(\$debian_chroot)}\u@\h:\w \[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\]\$ "
+export PS1="# \W \[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\] # "
+
 
 LOGO_BLOCK="
 ██╗    ██╗ █████╗ ███████╗ █████╗ ████████╗ ██████╗██╗  ██╗             
