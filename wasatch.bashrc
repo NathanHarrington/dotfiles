@@ -33,7 +33,8 @@ LOGO_BLOCK="
 ╚═╝     ╚═╝  ╚═╝ ╚═════╝    ╚═╝    ╚═════╝ ╚═╝  ╚═══╝╚═╝ ╚═════╝╚══════╝
 "
 
-LOGO_CURSIVE="WW      WW   AAA    SSSSS    AAA   TTTTTTT  CCCCC  HH   HH            
+LOGO_CURSIVE="
+WW      WW   AAA    SSSSS    AAA   TTTTTTT  CCCCC  HH   HH            
 WW      WW  AAAAA  SS       AAAAA    TTT   CC    C HH   HH            
 WW   W  WW AA   AA  SSSSS  AA   AA   TTT   CC      HHHHHHH            
  WW WWW WW AAAAAAA      SS AAAAAAA   TTT   CC    C HH   HH            
@@ -46,7 +47,8 @@ PP      HH   HH OO   OO   TTT   OO   OO NN  NNN  III  CC    C      SS
 PP      HH   HH  OOOO0    TTT    OOOO0  NN   NN IIIII  CCCCC   SSSSS  
 "
 
-LOGO_BLIMP=" _     _  _______  _______  _______  _______  _______  __   __                
+LOGO_BLIMP="
+ _     _  _______  _______  _______  _______  _______  __   __                
 | | _ | ||   _   ||       ||   _   ||       ||       ||  | |  |               
 | || || ||  |_|  ||  _____||  |_|  ||_     _||       ||  |_|  |               
 |       ||       || |_____ |       |  |   |  |       ||       |               
@@ -93,9 +95,6 @@ lock() {
 # disk because you deleted the file.py file, but the file.pyc file is
 # still there.
 export PYTHONDONTWRITEBYTECODE=1
-
-# added by travis gem
-[ -f /home/nharrington/.travis/travis.sh ] && source /home/nharrington/.travis/travis.sh
 
 # Avoid inadvertent global package installation
 export PIP_REQUIRE_VIRTUALENV=true
