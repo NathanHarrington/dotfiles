@@ -20,12 +20,14 @@
 "
 " Restart vim
 "
+" If you want NERDTreeTabs:
 " At the start of every vim session, run :NERDTreeTabsToggle twice, and
 " the nerd tree will always be on the right, on every buffer/tab
 "
+" NERDTree is disabled by default.
 "
-"
-"
+" On windows, copy the .vim/colors/* to c:\program files\vim73\colors
+" On windows, disable the Jedi lines
 "
 "
 " Be iMproved
@@ -41,8 +43,8 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'                  " let Vundle manage Vundle, required
 
 "-------------------=== Code/Project navigation ===-------------
-Plugin 'scrooloose/nerdtree' 	    	    " Project and file navigation
-Plugin 'jistr/vim-nerdtree-tabs'            " Always display the nerdtree
+"Plugin 'scrooloose/nerdtree' 	    	    " Project and file navigation
+"Plugin 'jistr/vim-nerdtree-tabs'            " Always display the nerdtree
 " Disabled because of ctags error
 "Plugin 'majutsushi/tagbar'          	    " Class/module browser
 Plugin 'kien/ctrlp.vim'                     " Fast transitions on project files
@@ -146,12 +148,12 @@ let g:airline_powerline_fonts=1
 "=====================================================
 "" NERDTree settings
 "=====================================================
-let NERDTreeIgnore=['\.pyc$', '\.pyo$']     " Ignore files in NERDTree
-let NERDTreeWinSize=40
-autocmd VimEnter * NERDTree                 " NERDTree autoload
-autocmd VimEnter * if !argc() | NERDTree | endif
-" Move nerdtree to the right side of the window
-let NERDTreeWinPos="right"
+"let NERDTreeIgnore=['\.pyc$', '\.pyo$']     " Ignore files in NERDTree
+"let NERDTreeWinSize=40
+"autocmd VimEnter * NERDTree                 " NERDTree autoload
+"autocmd VimEnter * if !argc() | NERDTree | endif
+"" Move nerdtree to the right side of the window
+"let NERDTreeWinPos="right"
 
 "=====================================================
 "" SnipMate settings
