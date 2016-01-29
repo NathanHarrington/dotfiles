@@ -257,3 +257,8 @@ nnoremap tn  :tabnext<Space>
 nnoremap tm  :tabm<Space>
 nnoremap td  :tabclose<CR>
 
+
+" check file change every 4 seconds ('CursorHold') and reload the buffer
+" upon detecting change
+set autoread
+au CursorHold * checktime
