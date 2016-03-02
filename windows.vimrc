@@ -7,7 +7,6 @@
 "
 " This is the only deviation from the original instructions, just use
 " the .vimrc file supplied in this dotfiles project.
-" Use the windows.vimrc or the .vimrc for linux
 " cp .vimrc ~/.vimrc
 " 
 " mkdir ~/.vim && cp -r ~/vimrc/.vim ~/
@@ -51,7 +50,8 @@ Plugin 'gmarik/Vundle.vim'                  " let Vundle manage Vundle, required
 Plugin 'kien/ctrlp.vim'                     " Fast transitions on project files
 
 "-------------------=== Other ===-------------------------------
-Plugin 'bling/vim-airline'   	    	    " Lean & mean status/tabline for vim
+"Plugin 'bling/vim-airline'   	    	    " Lean & mean status/tabline for vim
+Plugin 'vim-airline/vim-airline-themes'     " move to github
 Plugin 'Lokaltog/powerline'                 " Powerline fonts plugin
 Plugin 'fisadev/FixedTaskList.vim'  	    " Pending tasks list
 Plugin 'rosenfeld/conque-term'      	    " Consoles as buffers
@@ -70,8 +70,8 @@ Plugin 'mitsuhiko/vim-sparkup'              " Sparkup(XML/jinja/htlm-django/etc.
 Plugin 'Rykka/riv.vim'                      " ReStructuredText plugin
 
 "-------------------=== Python  ===-----------------------------
-Plugin 'klen/python-mode'                   " Python mode (docs, refactor, lints...)
-Plugin 'davidhalter/jedi-vim'               " Jedi-vim autocomplete plugin
+"Plugin 'klen/python-mode'                   " Python mode (docs, refactor, lints...)
+"Plugin 'davidhalter/jedi-vim'               " Jedi-vim autocomplete plugin
 Plugin 'mitsuhiko/vim-jinja'                " Jinja support for vim
 Plugin 'mitsuhiko/vim-python-combined'      " Combined Python 2/3 for Vim
 Plugin 'hynek/vim-python-pep8-indent'       " PEP8 indent
@@ -175,40 +175,40 @@ let g:riv_disable_folding=1
 set completeopt-=preview                    " remove omnicompletion dropdown
 
 " rope
-let g:pymode_rope=0
-let g:pymode_rope_completion=0
-let g:pymode_rope_complete_on_dot=0
-let g:pymode_rope_auto_project=0
-let g:pymode_rope_enable_autoimport=0
-let g:pymode_rope_autoimport_generate=0
-let g:pymode_rope_guess_project=0
-
+"let g:pymode_rope=0
+"let g:pymode_rope_completion=0
+"let g:pymode_rope_complete_on_dot=0
+"let g:pymode_rope_auto_project=0
+"let g:pymode_rope_enable_autoimport=0
+"let g:pymode_rope_autoimport_generate=0
+"let g:pymode_rope_guess_project=0
+"
 " documentation
-let g:pymode_doc=0
-let g:pymode_doc_key='K'
-
+"let g:pymode_doc=0
+"let g:pymode_doc_key='K'
+"
 " lints
-let g:pymode_lint=0
-let g:pymode_lint_checker='flake8,pep257'
-let g:pymode_lint_write=0                   " run lints after file save
-let g:pymode_lint_ignore=''                 " ignore lint errors
-
+"let g:pymode_lint=0
+"let g:pymode_lint_checker='flake8,pep257'
+"let g:pymode_lint_write=0                   " run lints after file save
+"let g:pymode_lint_ignore=''                 " ignore lint errors
+"
 " virtualenv
-let g:pymode_virtualenv=1
-
+"let g:pymode_virtualenv=1
+"
 " breakpoints
-let g:pymode_breakpoint=1
-let g:pymode_breakpoint_key='<leader>b'
-
+"let g:pymode_breakpoint=1
+"let g:pymode_breakpoint_key='<leader>b'
+"
 " syntax highlight
 let python_highlight_all=1
 let python_highlight_exceptions=1
 let python_highlight_builtins=1
 let python_slow_sync=1
-let g:pymode_syntax=1
-let g:pymode_syntax_all=1
-let g:pymode_syntax_indent_errors=g:pymode_syntax_all
-let g:pymode_syntax_space_errors=g:pymode_syntax_all
+"let g:pymode_syntax=1
+"let g:pymode_syntax_all=1
+"let g:pymode_syntax_indent_errors=g:pymode_syntax_all
+"let g:pymode_syntax_space_errors=g:pymode_syntax_all
 
 " highlight 'long' lines (>= 80 symbols) in python files
 augroup vimrc_autocmds
@@ -219,15 +219,15 @@ augroup vimrc_autocmds
 augroup END
 
 " code folding
-let g:pymode_folding=0
+"let g:pymode_folding=0
 
 " code running
-let g:pymode_run=0
+"let g:pymode_run=0
 
 " jedi-vim
-let g:jedi#popup_select_first=0             " Disable choose first option on autocomplete
-let g:jedi#show_call_signatures=0           " Show call signatures
-let g:jedi#popup_on_dot=1                   " Enable autocomplete on dot
+"let g:jedi#popup_select_first=0             " Disable choose first option on autocomplete
+"let g:jedi#show_call_signatures=0           " Show call signatures
+"let g:jedi#popup_on_dot=1                   " Enable autocomplete on dot
 
 " syntastic
 let g:syntastic_always_populate_loc_list=1
