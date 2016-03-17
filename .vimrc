@@ -1,5 +1,22 @@
 " Based heavily on: https://github.com/rmk135/vimrc
 "
+" cp .vimrc ~/.vimrc
+" mkdir ~/.vim
+" git clone https://github.com/gmarik/Vundle.vim.git  ~/.vim/bundle/Vundle.vim
+"
+" Run vim, ignore errors
+" vim
+" 
+" Install VIM Plugins (inside VIM)
+" :PluginInstall
+"
+" Restart vim
+"
+"
+"
+"
+"
+" Pre - 20160316 instructions group:
 " To install on windows, run the following in a git-bash window 
 " same install procedure as for linux:
 "
@@ -133,7 +150,7 @@ set hlsearch	                            " highlight search results
 "=====================================================
 "" AirLine settings
 "=====================================================
-let g:airline_theme='badwolf'
+"let g:airline_theme='badwolf'
 let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#tabline#formatter='unique_tail'
 let g:airline_powerline_fonts=1
