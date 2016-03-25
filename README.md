@@ -5,32 +5,35 @@ environment configuration resources
 # Cinnamon configuration instructions
 Based on FC23 with cinnammon spin:
 
-Goto themes, select esco window borders for blue edges
-Background->Settings -> picture gradient of no picture, change color to
-black. Turn off display of icons on desktop.
+    Goto themes, select esco window borders for blue edges
+    Background->Settings -> picture gradient of no picture, change color to
+    black. Turn off display of icons on desktop.
 
-cp .bashrc ~/
-Run timewaster blocks 
+    Start a terminal, change to green on black color scheme, turn off
+    scrollbar display, no scrollbar buffer. Set menubar to not display by
+    default.
 
-sudo hostnamectl set-hostname u430touch
-sudo systemctl enable sshd
-sudo systemctl start sshd
+    Change time display in bottom right panel applet to be custom format.
+    Add the workspace panel applet
+    Press alt-f1, add 6 more workspaces
 
 
-sudo dnf install git screen
-sudo dnf install parcellite
-sudo dnf install vim autossh
-start parcellite, click synchronize clipboards
+    cp .bashrc ~/
+    Run timewaster blocks 
 
-Run .vimrc top level instructions
+    sudo hostnamectl set-hostname u430touch
+    sudo systemctl enable sshd
+    sudo systemctl start sshd
 
-Start a terminal, change to green on black color scheme, turn off
-scrollbar display, no scrollbar buffer. Set menubar to not display by
-default.
 
-Change time display in bottom right panel applet to be custom format.
-Add the workspace panel applet
-Press alt-f1, add 6 more workspaces
+    sudo dnf install git screen
+    sudo dnf install parcellite
+    sudo dnf install vim autossh
+    
+    start parcellite, click synchronize clipboards
+
+    Run .vimrc top level instructions
+
 
 Copy .gnupg from backup to ~/
 
