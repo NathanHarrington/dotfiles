@@ -18,26 +18,63 @@ Based on FC23 with cinnammon spin:
     Press alt-f1, add 6 more workspaces
 
 
-    cp .bashrc ~/
-    Run timewaster blocks 
+    sudo dnf -y install git autossh screen
+    git clone https://github.com/NathanHarrington/dotfiles
 
-    sudo hostnamectl set-hostname u430touch
+    cd dotfiles
+    sudo ./timewaster-blocks.sh
+
+    cp .bashrc ~/
     sudo systemctl enable sshd
     sudo systemctl start sshd
-
-
-    sudo dnf install git screen
-    sudo dnf install parcellite
-    sudo dnf install vim autossh
     
-    start parcellite, click synchronize clipboards
+    sudo dnf -y install parcellite vim 
+    
+    start parcellite, check "Use Copy" and "Use Primary", thne click synchronize clipboards
+
+    Right click icons on taskbar, remove.
+    Right click the word menu, remove the text, change to custom icon.
 
     Run .vimrc top level instructions
+
+
+Lenovo U430-touch specifics:
+    sudo hostnamectl set-hostname u430touch
+
+MacBook Pro 
+    sudo hostnamectl set-hostname mbp-fc23
+    sudo dnf -y update
+    sudo dnf install -y 
+    
+    Install rpm fusion libraries as described here:
+        http://rpmfusion.org/Configuration/
+    
+    Use the onpub.com broadcom installation script described here:
+        https://onpub.com/install-broadcom-linux-wi-fi-driver-on-fedora-23-s7-a192
+
+    This will lead to "almost works" status with the built-in broadcom
+    chipset. Alternatives include wired access and external dongles.
+    Unfortunately there are also various standby issues at this time, so
+    inhibiting the macbook pro experiment.
+
+
+Integrate the shared drive where appropriate:
+
+    sudo mkdir -p /mnt/cifs_share/share_data
+    sudo mount --verbose -t cifs -o uid=1000 \
+        //192.168.1.250/was-share1 /mnt/cifs_share/share_data/
+
+    (press enter for no password)
+
+    mkdir /home/nharrington/wasatch
+    ln -s /mnt/cifs_share/share_data /home/nharrington/wasatch
+
 
 
 Copy .gnupg from backup to ~/
 
 Install ublock origin for firefox
+Install disable ctrl-q exit plugin for firefox
 Install Dropbox, spideroak
 
 Login to spideroak, dropbox, reboot make sure the services start at

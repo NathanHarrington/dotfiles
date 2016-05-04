@@ -32,6 +32,7 @@ export PS1="\u@\h \W\[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\] "
 # still there.
 export PYTHONDONTWRITEBYTECODE=1
 
-# Avoid inadvertent global package installation
-export PIP_REQUIRE_VIRTUALENV=true
+# Avoid inadvertent global package installation - this is good for older
+# style virtual-env integrations, but will break conda
+#export PIP_REQUIRE_VIRTUALENV=true
 

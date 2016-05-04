@@ -19,7 +19,7 @@ export GITAWAREPROMPT=~/projects/dotfiles/.bash/git-aware-prompt
 source "${GITAWAREPROMPT}/main.sh"
 
 export PS1="\${debian_chroot:+(\$debian_chroot)}\u@\h:\w \[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\]\$ "
-export PS1="# \W \[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\] # "
+export PS1="# \h \W \[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\] # "
 
 
 LOGO_BLOCK="
@@ -101,6 +101,7 @@ lock() {
 # still there.
 export PYTHONDONTWRITEBYTECODE=1
 
-# Avoid inadvertent global package installation
-export PIP_REQUIRE_VIRTUALENV=true
+# Avoid inadvertent global package installation - this is good for older
+# style virtual-env integrations, but will break conda
+#export PIP_REQUIRE_VIRTUALENV=true
 
