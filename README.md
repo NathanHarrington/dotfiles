@@ -5,24 +5,55 @@ environment configuration resources
 # Cinnamon configuration instructions
 Based on FC23 with cinnammon spin:
 
-    Goto themes, select esco window borders for blue edges
-    Background->Settings -> picture gradient of no picture, change color to
+    sudo dnf -y update
+
+    (about 20 minutes later...)
+
+    After the dnf update, go to Themes, download the themes:
+        Ambience Crunchy (OS-Crunchy-green), Faince+
+        Choose esco window borders
+        Choose OS-Crunhcy-green controls
+        Choose Desktop Faince+
+        This approach gives you full borders around entire command line
+        windows to highlight current focus. Green controls in certain
+        areas, and a dark taskbar.
+
+    Backgrounds->Settings->Picture aspect of no picture, change color to
     black. Turn off display of icons on desktop.
 
     Start a terminal, change to green on black color scheme, turn off
     scrollbar display, no scrollbar buffer. Set menubar to not display by
     default.
 
-    Change time display in bottom right panel applet to be custom format.
-    Add the workspace panel applet
-    Press alt-f1, add 6 more workspaces
+    Enter panel edit mode, move the "All windows" applet so the clock is
+    in the bottom right.
 
+    Change time display in bottom right panel applet to be custom format:
+        %Y-%m-%d %H:%M:%S
+
+    Add the workspace switcher panel applet, press alt-f1, create a
+        total of 7 workspaces.
+
+    Keyboard->Shortcuts->Workspaces->Direct Navigation:
+        Add alt+N for direct to workspace N
+   
+    Open the applets application, go online and install the network
+    applet:
+        Network usage monitor with alerts.
+        Configure to show combined up/down, select appropriate
+        interface.
+
+    Right click icons on taskbar, remove.
+    Right click the word menu, remove the text, change to custom icon.
 
     sudo dnf -y install git autossh screen
     git clone https://github.com/NathanHarrington/dotfiles
 
-    cd dotfiles
-    sudo ./timewaster-blocks.sh
+    # Enable the timewaster blocks crontab entry:
+    sudo su -
+    crontab -e
+    59 * * * * /home/nharrington/projects/dotfiles/hosts_block.sh
+
 
     cp .bashrc ~/
     sudo systemctl enable sshd
@@ -30,10 +61,7 @@ Based on FC23 with cinnammon spin:
     
     sudo dnf -y install parcellite vim 
     
-    start parcellite, check "Use Copy" and "Use Primary", thne click synchronize clipboards
-
-    Right click icons on taskbar, remove.
-    Right click the word menu, remove the text, change to custom icon.
+    start parcellite, check "Use Copy" and "Use Primary", then click synchronize clipboards
 
     Run .vimrc top level instructions
 
