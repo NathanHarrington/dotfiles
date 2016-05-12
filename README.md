@@ -103,7 +103,9 @@ Copy .gnupg from backup to ~/
 
 Install ublock origin for firefox
 Install disable ctrl-q exit plugin for firefox
-Install Dropbox, spideroak
+Install Dropbox rpm from their website
+Install spideroak rpm from their website
+Install nomachine rpm from their website
 
 Login to spideroak, dropbox, reboot make sure the services start at
 login.
@@ -121,9 +123,25 @@ on a per-system basis.
 TODO:
 setup autossh tunneling service at system login
     tested setups monitored outside of channels
+    autossh -M 28767 -o port=<public port> -L 8190:<internal network ip>:22
+        username@public facing ip
+
+    Lets say you forget and leave your computer at a network location
+    without port forwarding. The autossh command will survive standby's
+    power cycles, unlocks, etc. It connects a tunnel from the laptop to
+    the shared server (cloud droplet). You then connect to the cloud
+    droplet from a different computer, then tunnel the connection back
+    through the ssh connections like:
+
+    laptop->server (public port) -R 9000:localhost:22
+    other->server (public port) -L 9022:localhost:9000
+    other ssh -L 9022 localhost
+        (which forwards to port 9000 on server, which goes to port 22 on
+        laptop)
+    Then from there it's all derivates of vnc/nx port forwarding.
+
 
 store all of these settings in dotfiles repositories to make environment
     more portable
 
 digital imagery export from cloud hosting providers for long term backup
-set timewaster blocks to auto start, iptables save
