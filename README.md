@@ -8,22 +8,35 @@ Based on FC23 with cinnammon spin:
     sudo dnf -y update
 
     (about 20 minutes later...)
+    
+    (system specific integrations here - scroll down)
 
-    After the dnf update, go to Themes, download the themes:
+    sudo dnf -y install git autossh screen
+    git clone https://github.com/NathanHarrington/dotfiles
+
+    # Enable the timewaster blocks crontab entry:
+    crontab -e
+    59 * * * * /home/nharrington/projects/dotfiles/hosts_block.sh
+
+    Go to Themes, download the themes:
         Ambience Crunchy (OS-Crunchy-green), Faince+
         Choose esco window borders
         Choose OS-Crunhcy-green controls
         Choose Desktop Faince+
         This approach gives you full borders around entire command line
         windows to highlight current focus. Green controls in certain
-        areas, and a dark taskbar.
+        areas, and a dark taskbar. That's the goal at least. apparently
+        these results are different for different installs. As of
+        2016-05-13 06:53 a decent option appears to be window borders
+        from ubuntu-xenial Xenus, gnome icons, adwaita controls, adwaita
+        mouse pointer and Faience+ desktop.
 
     Backgrounds->Settings->Picture aspect of no picture, change color to
     black. Turn off display of icons on desktop.
 
     Start a terminal, change to green on black color scheme, turn off
-    scrollbar display, no scrollbar buffer. Set menubar to not display by
-    default.
+    scrollbar display, no scrollbar buffer size limit. Set menubar to
+    not display by default.
 
     Enter panel edit mode, move the "All windows" applet so the clock is
     in the bottom right.
@@ -36,7 +49,9 @@ Based on FC23 with cinnammon spin:
 
     Keyboard->Shortcuts->Workspaces->Direct Navigation:
         Add alt+N for direct to workspace N
-   
+  
+    Windows->Behavior->Location of newly opened windows to Automatic
+
     Open the applets application, go online and install the network
     applet:
         Network usage monitor with alerts.
@@ -46,15 +61,8 @@ Based on FC23 with cinnammon spin:
     Right click icons on taskbar, remove.
     Right click the word menu, remove the text, change to custom icon.
 
-    sudo dnf -y install git autossh screen
-    git clone https://github.com/NathanHarrington/dotfiles
 
-    # Enable the timewaster blocks crontab entry:
-    sudo su -
-    crontab -e
-    59 * * * * /home/nharrington/projects/dotfiles/hosts_block.sh
-
-
+    (in dotfiles)
     cp .bashrc ~/
     sudo systemctl enable sshd
     sudo systemctl start sshd
@@ -68,6 +76,20 @@ Based on FC23 with cinnammon spin:
 
 Lenovo U430-touch specifics:
     sudo hostnamectl set-hostname u430touch
+
+Asus Zenbook UX305C specifics:
+    As of 2016-05-12 16:44 touchpad will not work out of the box:
+
+    FC23 Live Cinnamon change boot in grub, append
+    i915.preliminary_hw_support=1
+
+    After running dnf -y update above, reboot
+    Add the most recent mainline kernel as described here:
+    https://fedoraproject.org/wiki/Kernel_Vanilla_Repositories
+
+    Reboot, verify that secure boot is disabled in the bios
+
+    In keyboard shortcuts, set brightness up/down to windows+F5/F6
 
 MacBook Pro 
     sudo hostnamectl set-hostname mbp-fc23
@@ -138,7 +160,7 @@ setup autossh tunneling service at system login
     other ssh -L 9022 localhost
         (which forwards to port 9000 on server, which goes to port 22 on
         laptop)
-    Then from there it's all derivates of vnc/nx port forwarding.
+    Then from there it's all derivatives of vnc/nx port forwarding.
 
 
 store all of these settings in dotfiles repositories to make environment
