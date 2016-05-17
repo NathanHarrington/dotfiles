@@ -73,6 +73,9 @@ Based on FC23 with cinnammon spin:
 
     Run .vimrc top level instructions
 
+    # Basic development environment
+    sudo dnf -y make automake gcc gcc-c++ kernel-devel
+
 
 Lenovo U430-touch specifics:
     sudo hostnamectl set-hostname u430touch
