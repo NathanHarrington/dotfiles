@@ -132,23 +132,6 @@ Copy .gnupg from backup to ~/
 
 Install ublock origin for firefox
 Install disable ctrl-q exit plugin for firefox
-Install Dropbox rpm from their website
-Install spideroak rpm from their website
-Install nomachine rpm from their website
-
-Login to spideroak, dropbox, reboot make sure the services start at
-login.
-
-Modify the encrypt_to_cloud.sh script to make a gpg encrypted tar file,
-upload every hour. This is the 'warm' backup of anything on the disk
-that is absolutely critical. Add entry to crontab like:
-# Every hour sync with dropbox
-38 * * * * $HOME/Documents/encryption/encrypt_to_cloud.sh
-
-This is to create a series of easier to manage tar files that are stored
-on a per-system basis.
-
-Old backups above, new backups below:
 
 # This is for your current critical backups use case: Primarily text
 # files with log entries and sensitive information. The occaisional pdf.
@@ -159,25 +142,33 @@ Old backups above, new backups below:
 #
 # The hourly and weekly scripts expect a configured set of rclone
 # drives. The idea is to back up everything to multiple cloud locations
-# that are fee. This is ugly, unglamorous and completely necessary to
+# that are free. This is ugly, unglamorous and completely necessary to
 # ensure backups succeed in spite of you.
 
 Download and install rclone according to:
 http://rclone.org/install/
 
-After the .gnupg backup as described above, and with a fully verified
-key management and recovery system:
+After the .gnupg copy as described above, and with a fully verified key
+management and recovery system:
 
 # Anything you put in the folder below will be auto-backed up to the
 # cloud, with encryption
 mkdir ~/Documents/auto_backup/
 
-Add the following hourly backups to crontab:
-10 * * * * $HOME/projects/dotfiles/backup_scripts/encrypt_directory.sh
-40 * * * * $HOME/projects/dotfiles/backup_scripts/hourly.sh
+Add the following to crontab -e:
 
-Add the following weekly entries to crontab
-40 * * * * $HOME/projects/dotfiles/backup_scripts/weekly.sh
+# Create the encrypted tar file of the auto backup directory at 40
+# minutes past the hour.
+40 * * * * $HOME/projects/dotfiles/backup_scripts/encrypt_directory.sh
+#
+# Copy the gpg file about 30 minutes after it has had time to be created
+10 * * * * $HOME/projects/dotfiles/backup_scripts/hourly
+# 
+# Make a daily copy every day at 02:20 am
+20 2 * * * $HOME/projects/dotfiles/backup_scripts/daily
+#
+# Make a weekly copy on friday at 02:30 am
+30 2 * * 5 $HOME/projects/dotfiles/backup_scripts/weekly
 
 
 

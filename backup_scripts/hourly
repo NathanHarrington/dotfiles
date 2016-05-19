@@ -30,7 +30,7 @@
 #
 
 # rclone remote names
-declare -a dest=("wpdropbox" "wpgdrive")
+declare -a dest=("wpdropbox" "wpgdrive" "wpbackblaze" "wponedrive")
 
 RCLONE=/usr/sbin/rclone
 
@@ -51,6 +51,15 @@ fi
 
 for DST_TYPE in "${dest[@]}"
 do
+
+    # Prepend the bucket name for backblaze b2
+    if [ "$DST_TYPE" == "wpbackblaze" ]; then
+        echo "Back blaze bucket prepend"
+        LOCATION="autobackupbucket${LOCATION}"
+        echo "To: $LOCATION"
+    fi
+
+
     echo "$RCLONE sync $SRC_FILENAME $DST_TYPE:$LOCATION"
     $RCLONE sync $SRC_FILENAME "$DST_TYPE:$LOCATION"
 done

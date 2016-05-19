@@ -11,6 +11,9 @@
 # hour on the local system. See other crontab entries for
 # synchronization to external backup systems of just the gpg file.
 #
+# Create the new encrypted backup every hour
+# 40 * * * * $HOME/projects/dotfiles/backup_scripts/encrypt_directory.sh
+#
 TMP_DIRECTORY=/home/nharrington/Documents
 SRC_DIRECTORY=/home/nharrington/Documents/auto_backup
 DEST_DIRECTORY=/home/nharrington/Documents/working_encrypted
