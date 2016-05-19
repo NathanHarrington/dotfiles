@@ -11,6 +11,7 @@ Based on FC23 with cinnammon spin:
     
     (system specific integrations here - scroll down)
 
+
     sudo dnf -y install git autossh screen
     git clone https://github.com/NathanHarrington/dotfiles
 
@@ -81,18 +82,21 @@ Lenovo U430-touch specifics:
     sudo hostnamectl set-hostname u430touch
 
 Asus Zenbook UX305C specifics:
+    sudo hostnamectl set-hostname zenbook
+
     As of 2016-05-12 16:44 touchpad will not work out of the box:
 
-    FC23 Live Cinnamon change boot in grub, append
+    FC23 Live Cinnamon change boot in grub of usb disk, append
     i915.preliminary_hw_support=1
 
-    After running dnf -y update above, reboot
+    After installing, and running dnf -y update above, reboot
     Add the most recent mainline kernel as described here:
     https://fedoraproject.org/wiki/Kernel_Vanilla_Repositories
 
     Reboot, verify that secure boot is disabled in the bios
 
     In keyboard shortcuts, set brightness up/down to windows+F5/F6
+
 
 MacBook Pro 
     sudo hostnamectl set-hostname mbp-fc23
@@ -143,6 +147,39 @@ that is absolutely critical. Add entry to crontab like:
 
 This is to create a series of easier to manage tar files that are stored
 on a per-system basis.
+
+Old backups above, new backups below:
+
+# This is for your current critical backups use case: Primarily text
+# files with log entries and sensitive information. The occaisional pdf.
+# Pictures of the kids, work products and task management are all done in
+# the cloud. This is the core data that you never want to lose, and is
+# usually about 1MB of new data per year. This strategy provides an
+# hourly backup of any and all files placed in a directory using rclone.
+#
+# The hourly and weekly scripts expect a configured set of rclone
+# drives. The idea is to back up everything to multiple cloud locations
+# that are fee. This is ugly, unglamorous and completely necessary to
+# ensure backups succeed in spite of you.
+
+Download and install rclone according to:
+http://rclone.org/install/
+
+After the .gnupg backup as described above, and with a fully verified
+key management and recovery system:
+
+# Anything you put in the folder below will be auto-backed up to the
+# cloud, with encryption
+mkdir ~/Documents/auto_backup/
+
+Add the following hourly backups to crontab:
+10 * * * * $HOME/projects/dotfiles/backup_scripts/encrypt_directory.sh
+40 * * * * $HOME/projects/dotfiles/backup_scripts/hourly.sh
+
+Add the following weekly entries to crontab
+40 * * * * $HOME/projects/dotfiles/backup_scripts/weekly.sh
+
+
 
 
 TODO:
