@@ -40,23 +40,24 @@ TAR_GPG_FILENAME="${HOSTNAME}_encrypted.tar.gpg"
 SRC_FILENAME="$HOME/Documents/working_encrypted/$TAR_GPG_FILENAME"
 
 SCRIPT_NAME=`basename "$0"`
-LOCATION="/auto_backup/${SCRIPT_NAME}"
 
-# Only change the location name to include the timestamp if it's daily
-# or weekly.
-if [ "$SCRIPT_NAME" != "hourly" ]; then
-    TIMESTAMP=`date`
-    LOCATION="/auto_backup/${SCRIPT_NAME}/${TIMESTAMP}"
-fi
+echo "PLAIN SCRIPT TEST"
 
 for DST_TYPE in "${dest[@]}"
 do
+    LOCATION="/auto_backup/${SCRIPT_NAME}"
+
+    # Only change the location name to include the timestamp if it's
+    # daily or weekly.
+    if [ "$SCRIPT_NAME" != "hourly" ]; then
+        TIMESTAMP=`date`
+        LOCATION="/auto_backup/${SCRIPT_NAME}/${TIMESTAMP}"
+    fi
 
     # Prepend the bucket name for backblaze b2
     if [ "$DST_TYPE" == "wpbackblaze" ]; then
         echo "Back blaze bucket prepend"
         LOCATION="autobackupbucket${LOCATION}"
-        echo "To: $LOCATION"
     fi
 
     NEW_FILE=$DST_TYPE:$LOCATION/$TAR_GPG_FILENAME
