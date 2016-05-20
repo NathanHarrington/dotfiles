@@ -30,11 +30,7 @@
 #
 
 # rclone remote names
-declare -a dest=("wpdropbox")
-declare -a dest=("wpbackblaze")
-declare -a dest=("wponedrive")
 declare -a dest=("wpdropbox" "wpgdrive" "wpbackblaze" "wponedrive")
-declare -a dest=("wpgdrive")
 
 RCLONE=/usr/sbin/rclone
 
