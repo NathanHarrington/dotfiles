@@ -3,6 +3,14 @@
 # Run rclone to synchronize to the various list of manually configured
 # drives. This expects the following configuration:
 #
+# This is for your current critical backups use case: Primarily text
+# files with log entries and sensitive information. The occaisional pdf.
+# More data intensive operations such as pictures of the kids, work
+# products and task management are all done elsewhere. This is the
+# core data that you never want to lose, and is  usually about 1MB of
+# new data per year. This strategy provides an  hourly backup of any and
+# all files placed in a directory using rclone. 
+#
 # StorageService:/auto_backup/time_frame/
 #
 # Where StorageService is google drive, dropbox, back blaze b2, etc.
@@ -19,23 +27,12 @@
 # timestamp so you don't have to rely on dropbox's 50 or so version
 # history.
 #
-# Hourly mode was created for synchronization with GUI clients like
-# dropbox and spideroak. Ultimately you may want to go with a system
-# like: https://raymii.org/s/articles/Set_up_your_own_truly_secure_\
-# encrypted_shared_storage_aka_Dropbox_clone.html  For right now this
-# system is designed to store tiny amounts of data, redundantly, for
-# free. One of the main goals is to remove your configuration and data
-# maintenance skills from the backup equation. Don't run your own VPS,
-# don't setup an encrypted filesystem. Use full-system encryption in
-# fedora, and these gpg cloud backups.
-#
 # Well that anacron description above was supposed to be what you wanted
-# to work, but you cannot figure teh anacron config. Just go nuclear for
+# to work, but you cannot figure the anacron config. Just go nuclear for
 # now and do all the backups every 1 hour while the system is on. Then
 # you'll have to go back in manually and delete files to save space, but
 # it should take about every year or so before that becomes an issue. So
 # that's back to crontab entries like:
-# Run daily script every hour to ensure new file in timestamp directory
 #
 #SCRIPTS=/home/nharrington/projects/dotfiles/backup_scripts
 #13 * * * * $SCRIPTS/encrypt_directory.sh >>$SCRIPTS/backup.log 2>&1

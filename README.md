@@ -133,46 +133,22 @@ Copy .gnupg from backup to ~/
 Install ublock origin for firefox
 Install disable ctrl-q exit plugin for firefox
 
-# This is for your current critical backups use case: Primarily text
-# files with log entries and sensitive information. The occaisional pdf.
-# More data intensive operations such as pictures of the kids, work
-# products and task management are all done elsewhere. This is the
-# core data that you never want to lose, and is  usually about 1MB of
-# new data per year. This strategy provides an  hourly backup of any and
-# all files placed in a directory using rclone. 
-#
-# The hourly and weekly scripts expect a configured set of rclone
-# drives. The idea is to back up everything to multiple cloud locations
-# that are free. This is ugly, unglamorous and completely necessary to
-# ensure backups succeed in spite of you.
+### Setup the nuclear backup option:
 
-Download and install rclone according to:
-http://rclone.org/install/
+    Download and install rclone according to: http://rclone.org/install/
 
-After the .gnupg copy as described above, and with a fully verified key
-management and recovery system:
+    After the .gnupg copy as described above, and with a fully verified key
+    management and recovery system:
 
-# Anything you put in the folder below will be auto-backed up to the
-# cloud, with encryption
-mkdir ~/Documents/auto_backup/
-
-Add the following to crontab -e:
-
-# Create the encrypted tar file of the auto backup directory at 40
-# minutes past the hour.
-40 * * * * $HOME/projects/dotfiles/backup_scripts/encrypt_directory.sh
-#
-# Copy the gpg file about 30 minutes after it has had time to be created
-10 * * * * $HOME/projects/dotfiles/backup_scripts/hourly
-# 
-# Run the daily copy every hour to ensure it is backed up on frequently
-# network inaccesible machines like laptops.
-20 * * * * $HOME/projects/dotfiles/backup_scripts/daily
-#
-# Make a weekly copy check every hour as well
-30 * * * * $HOME/projects/dotfiles/backup_scripts/weekly
-
-
+    # Anything you put in the folder below will be auto-backed up to the
+    # cloud, with encryption
+    mkdir ~/Documents/auto_backup/
+    
+    Add the following to crontab -e:
+    
+    SCRIPTS=/home/nharrington/projects/dotfiles/backup_scripts
+    13 * * * * $SCRIPTS/encrypt_directory.sh >>$SCRIPTS/backup.log 2>&1
+    14 * * * * $SCRIPTS/daily >>$SCRIPTS/backup.log 2>&1
 
 
 TODO:
