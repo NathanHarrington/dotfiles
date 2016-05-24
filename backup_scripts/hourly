@@ -14,23 +14,28 @@
 # ln -s hourly daily
 # ln -s hourly 
 #
-# Then in crontab, run the weekly script every week, where it is smart
-# enough to create a folder with a timestamp, and put the "hourly"
-# folder in that directory. This is so you don't have to rely on
-# dropbox's 50 or so versions.
+#
+# The in crontab, run each of them every hour. When in 'daily' mode, it
+# will check the timestamp on a synchronization file. If it is more than
+# a day old, it will perform the synchronization. This is to ensure you
+# get at least one backup if your system is on for at least one hour
+# during a 24 hour period. The script will create a folder with a
+# timestamp, and put the "hourly" folder in that directory. This is so
+# you don't have to rely on dropbox's 50 or so version histories.
 #
 # Copy the gpg file about 30 minutes after it has had time to be created
 # 10 * * * * $HOME/projects/dotfiles/backup_scripts/hourly
 # 
-# Make a daily copy every day at 02:20 am
-# 20 2 * * * $HOME/projects/dotfiles/backup_scripts/daily
+# Run the daily copy every hour to ensure it is backed up on frequently
+# network inaccesible machines like laptops.
+# 20 * * * * $HOME/projects/dotfiles/backup_scripts/daily
 #
-# Make a weekly copy on friday at 02:30 am
-# 30 2 * * 5 $HOME/projects/dotfiles/backup_scripts/weekly
-#
+# Make a weekly copy check every hour as well
+# 30 * * * * $HOME/projects/dotfiles/backup_scripts/weekly
 
 # rclone remote names
 declare -a dest=("wpdropbox" "wpgdrive" "wpbackblaze" "wponedrive")
+declare -a dest=("wpdropbox")
 
 RCLONE=/usr/sbin/rclone
 
@@ -38,10 +43,12 @@ HOSTNAME=$(hostname)
 TAR_GPG_FILENAME="${HOSTNAME}_encrypted.tar.gpg"
 
 SRC_FILENAME="$HOME/Documents/working_encrypted/$TAR_GPG_FILENAME"
+DAILY_RUN="$HOME/Documents/working_encrypted/daily_run"
+WEEKLY_RUN="$HOME/Documents/working_encrypted/weekly_run"
+
 
 SCRIPT_NAME=`basename "$0"`
 
-echo "PLAIN SCRIPT TEST"
 
 for DST_TYPE in "${dest[@]}"
 do
@@ -54,14 +61,43 @@ do
         LOCATION="/auto_backup/${SCRIPT_NAME}/${TIMESTAMP}"
     fi
 
+    OK_TO_SYNC=True
+
+    # If not hourly, check that synchronization timestamp is older than
+    # the interval
+    if [ "$SCRIPT_NAME" == "daily" ]; then
+
+        if test `find "$DAILY_RUN" -mmin +1440`; then
+            echo "Daily old enough"
+        else
+            OK_TO_SYNC=False
+        fi
+
+    fi # check daily run history
+
+    if [ "$SCRIPT_NAME" == "weekly" ]; then
+
+        if test `find "$WEEKLY_RUN" -mmin +1440`; then
+            echo "Weekly old enough"
+        else
+            OK_TO_SYNC=False
+        fi
+    fi # Check weekly run history
+
+
     # Prepend the bucket name for backblaze b2
     if [ "$DST_TYPE" == "wpbackblaze" ]; then
         echo "Back blaze bucket prepend"
         LOCATION="autobackupbucket${LOCATION}"
     fi
 
-    NEW_FILE=$DST_TYPE:$LOCATION/$TAR_GPG_FILENAME
-    echo "$RCLONE sync $SRC_FILENAME $NEW_FILE"
-    $RCLONE sync $SRC_FILENAME "$NEW_FILE"
+    if [ OK_TO_SYNC ]; then
+        # Perform actual synchronization with rclone
+        #NEW_FILE=$DST_TYPE:$LOCATION/$TAR_GPG_FILENAME
+        #echo "$RCLONE sync $SRC_FILENAME $NEW_FILE"
+        #$RCLONE sync $SRC_FILENAME "$NEW_FILE"
+        echo "inhibit sync to: $DST_TYPE"
+    fi
+
 done
 

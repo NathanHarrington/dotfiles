@@ -135,10 +135,11 @@ Install disable ctrl-q exit plugin for firefox
 
 # This is for your current critical backups use case: Primarily text
 # files with log entries and sensitive information. The occaisional pdf.
-# Pictures of the kids, work products and task management are all done in
-# the cloud. This is the core data that you never want to lose, and is
-# usually about 1MB of new data per year. This strategy provides an
-# hourly backup of any and all files placed in a directory using rclone.
+# More data intensive operations such as pictures of the kids, work
+# products and task management are all done elsewhere. This is the
+# core data that you never want to lose, and is  usually about 1MB of
+# new data per year. This strategy provides an  hourly backup of any and
+# all files placed in a directory using rclone. 
 #
 # The hourly and weekly scripts expect a configured set of rclone
 # drives. The idea is to back up everything to multiple cloud locations
@@ -164,11 +165,12 @@ Add the following to crontab -e:
 # Copy the gpg file about 30 minutes after it has had time to be created
 10 * * * * $HOME/projects/dotfiles/backup_scripts/hourly
 # 
-# Make a daily copy every day at 02:20 am
-20 2 * * * $HOME/projects/dotfiles/backup_scripts/daily
+# Run the daily copy every hour to ensure it is backed up on frequently
+# network inaccesible machines like laptops.
+20 * * * * $HOME/projects/dotfiles/backup_scripts/daily
 #
-# Make a weekly copy on friday at 02:30 am
-30 2 * * 5 $HOME/projects/dotfiles/backup_scripts/weekly
+# Make a weekly copy check every hour as well
+30 * * * * $HOME/projects/dotfiles/backup_scripts/weekly
 
 
 
