@@ -72,10 +72,18 @@ Based on FC23 with cinnammon spin:
     
     start parcellite, check "Use Copy" and "Use Primary", then click synchronize clipboards
 
-    Run .vimrc top level instructions
 
     # Basic development environment
     sudo dnf -y make automake gcc gcc-c++ kernel-devel
+
+    # Pre-20160525 vim instructions are in wasatch.vimrc
+    You probably don't want those. You want:
+    https://github.com/amix/vimrc
+
+    Then copy the custom config:
+    cp nharrington_vim_config ~/.vim_runtime/my_configs.vim
+
+
 
 
 Lenovo U430-touch specifics:

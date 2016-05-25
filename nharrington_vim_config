@@ -1,0 +1,10 @@
+" nharrington specify keymappings and settings for vim. Designed to work
+" with https://github.com/amix/vimrc 
+"
+" Print an ISO timestamp
+nnoremap <F5> m'A<C-R>="".strftime('%Y-%m-%d %H:%M')<CR>
+map! <F5> <C-R>="".strftime('%Y-%m-%d %H:%M')<CR>
+
+" More margin for better flow
+set tw=72
+set ignorecase
