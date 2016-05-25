@@ -84,6 +84,16 @@ Based on FC23 with cinnammon spin:
     cp nharrington_vim_config ~/.vim_runtime/my_configs.vim
 
 
+    To connect with other systems from this new system:
+    ssh-keygen 
+    (accept defaults)
+    cat ~/.ssh/id_rsa.pub | \
+        ssh (other system) "cat >> ~/.ssh/authorized_keys"
+
+    chmod 0700 ~/.ssh
+    chmod 0600 ~/.ssh/{authorized_keys,id_rsa}
+
+    ssh (other system)
 
 
 Lenovo U430-touch specifics:
