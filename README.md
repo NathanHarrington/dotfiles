@@ -65,6 +65,10 @@ Based on FC23 with cinnammon spin:
 
     (in dotfiles)
     cp .bashrc ~/
+    
+    git config --global core.editor "vim"
+    git config --global credential.helper "cache --timeout=360000"
+
     sudo systemctl enable sshd
     sudo systemctl start sshd
     
