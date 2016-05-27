@@ -62,6 +62,8 @@ Based on FC23 with cinnammon spin:
     Right click icons on taskbar, remove.
     Right click the word menu, remove the text, change to custom icon.
 
+    Go to accessibility, make sure "Enable Zoom" is on. Make sure mouse
+    wheel modifier is disabled - use keyboard shortcut instead.
 
     (in dotfiles)
     cp .bashrc ~/
