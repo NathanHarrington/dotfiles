@@ -35,12 +35,14 @@
 # that's back to crontab entries like:
 #
 #SCRIPTS=/home/nharrington/projects/dotfiles/backup_scripts
+#export BACKUP_PREFIX=wp  (change this to the correct prefix! )
 #13 * * * * $SCRIPTS/encrypt_directory.sh >>$SCRIPTS/backup.log 2>&1
 #14 * * * * $SCRIPTS/daily >>$SCRIPTS/backup.log 2>&1
 
 
 # rclone remote names
-declare -a dest=("nhdropbox" "nhgdrive" "nhbackblaze" "nhonedrive")
+declare -a dest=("${BACKUP_PREFIX}dropbox" "${BACKUP_PREFIX}gdrive"
+"${BACKUP_PREFIX}backblaze" "${BACKUP_PREFIX}onedrive")
 
 RCLONE=/usr/sbin/rclone
 
@@ -64,9 +66,9 @@ do
     fi
 
     # Prepend the bucket name for backblaze b2
-    if [ "$DST_TYPE" == "nhbackblaze" ]; then
+    if [ "$DST_TYPE" == "${BACKUP_PREFIX}backblaze" ]; then
         echo "Back blaze bucket prepend"
-        LOCATION="nhautobackupbucket${LOCATION}"
+        LOCATION="${BACKUP_PREFIX}autobackupbucket${LOCATION}"
     fi
 
     # Perform the actual synchronization with rclone
