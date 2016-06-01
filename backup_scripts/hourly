@@ -8,31 +8,20 @@
 # More data intensive operations such as pictures of the kids, work
 # products and task management are all done elsewhere. This is the
 # core data that you never want to lose, and is  usually about 1MB of
-# new data per year. This strategy provides an  hourly backup of any and
+# new data per year. This strategy provides an hourly backup of any and
 # all files placed in a directory using rclone. 
 #
-# StorageService:/auto_backup/time_frame/
+# StorageService:/(Backup_prefix)auto_backup/time_frame/
 #
 # Where StorageService is google drive, dropbox, back blaze b2, etc.
 # auto_backup is a directory in the root folder, and hourly, daily,
-# weekly are manually created folders.
+# weekly are manually created folders. Backup_prefix is the two letter
+# prefix of the use-case (nh for home, wp for wasatch photonics)
 #
-# Create links to this script like:
-# ln -s hourly weekly
-# ln -s hourly daily
-# ln -s hourly 
-#
-# Then in anacron, run the daily and weekly scripts accordingly. Each
-# non-hourly mode will create a folder in the directory with the
-# timestamp so you don't have to rely on dropbox's 50 or so version
-# history.
-#
-# Well that anacron description above was supposed to be what you wanted
-# to work, but you cannot figure the anacron config. Just go nuclear for
-# now and do all the backups every 1 hour while the system is on. Then
-# you'll have to go back in manually and delete files to save space, but
-# it should take about every year or so before that becomes an issue. So
-# that's back to crontab entries like:
+# Nuclear for now and do all the backups every 1 hour while the system
+# is on. Then you'll have to go back in manually and delete files to
+# save space, but it should take about every year or so before that
+# becomes an issue. So that's back to crontab entries like:
 #
 #SCRIPTS=/home/nharrington/projects/dotfiles/backup_scripts
 #export BACKUP_PREFIX=wp  (change this to the correct prefix! )

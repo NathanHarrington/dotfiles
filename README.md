@@ -171,6 +171,7 @@ Install disable ctrl-q exit plugin for firefox
     Add the following to crontab -e:
     
     SCRIPTS=/home/nharrington/projects/dotfiles/backup_scripts
+    export BACKUP_PREFIX=nh  (change this to the correct prefix! )
     13 * * * * $SCRIPTS/encrypt_directory.sh >>$SCRIPTS/backup.log 2>&1
     14 * * * * $SCRIPTS/daily >>$SCRIPTS/backup.log 2>&1
 
