@@ -1,0 +1,52 @@
+#!/bin/bash
+#
+# Designed to be run every hour from crontab. This simply looks for a
+# folder with todays date on the various services. If it does not exist
+# it creates it. It will then upload the file to the folder. At the next
+# pass the file will only be uploaded if changed locally. This is
+# designed to perform backups within an hour of change, whenever the
+# system is available.
+#
+# Add the following entries to your crontab
+#SCRIPTS=/home/nharrington/projects/dotfiles/backup_scripts
+#export BACKUP_PREFIX=wp  (change this to the correct prefix! )
+#13 * * * * $SCRIPTS/encrypt_directory.sh >>$SCRIPTS/backup.log 2>&1
+#14 * * * * $SCRIPTS/rclone_hourly >>$SCRIPTS/backup.log 2>&1
+
+
+# rclone remote names
+declare -a dest=("${BACKUP_PREFIX}dropbox" "${BACKUP_PREFIX}gdrive"
+"${BACKUP_PREFIX}backblaze" "${BACKUP_PREFIX}onedrive")
+
+RCLONE=/usr/sbin/rclone
+RCLONE_OPTS=--verbose
+
+HOSTNAME=$(hostname)
+TAR_GPG_FILENAME="${HOSTNAME}_encrypted.tar.gpg"
+
+SRC_FILENAME="$HOME/Documents/working_encrypted/$TAR_GPG_FILENAME"
+
+SCRIPT_NAME=`basename "$0"`
+
+MONTH=`date +%Y%m`
+DAY=`date +%Y%m%d`
+
+for DST_TYPE in "${dest[@]}"
+do
+    LOCATION="/auto_backup/${SCRIPT_NAME}"
+
+    # Prepend the bucket name for backblaze b2
+    if [ "$DST_TYPE" == "${BACKUP_PREFIX}backblaze" ]; then
+        echo "Back blaze bucket prepend"
+        LOCATION="${BACKUP_PREFIX}autobackupbucket${LOCATION}"
+    fi
+
+    # Perform the actual copy with rclone. rclone automatically creates
+    # the folder if it does not exist.
+    NEW_FILE=$DST_TYPE:$LOCATION/$MONTH/$DAY-$TAR_GPG_FILENAME
+
+    echo "$RCLONE $RCLONE_OPTS copy $SRC_FILENAME $NEW_FILE"
+    $RCLONE $RCLONE_OPTS copy $SRC_FILENAME $NEW_FILE
+
+done
+
