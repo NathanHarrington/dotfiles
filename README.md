@@ -157,7 +157,7 @@ Copy .gnupg from backup to ~/
 Install ublock origin for firefox
 Install disable ctrl-q exit plugin for firefox
 
-### Setup the nuclear backup option:
+### Setup the rclone backup option:
 
     Download and install rclone according to: http://rclone.org/install/
 

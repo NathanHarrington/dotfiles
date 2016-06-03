@@ -7,6 +7,24 @@
 # designed to perform backups within an hour of change, whenever the
 # system is available.
 #
+# This is for your current critical backups use case: Primarily text
+# files with log entries and sensitive information. The occaisional pdf.
+# More data intensive operations such as pictures of the kids, work
+# products and task management are all done elsewhere. This is the
+# core data that you never want to lose, and is  usually about 1MB of
+# new data per year. This strategy provides an hourly backup of any and
+# all files placed in a directory using rclone. 
+#
+# StorageService:/(Backup_prefix)auto_backup/time_frame/
+#
+# Where StorageService is google drive, dropbox, back blaze b2, etc.
+# auto_backup is a directory in the root folder, and hourly, daily,
+# weekly are manually created folders. Backup_prefix is the two letter
+# prefix of the use-case (nh for home, wp for wasatch photonics). 
+#
+# This is to create distributed backups that are other sys-admins
+# responsibilities.
+#
 # Add the following entries to your crontab
 #SCRIPTS=/home/nharrington/projects/dotfiles/backup_scripts
 #export BACKUP_PREFIX=wp  (change this to the correct prefix! )
