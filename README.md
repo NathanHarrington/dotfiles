@@ -186,12 +186,13 @@ Install disable ctrl-q exit plugin for firefox
 
     These are from: http://crashmag.net/setting-up-ssmtp-with-gmail
 
-    sudo dnf install ssmtp
+    sudo dnf install ssmtp mailx
 
     sudo vi /etc/ssmtp/ssmtp.conf
 
     root=nharrington@wasatchphotonics.com
     mailhub=smtp.gmail.com:587
+    RewriteDomain=wasatchphotonics.com
     UseTLS=YES
     UseSTARTTLS=YES
     AuthUser=nharrington@wasatchphotonics.com
@@ -204,11 +205,6 @@ Install disable ctrl-q exit plugin for firefox
     echo "this is the body" | mail -v -s "Test 201606031355" \
         nharrington@wasatchphotonics.com
 
-    While you're here - configure root mail to forward to the
-    nharrington account as well:
-    sudo su - 
-    echo "nharrington" > ~/.forward
-    exit
 
     echo "nharrington@wasatchphotonics.com" > ~/.forward
 
