@@ -15,6 +15,14 @@ Based on FC23 with cinnammon spin:
     sudo dnf -y install git autossh screen
     git clone https://github.com/NathanHarrington/dotfiles
 
+    sudo dnf -y install parcellite vim 
+    
+    start parcellite, check "Use Copy" and "Use Primary", then click synchronize clipboards
+
+    You may have to go to mouse and touchpad, then turn off "emulate
+    middle click by clicking both left and right buttons" If using an
+    external mouse.
+
     # Enable the timewaster blocks crontab entry:
     crontab -e
     59 * * * * /home/nharrington/projects/dotfiles/hosts_block.sh
@@ -74,13 +82,9 @@ Based on FC23 with cinnammon spin:
     sudo systemctl enable sshd
     sudo systemctl start sshd
     
-    sudo dnf -y install parcellite vim 
-    
-    start parcellite, check "Use Copy" and "Use Primary", then click synchronize clipboards
-
 
     # Basic development environment
-    sudo dnf -y make automake gcc gcc-c++ kernel-devel
+    sudo dnf -y install make automake gcc gcc-c++ kernel-devel
 
     # Pre-20160525 vim instructions are in wasatch.vimrc
     You probably don't want those. You want:
@@ -103,9 +107,11 @@ Based on FC23 with cinnammon spin:
 
 
 Lenovo U430-touch specifics:
+
     sudo hostnamectl set-hostname u430touch
 
 Asus Zenbook UX305C specifics:
+
     sudo hostnamectl set-hostname zenbook
 
     As of 2016-05-12 16:44 touchpad will not work out of the box:
@@ -174,6 +180,43 @@ Install disable ctrl-q exit plugin for firefox
     export BACKUP_PREFIX=nh  (change this to the correct prefix! )
     13 * * * * $SCRIPTS/encrypt_directory.sh >>$SCRIPTS/backup.log 2>&1
     44 * * * * $SCRIPTS/rclone_hourly >>$SCRIPTS/backup.log 2>&1
+
+
+### rclone backup sends verification emails as well, so configure ssmtp:
+
+    These are from: http://crashmag.net/setting-up-ssmtp-with-gmail
+
+    sudo dnf install ssmtp
+
+    sudo vi /etc/ssmtp/ssmtp.conf
+
+    root=nharrington@wasatchphotonics.com
+    mailhub=smtp.gmail.com:587
+    UseTLS=YES
+    UseSTARTTLS=YES
+    AuthUser=nharrington@wasatchphotonics.com
+    AuthPass=<app password created from google)
+
+    sudo alternatives --config mta
+    (select sendmail.ssmtp)
+
+    Test with:
+    echo "this is the body" | mail -v -s "Test 201606031355" \
+        nharrington@wasatchphotonics.com
+
+    While you're here - configure root mail to forward to the
+    nharrington account as well:
+    sudo su - 
+    echo "nharrington" > ~/.forward
+    exit
+
+    echo "nharrington@wasatchphotonics.com" > ~/.forward
+
+    Test mail configuration:
+    echo "Test mail to root" | mail -s "Test root essmtp" root
+    echo "Test mail to local" | mail -s "Test local" nharrington
+    echo "Test mail to gmail" | mail -s "Test gmail" \
+        nharrington@wasatchphotonics.com
 
 
 TODO:
