@@ -188,7 +188,7 @@ Install disable ctrl-q exit plugin for firefox
     44 * * * * $SCRIPTS/rclone_hourly >>$SCRIPTS/backup.log 2>&1
     #
     # Email a summary of the backup directories for hand verification
-    28 * * * * $SCRIPTS/mail_summary >>$SCRIPTS/backup.log 2>&1
+    28 3 * * * $SCRIPTS/mail_summary >>$SCRIPTS/backup.log 2>&1
 
 
 ### rclone backup sends verification emails as well, so configure ssmtp:
