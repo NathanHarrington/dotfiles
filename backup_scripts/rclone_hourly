@@ -27,7 +27,7 @@
 #
 # Add the following entries to your crontab
 #SCRIPTS=/home/nharrington/projects/dotfiles/backup_scripts
-#export BACKUP_PREFIX=wp  (change this to the correct prefix! )
+#BACKUP_PREFIX=wp  (change this to the correct prefix! )
 #13 * * * * $SCRIPTS/encrypt_directory.sh >>$SCRIPTS/backup.log 2>&1
 #14 * * * * $SCRIPTS/rclone_hourly >>$SCRIPTS/backup.log 2>&1
 

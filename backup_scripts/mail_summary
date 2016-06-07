@@ -1,0 +1,49 @@
+#!/bin/sh
+#
+# List a summary of a random rclone backup source. This is designed to
+# encourage you to actually read the emails to verify that the files are
+# being updated. Right now you want to look for any anamalous entries
+# visually - figure out how to automate this later.
+#
+
+declare -a dest=("${BACKUP_PREFIX}dropbox" "${BACKUP_PREFIX}gdrive"
+"${BACKUP_PREFIX}backblaze" "${BACKUP_PREFIX}onedrive")
+
+MONTH=`date +%Y%m`
+
+RCLONE=/usr/sbin/rclone
+RCLONE_OPTS=
+
+MAIL=mail
+MAIL_OPTS="-v -s"
+MAIL_DEST="nharrington@wasatchphotonics.com"
+MAIL_SUBJ="rclone backup $MONTH $DST_TYPE"
+TMP_MAIL=/tmp/rclone-log
+
+# Get a random entry from the destination source list
+RANGE=${#dest[@]}
+number=$RANDOM
+let "number %= $RANGE"
+
+DST_TYPE=${dest[$number]}
+
+LOCATION="/auto_backup/rclone_hourly/$MONTH"
+
+if [ "$DST_TYPE" == "${BACKUP_PREFIX}backblaze" ]; then
+    echo "Back blaze bucket prepend"
+    LOCATION="${BACKUP_PREFIX}autobackupbucket${LOCATION}"
+fi
+
+
+# List the size of the directory
+echo "$RCLONE $RCLONE_OPTS size $DST_TYPE:$LOCATION > $TMP_MAIL"
+$RCLONE $RCLONE_OPTS size $DST_TYPE:$LOCATION > $TMP_MAIL 2>&1
+
+# List the contents of the directory
+echo "$RCLONE $RCLONE_OPTS lsd $DST_TYPE:$LOCATION >> $TMP_MAIL"
+$RCLONE $RCLONE_OPTS lsd $DST_TYPE:$LOCATION >> $TMP_MAIL 2>&1
+
+# Email the output of the size and contents of the directory
+cat $TMP_MAIL | $MAIL $MAIL_OPTS "$MAIL_SUBJ" $MAIL_DEST
+
+rm $TMP_MAIL

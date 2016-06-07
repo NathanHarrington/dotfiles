@@ -167,6 +167,12 @@ Install disable ctrl-q exit plugin for firefox
 
     Download and install rclone according to: http://rclone.org/install/
 
+    Create the references to the various cloud storage options with:
+
+    rclone config  
+
+    (google drive, onedrive, dropbox, etc.)
+
     After the .gnupg copy as described above, and with a fully verified key
     management and recovery system:
 
@@ -177,9 +183,12 @@ Install disable ctrl-q exit plugin for firefox
     Add the following to crontab -e:
     
     SCRIPTS=/home/nharrington/projects/dotfiles/backup_scripts
-    export BACKUP_PREFIX=nh  (change this to the correct prefix! )
+    BACKUP_PREFIX=nh  (change this to the correct prefix! )
     13 * * * * $SCRIPTS/encrypt_directory.sh >>$SCRIPTS/backup.log 2>&1
     44 * * * * $SCRIPTS/rclone_hourly >>$SCRIPTS/backup.log 2>&1
+    #
+    # Email a summary of the backup directories for hand verification
+    28 * * * * $SCRIPTS/mail_summary >>$SCRIPTS/backup.log 2>&1
 
 
 ### rclone backup sends verification emails as well, so configure ssmtp:
