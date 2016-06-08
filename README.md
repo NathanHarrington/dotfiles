@@ -12,7 +12,12 @@ Based on FC23 with cinnammon spin:
     (system specific integrations here - scroll down)
 
 
+
+    # Basic development environment
+    sudo dnf -y install make automake gcc gcc-c++ kernel-devel cmake
     sudo dnf -y install git autossh tmux
+    sudo dnf -y install redhat-rpm-config python-devel
+
     git clone https://github.com/NathanHarrington/dotfiles
 
     sudo dnf -y install parcellite vim 
@@ -50,7 +55,8 @@ Based on FC23 with cinnammon spin:
 
     Start a terminal, change to green on black color scheme, turn off
     scrollbar display, no scrollbar buffer size limit. Set menubar to
-    not display by default.
+    not display by default. Set initial startup size to 100x30 (for tmux
+    to look good at startup font size)
 
     Enter panel edit mode, move the "All windows" applet so the clock is
     in the bottom right.
@@ -87,9 +93,6 @@ Based on FC23 with cinnammon spin:
     sudo systemctl enable sshd
     sudo systemctl start sshd
     
-
-    # Basic development environment
-    sudo dnf -y install make automake gcc gcc-c++ kernel-devel
 
     # Pre-20160525 vim instructions are in wasatch.vimrc
     You probably don't want those. You want:
