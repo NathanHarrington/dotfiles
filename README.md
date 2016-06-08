@@ -172,7 +172,7 @@ Install ublock origin for firefox
 Install disable ctrl-q exit plugin for firefox
 
 Install ublock origin for chrome
-Install "fixed width gmail font" extension for chrome
+Install "fixed width text for gmail" extension for chrome
 
 ### Setup the rclone backup option:
 
@@ -197,42 +197,42 @@ Install "fixed width gmail font" extension for chrome
     BACKUP_PREFIX=nh  (change this to the correct prefix! )
     13 * * * * $SCRIPTS/encrypt_directory.sh >>$SCRIPTS/backup.log 2>&1
     44 * * * * $SCRIPTS/rclone_hourly >>$SCRIPTS/backup.log 2>&1
-    #
+    
     # Email a summary of the backup directories for hand verification
+    MAIL_DEST="nharrington@wasatchphotonics.com" 
     28 3 * * * $SCRIPTS/mail_summary >>$SCRIPTS/backup.log 2>&1
 
 
 ### rclone backup sends verification emails as well, so configure ssmtp:
 
-    These are from: http://crashmag.net/setting-up-ssmtp-with-gmail
+    These are based on: http://crashmag.net/setting-up-ssmtp-with-gmail
 
-    sudo dnf install ssmtp mailx
+    sudo dnf -y install ssmtp mailx
 
+    # Update the ssmtp.conf file as shown below, where domain is a
+    "google apps for business" hosted domain, such as
+    wasatchphotonics.com
+    
     sudo vi /etc/ssmtp/ssmtp.conf
 
-    root=nharrington@wasatchphotonics.com
+    root=username@domain
     mailhub=smtp.gmail.com:587
-    RewriteDomain=wasatchphotonics.com
+    RewriteDomain=domain
     UseTLS=YES
     UseSTARTTLS=YES
-    AuthUser=nharrington@wasatchphotonics.com
+    AuthUser=username@domain
     AuthPass=<app password created from google)
 
     sudo alternatives --config mta
     (select sendmail.ssmtp)
 
-    Test with:
-    echo "this is the body" | mail -v -s "Test 201606031355" \
-        nharrington@wasatchphotonics.com
-
-
-    echo "nharrington@wasatchphotonics.com" > ~/.forward
+    echo "username@domain" > ~/.forward
 
     Test mail configuration:
+
     echo "Test mail to root" | mail -s "Test root essmtp" root
     echo "Test mail to local" | mail -s "Test local" nharrington
-    echo "Test mail to gmail" | mail -s "Test gmail" \
-        nharrington@wasatchphotonics.com
+    echo "Test mail to gmail" | mail -s "Test gmail" username@domain
 
 
 TODO:
