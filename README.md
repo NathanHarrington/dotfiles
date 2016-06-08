@@ -12,7 +12,7 @@ Based on FC23 with cinnammon spin:
     (system specific integrations here - scroll down)
 
 
-    sudo dnf -y install git autossh screen
+    sudo dnf -y install git autossh tmux
     git clone https://github.com/NathanHarrington/dotfiles
 
     sudo dnf -y install parcellite vim 
@@ -23,9 +23,14 @@ Based on FC23 with cinnammon spin:
     middle click by clicking both left and right buttons" If using an
     external mouse.
 
-    # Enable the timewaster blocks crontab entry:
+    # Enable the timewaster blocks crontab entry as root:
+    sudo su -
     crontab -e
     59 * * * * /home/nharrington/projects/dotfiles/hosts_block.sh
+
+
+    # Create tmux configuration following:
+    http://tony.github.io/tmux-config/
 
     Go to Themes, download the themes:
         Ambience Crunchy (OS-Crunchy-green), Faince+
@@ -163,6 +168,9 @@ Copy .gnupg from backup to ~/
 Install ublock origin for firefox
 Install disable ctrl-q exit plugin for firefox
 
+Install ublock origin for chrome
+Install "fixed width gmail font" extension for chrome
+
 ### Setup the rclone backup option:
 
     Download and install rclone according to: http://rclone.org/install/
@@ -225,27 +233,6 @@ Install disable ctrl-q exit plugin for firefox
 
 
 TODO:
-setup autossh tunneling service at system login
-    tested setups monitored outside of channels
-    autossh -M 28767 -o port=<public port> -L 8190:<internal network ip>:22
-        username@public facing ip
-
-    Lets say you forget and leave your computer at a network location
-    without port forwarding. The autossh command will survive standby's
-    power cycles, unlocks, etc. It connects a tunnel from the laptop to
-    the shared server (cloud droplet). You then connect to the cloud
-    droplet from a different computer, then tunnel the connection back
-    through the ssh connections like:
-
-    laptop->server (public port) -R 9000:localhost:22
-    other->server (public port) -L 9022:localhost:9000
-    other ssh -L 9022 localhost
-        (which forwards to port 9000 on server, which goes to port 22 on
-        laptop)
-    Then from there it's all derivatives of vnc/nx port forwarding.
-
-
 store all of these settings in dotfiles repositories to make environment
     more portable
 
-digital imagery export from cloud hosting providers for long term backup
