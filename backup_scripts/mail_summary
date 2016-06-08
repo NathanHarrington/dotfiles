@@ -37,16 +37,18 @@ fi
 HOSTNAME=`hostname --fqdn`
 FULL_TIME=`date "+%Y%m%d %H:%M:%S"`
 echo "rclone backup for: $HOSTNAME at $FULL_TIME" > $TMP_MAIL
+echo "Size and list for: $DST_TYPE:$LOCATION" >> $TMP_MAIL
 
 # List the size of the directory
 echo "$RCLONE $RCLONE_OPTS size $DST_TYPE:$LOCATION >> $TMP_MAIL 2>&1"
 $RCLONE $RCLONE_OPTS size $DST_TYPE:$LOCATION >> $TMP_MAIL 2>&1
 
 # List the contents of the directory
-echo "$RCLONE $RCLONE_OPTS lsd $DST_TYPE:$LOCATION >> $TMP_MAIL 2>&1"
-$RCLONE $RCLONE_OPTS lsd $DST_TYPE:$LOCATION >> $TMP_MAIL 2>&1
+echo "$RCLONE $RCLONE_OPTS lsl $DST_TYPE:$LOCATION >> $TMP_MAIL 2>&1"
+$RCLONE $RCLONE_OPTS lsl $DST_TYPE:$LOCATION >> $TMP_MAIL 2>&1
 
 # Email the output of the size and contents of the directory
+cat $TMP_MAIL 2>&1
 cat $TMP_MAIL | $MAIL $MAIL_OPTS "$MAIL_SUBJ" $MAIL_DEST
 
 rm $TMP_MAIL
