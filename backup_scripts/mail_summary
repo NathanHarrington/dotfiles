@@ -5,6 +5,10 @@
 # being updated. Right now you want to look for any anamalous entries
 # visually - figure out how to automate this later.
 #
+# Add the following entries to your crontab
+#BACKUP_PREFIX=wp  (change this to the correct prefix! )
+#MAIL_DEST=nharrington@wasatchphotonics.com
+#45 12 * * * $SCRIPTS/mail_summary >>$SCRIPTS/backup.log 2>&1
 
 declare -a dest=("${BACKUP_PREFIX}dropbox" "${BACKUP_PREFIX}gdrive"
 "${BACKUP_PREFIX}backblaze" "${BACKUP_PREFIX}onedrive")

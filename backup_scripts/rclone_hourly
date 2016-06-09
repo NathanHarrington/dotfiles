@@ -1,5 +1,13 @@
 #!/bin/bash
 #
+# CAUTION:
+# Option --size-only is used in rclone. This will avoid
+# issues with rclone copying files whose hash has changed. This also
+# makes it possible to edit a single file in the auto_backup folder, 
+# don't increase the file size, and this script may not backup the
+# change.
+# ########
+#
 # Designed to be run every hour from crontab. This simply looks for a
 # folder with todays date on the various services. If it does not exist
 # it creates it. It will then upload the file to the folder. At the next
@@ -23,7 +31,7 @@
 # prefix of the use-case (nh for home, wp for wasatch photonics). 
 #
 # This is to create distributed backups that are other sys-admins
-# responsibilities.
+# responsibilities. 
 #
 # Add the following entries to your crontab
 #SCRIPTS=/home/nharrington/projects/dotfiles/backup_scripts
@@ -35,9 +43,10 @@
 # rclone remote names
 declare -a dest=("${BACKUP_PREFIX}dropbox" "${BACKUP_PREFIX}gdrive"
 "${BACKUP_PREFIX}backblaze" "${BACKUP_PREFIX}onedrive")
+#declare -a dest=("${BACKUP_PREFIX}gdrive")
 
 RCLONE=/usr/sbin/rclone
-RCLONE_OPTS=--verbose
+RCLONE_OPTS="--verbose --size-only"
 
 HOSTNAME=$(hostname)
 TAR_GPG_FILENAME="${HOSTNAME}_encrypted.tar.gpg"
