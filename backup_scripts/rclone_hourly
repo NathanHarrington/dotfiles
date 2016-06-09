@@ -5,7 +5,8 @@
 # issues with rclone copying files whose hash has changed. This also
 # makes it possible to edit a single file in the auto_backup folder, 
 # don't increase the file size, and this script may not backup the
-# change.
+# change. GPG is also changing the file size every pass, sometime it
+# matches the last size, sometimes not. 
 # ########
 #
 # Designed to be run every hour from crontab. This simply looks for a
