@@ -173,6 +173,7 @@ Install disable ctrl-q exit plugin for firefox
 
 Install ublock origin for chrome
 Install "fixed width text for gmail" extension for chrome
+Set chrome to "remember where you left off"
 
 ### Setup the rclone backup option:
 
