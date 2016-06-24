@@ -122,16 +122,14 @@ Asus Zenbook UX305C specifics:
 
     sudo hostnamectl set-hostname zenbook
 
-    As of 2016-05-12 16:44 touchpad will not work out of the box:
-
-    FC23 Live Cinnamon change boot in grub of usb disk, append
-    i915.preliminary_hw_support=1
-
-    After installing, and running dnf -y update above, reboot
-    Add the most recent mainline kernel as described here:
-    https://fedoraproject.org/wiki/Kernel_Vanilla_Repositories
-
-    Reboot, verify that secure boot is disabled in the bios
+    FC24 will not display all 16:9 options. All you really want is 1920x1080:
+    Edit /etc/default/grub
+    Append: video=1920x1080 to the CMDLINE_LINUX variable.
+    
+    Run: grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg as root
+    
+    This will "kick the 16:9" mode into place as described here:
+    https://bugzilla.redhat.com/show_bug.cgi?id=1339930
 
     In keyboard shortcuts, set brightness up/down to windows+F5/F6
 
