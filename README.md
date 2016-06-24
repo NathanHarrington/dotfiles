@@ -18,7 +18,7 @@ Based on FC23 with cinnammon spin:
     sudo dnf -y install git autossh tmux
     sudo dnf -y install redhat-rpm-config python-devel
 
-    git clone https://github.com/NathanHarrington/dotfiles
+    git clone https://github.com/NathanHarrington/dotfiles ~/projects/dotfiles
 
     sudo dnf -y install parcellite vim 
     
