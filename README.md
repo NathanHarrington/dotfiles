@@ -49,6 +49,11 @@ Based on FC23 with cinnammon spin:
         2016-05-13 06:53 a decent option appears to be window borders
         from ubuntu-xenial Xenus, gnome icons, adwaita controls, adwaita
         mouse pointer and Faience+ desktop.
+        2016-06-27 FC24 ships out of the box with themes. Combining:
+        Window Borders: Esco
+        Controls: BlueMenta
+        Desktop: Blue-submarine 
+        Looks good, and has the fully colored edge window borders
 
     Backgrounds->Settings->Picture aspect of no picture, change color to
     black. Turn off display of icons on desktop.
