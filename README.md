@@ -34,22 +34,17 @@ Based on FC23 with cinnammon spin:
     59 * * * * /home/nharrington/projects/dotfiles/hosts_block.sh
 
 
-    # Create tmux configuration following:
-    http://tony.github.io/tmux-config/
+tmux configuration:
 
-    Go to Themes, download the themes:
-        Ambience Crunchy (OS-Crunchy-green), Faince+
-        Choose esco window borders
-        Choose OS-Crunhcy-green controls
-        Choose Desktop Faince+
-        This approach gives you full borders around entire command line
-        windows to highlight current focus. Green controls in certain
-        areas, and a dark taskbar. That's the goal at least. apparently
-        these results are different for different installs. As of
-        2016-05-13 06:53 a decent option appears to be window borders
-        from ubuntu-xenial Xenus, gnome icons, adwaita controls, adwaita
-        mouse pointer and Faience+ desktop.
-        2016-06-27 FC24 ships out of the box with themes. Combining:
+    Setup tmux with the instructions from:
+    http://tony.github.io/tmux-config/
+    
+    Install tmux-resurrect with the manual instructions from:
+    https://github.com/tmux-plugins/tmux-resurrect
+
+Cinnamon configuration:
+
+    2016-06-27 FC24 ships out of the box with themes. Combining:
         Window Borders: Esco
         Controls: BlueMenta
         Desktop: Blue-submarine 
@@ -89,6 +84,9 @@ Based on FC23 with cinnammon spin:
     Go to accessibility, make sure "Enable Zoom" is on. Make sure mouse
     wheel modifier is disabled - use keyboard shortcut instead.
 
+
+Miscellaneous configuration:
+
     (in dotfiles)
     cp .bashrc ~/
     
@@ -117,6 +115,17 @@ Based on FC23 with cinnammon spin:
     chmod 0600 ~/.ssh/{authorized_keys,id_rsa}
 
     ssh (other system)
+
+
+    Copy .gnupg from backup to ~/
+
+    Install ublock origin for firefox
+    Install disable ctrl-q exit plugin for firefox
+
+    Sign in to chrome to get the settings below:
+    Set chrome to "remember where you left off"
+    Install ublock origin for chrome
+    Install "fixed width text for gmail" extension for chrome
 
 
 Lenovo U430-touch specifics:
@@ -167,16 +176,6 @@ Integrate the shared drive where appropriate:
     mkdir /home/nharrington/wasatch
     ln -s /mnt/cifs_share/share_data /home/nharrington/wasatch
 
-
-
-Copy .gnupg from backup to ~/
-
-Install ublock origin for firefox
-Install disable ctrl-q exit plugin for firefox
-
-Install ublock origin for chrome
-Install "fixed width text for gmail" extension for chrome
-Set chrome to "remember where you left off"
 
 ### Setup the rclone backup option:
 
