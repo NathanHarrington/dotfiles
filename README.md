@@ -2,8 +2,8 @@
 environment configuration resources
 
 
-# Cinnamon configuration instructions
-Based on FC23 with cinnammon spin:
+# System configuration instructions
+Based on FC24 with cinnammon spin:
 
     sudo dnf -y update
 
@@ -237,6 +237,14 @@ Integrate the shared drive where appropriate:
     echo "Test mail to local" | mail -s "Test local" nharrington
     echo "Test mail to gmail" | mail -s "Test gmail" username@domain
 
+### Virtualbox configuration instructions
+    
+    Download virtualbox: http://download.virtualbox.org/virtualbox/5.0.22/VirtualBox-5.0-5.0.22_108108_fedora24-1.x86_64.rpm
+    Download expansion pack: http://download.virtualbox.org/virtualbox/5.0.22/Oracle_VM_VirtualBox_Extension_Pack-5.0.22-108108.vbox-extpack
+    
+    After installing virtualbox, add the current user to the vboxusers group for usb access
+    sudo usermod -a -G vboxusers nharrington
+    
 
 TODO:
 store all of these settings in dotfiles repositories to make environment
