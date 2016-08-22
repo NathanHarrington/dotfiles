@@ -15,6 +15,7 @@ declare -a arr=("wral.com" "wncn.com" "abc11.com"
 
 echo "127.0.0.1 localhost.localdomain localhost" > /etc/hosts
 echo "::1     localhost6.localdomain6 localhost6" >> /etc/hosts
+echo "216.239.38.120     www.google.com # force safesearch " >> /etc/hosts
 
 
 for i in "${arr[@]}"

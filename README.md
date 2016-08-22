@@ -250,3 +250,17 @@ TODO:
 store all of these settings in dotfiles repositories to make environment
     more portable
 
+### Autossh systemd service configuration instructions
+
+    Edit the autossh.service file. Change the CUSTOM_REMOTE_PORT
+    variable to a unique value for the host.  That is, make sure it's a
+    port that isn't used by any other forwarding setup.  Add the correct
+    reference to the private key. Change the ssh hostname and port
+    numbers as required.
+
+    cp autossh.service /etc/systemd/system/autossh.service
+    systemctl enable NetworkManager-wait-online.service
+    systemctl enable autossh
+
+    (reboot to test)
+
