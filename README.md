@@ -3,7 +3,7 @@ environment configuration resources
 
 
 # System configuration instructions
-Based on FC24 with cinnammon spin:
+Based on Fedoara Core 24:
 
     sudo dnf -y update
 
@@ -33,6 +33,37 @@ Based on FC24 with cinnammon spin:
     crontab -e
     59 * * * * /home/nharrington/projects/dotfiles/hosts_block.sh
 
+Encrypt home folder:
+
+    These are based on: 
+    https://cloud-ninja.org/2014/04/05/fedora-encrypting-your-home-directory/
+
+    After a fresh reboot, with no users logged in.
+    Open a virtual console, login as root:
+
+    dnf -y install keyutils ecryptfs-utils pam_mount
+    authconfig --enableecryptfs --updateall
+    usermod -aG ecryptfs nharrington
+    ecryptfs-migrate-home -u nharrington
+
+    # After perusing the messages about what to do next...
+
+    su - nharrington
+
+    # Write down the wrapped passphrase elsewhere...
+    ecryptfs-unwrap-passphrase ~/.ecryptfs/wrapped-passphrase 
+
+    # Include it locally...
+    ecryptfs-insert-wrapped-passphrase-into-keyring ~/.ecryptfs/wrapped-passphrase
+
+    # Reboot system, login as nharrington. Verify that the firefox history
+    # is there, all the other expected files are there.
+
+    # Remove the older, unencrypted home directory, something like:
+    # rm -rf /home/nharrington.YwNG1Fho
+
+    # Setup swap encryption, reboot
+    ecryptfs-setup-swap
 
 tmux configuration:
 
