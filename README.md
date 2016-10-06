@@ -69,6 +69,7 @@ tmux configuration:
 
     Setup tmux with the instructions from:
     http://tony.github.io/tmux-config/
+    (Make sure to run the pip and sudo commands from the powerline section in a terminal)
     
     Install tmux-resurrect with the manual instructions from:
     https://github.com/tmux-plugins/tmux-resurrect
