@@ -74,6 +74,14 @@ tmux configuration:
     Install tmux-resurrect with the manual instructions from:
     https://github.com/tmux-plugins/tmux-resurrect
 
+Gnome Configuration (3.204):
+
+    Install gnome-tweak-tool
+    In workspaces, change workspace creation to static, create 7 workspaces.
+    Top Bar show date, show seconds
+    Extensions, Launch new instance to On
+    Applications, global dark theme to On
+    
 Cinnamon configuration:
 
     2016-06-27 FC24 ships out of the box with themes. Combining:
