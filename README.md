@@ -81,49 +81,11 @@ Gnome Configuration (3.204):
     Top Bar show date, show seconds
     Extensions, Launch new instance to On
     Applications, global dark theme to On
+    Extensions, Alternatetab to On
     
-Cinnamon configuration:
-
-    2016-06-27 FC24 ships out of the box with themes. Combining:
-        Window Borders: Esco
-        Controls: BlueMenta
-        Desktop: Blue-submarine 
-        Looks good, and has the fully colored edge window borders
-
-    Backgrounds->Settings->Picture aspect of no picture, change color to
-    black. Turn off display of icons on desktop.
-
-    Start a terminal, change to green on black color scheme, turn off
-    scrollbar display, no scrollbar buffer size limit. Set menubar to
-    not display by default. Set initial startup size to 100x30 (for tmux
-    to look good at startup font size)
-
-    Enter panel edit mode, move the "All windows" applet so the clock is
-    in the bottom right.
-
-    Change time display in bottom right panel applet to be custom format:
-        %Y-%m-%d %H:%M:%S
-
-    Add the workspace switcher panel applet, press alt-f1, create a
-        total of 7 workspaces.
-
-    Keyboard->Shortcuts->Workspaces->Direct Navigation:
-        Add alt+N for direct to workspace N
-  
-    Windows->Behavior->Location of newly opened windows to Automatic
-
-    Open the applets application, go online and install the network
-    applet:
-        Network usage monitor with alerts.
-        Configure to show combined up/down, select appropriate
-        interface.
-
-    Right click icons on taskbar, remove.
-    Right click the word menu, remove the text, change to custom icon.
-
-    Go to accessibility, make sure "Enable Zoom" is on. Make sure mouse
-    wheel modifier is disabled - use keyboard shortcut instead.
-
+    Keyboard shortcuts, set Switch to workspace 1-4 to Alt-[1234]
+    Add new shortcuts for workspaces 5,6,7 with the custom command type:
+    wmcontrol -s 1
 
 Miscellaneous configuration:
 
