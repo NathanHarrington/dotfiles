@@ -85,7 +85,9 @@ Gnome Configuration (3.204):
     
     Keyboard shortcuts, set Switch to workspace 1-4 to Alt-[1234]
     Add new shortcuts for workspaces 5,6,7 with the custom command type:
-    wmcontrol -s 1
+    wmctrl -s 1
+
+    dnf install wmctrl
 
 Miscellaneous configuration:
 
