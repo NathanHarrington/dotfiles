@@ -1,6 +1,7 @@
 [Unit]
 Description=Keeps a tunnel to 'remote.example.com' open
-After=network.target
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 User=nharrington
