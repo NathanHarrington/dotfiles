@@ -262,6 +262,9 @@ store all of these settings in dotfiles repositories to make environment
     reference to the private key. Change the ssh hostname and port
     numbers as required.
 
+    First, ssh into the system in question to make sure the manual key
+    agreement process is executed.
+
     cp autossh.service /etc/systemd/system/autossh.service
     systemctl enable NetworkManager-wait-online.service
     systemctl enable autossh
