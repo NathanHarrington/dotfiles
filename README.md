@@ -271,3 +271,16 @@ store all of these settings in dotfiles repositories to make environment
 
     (reboot to test)
 
+### Hardware specific configurations
+
+    Logitech Performance MX Mouse
+    
+    sudo dnf install xdotool xbindkeys
+    
+    cat > ~/.xbindkeysrc
+    "xdotool key Super"
+    release + b:10
+    
+    cat > ~/.config/autostart/xbindkeys.desktop
+
+    
