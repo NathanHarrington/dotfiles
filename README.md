@@ -281,6 +281,6 @@ store all of these settings in dotfiles repositories to make environment
     "xdotool key Super"
     release + b:10
     
-    cat > ~/.config/autostart/xbindkeys.desktop
+    echo "xbindkeys" > ~/.config/autostart/xbindkeys.desktop
 
     
