@@ -306,4 +306,11 @@ store all of these settings in dotfiles repositories to make environment
 
     reinstall nomachine
 
+### Mutt configuration
 
+    mkdir -p ~/.mutt/cache
+
+    cp /home/nharrington/projects/.muttrc ~/
+
+    Edit the .muttrc configuration to include the appropriate app
+    passwords, domain settings.
