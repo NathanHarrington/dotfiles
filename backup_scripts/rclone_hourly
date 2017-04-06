@@ -46,7 +46,7 @@ declare -a dest=("${BACKUP_PREFIX}dropbox" "${BACKUP_PREFIX}gdrive"
 "${BACKUP_PREFIX}backblaze" "${BACKUP_PREFIX}onedrive")
 #declare -a dest=("${BACKUP_PREFIX}gdrive")
 
-RCLONE=/usr/sbin/rclone
+RCLONE=/usr/bin/rclone
 RCLONE_OPTS="--verbose --size-only"
 
 HOSTNAME=$(hostname)

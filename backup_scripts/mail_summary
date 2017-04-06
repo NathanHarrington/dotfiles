@@ -15,7 +15,7 @@ declare -a dest=("${BACKUP_PREFIX}dropbox" "${BACKUP_PREFIX}gdrive"
 
 MONTH=`date +%Y%m`
 
-RCLONE=/usr/sbin/rclone
+RCLONE=/usr/bin/rclone
 RCLONE_OPTS=
 
 MAIL=mail
