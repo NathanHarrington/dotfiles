@@ -76,7 +76,11 @@ tmux configuration:
 
 Gnome Configuration (3.204):
 
-    Install gnome-tweak-tool
+    Install and run gnome-tweak-tool
+
+    Problems? run gnome-control-center from command line, looks for
+    library fails
+
     In workspaces, change workspace creation to static, create 7 workspaces.
     Top Bar show date, show seconds
     Extensions, Launch new instance to On
@@ -85,7 +89,7 @@ Gnome Configuration (3.204):
     
     Keyboard shortcuts, set Switch to workspace 1-4 to Alt-[1234]
     Add new shortcuts for workspaces 5,6,7 with the custom command type:
-    wmctrl -s w(orkspace number-1)
+    wmctrl -s (workspace number-1)
 
     dnf install wmctrl
 
@@ -243,8 +247,10 @@ Integrate the shared drive where appropriate:
 
 ### Virtualbox configuration instructions
     
-    Download virtualbox: http://download.virtualbox.org/virtualbox/5.0.22/VirtualBox-5.0-5.0.22_108108_fedora24-1.x86_64.rpm
-    Download expansion pack: http://download.virtualbox.org/virtualbox/5.0.22/Oracle_VM_VirtualBox_Extension_Pack-5.0.22-108108.vbox-extpack
+    Download virtualbox: 
+        http://download.virtualbox.org/virtualbox/5.0.22/VirtualBox-5.0-5.0.22_108108_fedora24-1.x86_64.rpm
+    Download expansion pack: 
+        http://download.virtualbox.org/virtualbox/5.0.22/Oracle_VM_VirtualBox_Extension_Pack-5.0.22-108108.vbox-extpack
     
     After installing virtualbox, add the current user to the vboxusers group for usb access
     sudo usermod -a -G vboxusers nharrington
@@ -283,4 +289,21 @@ store all of these settings in dotfiles repositories to make environment
     
     echo "xbindkeys" > ~/.config/autostart/xbindkeys.desktop
 
-    
+### Install nomachine
+
+    Download nomachine from: https://www.nomachine.com/download/linux&id=1 
+
+    run:
+
+    sudo dnf install ./nomachine
+
+    If you get a message about an selinux failure with systemd read from
+    nxserver.service as describe here: https://www.nomachine.com/TR11N07360
+
+    sudo vi /etc/selinux/config
+
+    change 'enforcing' to 'permissive'
+
+    reinstall nomachine
+
+
