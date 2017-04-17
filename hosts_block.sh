@@ -11,6 +11,7 @@ declare -a arr=("wral.com" "wncn.com" "abc11.com"
 "facebook.com" "twitter.com" "imgur.com" "gfycat.com"
 "news.google.com" "reddit.com" "nfl.com" "si.com" "espn.com"
 "sbnation.com" "bleacherreport.com" "sportingnews.com"
+"foxnews.com", 
 "drudgereport.com" "newsobserver.com" "news.ycombinator.com")
 
 echo "127.0.0.1 localhost.localdomain localhost" > /etc/hosts
