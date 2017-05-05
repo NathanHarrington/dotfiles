@@ -8,3 +8,8 @@ map! <F5> <C-R>="".strftime('%Y-%m-%d %H:%M')<CR>
 " More margin for better flow
 set tw=72
 set ignorecase
+
+" Turn off auto indenting by default on text files
+filetype indent off
+set noai "Auto indent
+set nosi "Smart indent
