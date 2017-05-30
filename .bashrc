@@ -36,3 +36,5 @@ export PYTHONDONTWRITEBYTECODE=1
 # style virtual-env integrations, but will break conda
 #export PIP_REQUIRE_VIRTUALENV=true
 
+alias conda3='export PATH=/home/nharrington/miniconda3/bin:$PATH'
+alias conda2='export PATH=/home/nharrington/miniconda2/bin:$PATH'
