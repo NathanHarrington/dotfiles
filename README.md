@@ -310,7 +310,7 @@ store all of these settings in dotfiles repositories to make environment
 
     mkdir -p ~/.mutt/cache
 
-    cp /home/nharrington/projects/.muttrc ~/
+    cp /home/nharrington/projects/dotfiles/.muttrc ~/
 
     Edit the .muttrc configuration to include the appropriate app
     passwords, domain settings.
