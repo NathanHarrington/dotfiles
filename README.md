@@ -314,3 +314,6 @@ store all of these settings in dotfiles repositories to make environment
 
     Edit the .muttrc configuration to include the appropriate app
     passwords, domain settings.
+
+    cd ~/.mutt
+    git clone https://github.com/altercation/mutt-colors-solarized
