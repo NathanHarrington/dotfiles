@@ -17,4 +17,4 @@ set nosi "Smart indent
 :hi Folded ctermbg=242
 
 " Turn off the blank space to the left of the main text area
-:set FoldColumn=0
+:set foldcolumn=0
