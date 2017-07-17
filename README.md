@@ -70,9 +70,15 @@ tmux configuration:
     Setup tmux with the instructions from:
     http://tony.github.io/tmux-config/
     (Make sure to run the pip and sudo commands from the powerline section in a terminal)
+
+    Copy the custom tmux configuration:
+    cp custom.tmux.conf ~/.tmux.conf
+
+
+    Install xclip to enable copying from the tmux scrollback buffer to
+    the system clipboard:
+    sudo dnf install xclip
     
-    Install tmux-resurrect with the manual instructions from:
-    https://github.com/tmux-plugins/tmux-resurrect
 
 Gnome Configuration (3.204):
 

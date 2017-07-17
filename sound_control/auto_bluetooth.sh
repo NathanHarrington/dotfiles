@@ -1,6 +1,9 @@
 # Automatically connect to the bluetooth headset, and set as the default
 # sink.
 # Bose QuietControl 30 on Fedora Core 24
+# In /etc/bluetooth/main.conf, make sure to set:
+# ControllerMode = bredr
+# Pair with blueman-manager or bluetoothctl manually 
 
 # Create an input stream for the bluetoothctrl command
 mkfifo /tmp/srv-input 
