@@ -17,7 +17,7 @@ ExecStart=/usr/bin/autossh -M 0 -N -q \
 -o "ServerAliveInterval 60"  -o "ServerAliveCountMax 3" \
 -p 6787 \
 -l nharrington waspho.com \
--R 8585:localhost:22 \
+-R 9001:localhost:22 \
 -i /home/nharrington/.ssh/cookbook-droplet_id_rsa
 
 [Install]
