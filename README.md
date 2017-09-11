@@ -151,8 +151,7 @@ Miscellaneous configuration:
 
     Under about:config
         set browser.fullscreen.autohide to False
-
-
+    Preferences -> General -> "Show windows and tabs from last time"
 
     Sign in to chrome to get the settings below:
     Set chrome to "remember where you left off"
