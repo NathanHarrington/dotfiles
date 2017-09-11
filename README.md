@@ -74,7 +74,6 @@ tmux configuration:
     Copy the custom tmux configuration:
     cp custom.tmux.conf ~/.tmux.conf
 
-
     Install xclip to enable copying from the tmux scrollback buffer to
     the system clipboard:
     sudo dnf install xclip
@@ -135,6 +134,25 @@ Miscellaneous configuration:
 
     Install ublock origin for firefox
     Install disable ctrl-q exit plugin for firefox
+    Install vimfx plugin for firefox
+        (blacklist *mail.google.com*)
+        Enable (Prevent autofocus of text inputs)
+    Install Hide Caption Titlebar Plus for firefox
+        Under look and feel 2, select 
+            Smaller Tabs & Tab bar 
+                (smaller like classic tabs, new)
+            Smaller Toolbars & Buttons 
+                ([Old] smaller buttons)
+    
+            Options for home button:
+                (Transparent style/color)
+                Select same icon size for both
+
+
+    Under about:config
+        set browser.fullscreen.autohide to False
+
+
 
     Sign in to chrome to get the settings below:
     Set chrome to "remember where you left off"
@@ -177,6 +195,11 @@ MacBook Pro
     chipset. Alternatives include wired access and external dongles.
     Unfortunately there are also various standby issues at this time, so
     inhibiting the macbook pro experiment.
+
+Lenovo w541 configuration:
+    Swap Fn and Ctrl in BIOS
+    Use Vertex theme for gnome here:
+        https://github.com/horst3180/vertex-theme
 
 
 Integrate the shared drive where appropriate:
@@ -323,3 +346,9 @@ store all of these settings in dotfiles repositories to make environment
 
     cd ~/.mutt
     git clone https://github.com/altercation/mutt-colors-solarized
+
+### Firefox configuration
+
+    Update to at least firefox version 54.0
+    Install vimfx plugin
+    /ub
