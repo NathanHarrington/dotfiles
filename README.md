@@ -364,4 +364,24 @@ store all of these settings in dotfiles repositories to make environment
     (accept defaults)
 
 
+### Vim configuration
+
+    # Install the DrawIt plugin
+    # wget https://vim.sourceforge.io/scripts/script.php?script_id=40
+     wget  \
+        https://vim.sourceforge.io/scripts/download_script.php?src_id=21108
+        -O DrawIt.vba.gz
+
+    vi DrawIt.vba.gz
+    :so %
+
+    # Exit vim, restart vim
+
+    # Apparently the \ leader character conflicts with a tmux setting,
+    # so every time you want to use the DrawIt plugin, the workflow is:
+
+    :let mapleader="-"
+    :DIstart
+    
+
 
