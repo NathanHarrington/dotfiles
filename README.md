@@ -132,32 +132,6 @@ Miscellaneous configuration:
 
     Copy .gnupg from backup to ~/
 
-    Install ublock origin for firefox
-    Install disable ctrl-q exit plugin for firefox
-    Install vimfx plugin for firefox
-        (blacklist *mail.google.com*)
-        Enable (Prevent autofocus of text inputs)
-    Install Hide Caption Titlebar Plus for firefox
-        Under look and feel 2, select 
-            Smaller Tabs & Tab bar 
-                (smaller like classic tabs, new)
-            Smaller Toolbars & Buttons 
-                ([Old] smaller buttons)
-    
-            Options for home button:
-                (Transparent style/color)
-                Select same icon size for both
-
-
-    Under about:config
-        set browser.fullscreen.autohide to False
-    Preferences -> General -> "Show windows and tabs from last time"
-
-    Sign in to chrome to get the settings below:
-    Set chrome to "remember where you left off"
-    Install ublock origin for chrome
-    Install "fixed width text for gmail" extension for chrome
-
 
 Lenovo U430-touch specifics:
 
@@ -346,8 +320,48 @@ store all of these settings in dotfiles repositories to make environment
     cd ~/.mutt
     git clone https://github.com/altercation/mutt-colors-solarized
 
-### Firefox configuration
-
+### Firefox and Chrome configuration
     Update to at least firefox version 54.0
     Install vimfx plugin
-    /ub
+
+    Install ublock origin for firefox
+    Install disable ctrl-q exit plugin for firefox
+    Install vimfx plugin for firefox
+        (blacklist *mail.google.com*)
+        Enable (Prevent autofocus of text inputs)
+    Install Hide Caption Titlebar Plus for firefox
+        Under look and feel 2, select 
+            Smaller Tabs & Tab bar 
+                (smaller like classic tabs, new)
+            Smaller Toolbars & Buttons 
+                ([Old] smaller buttons)
+    
+            Options for home button:
+                (Transparent style/color)
+                Select same icon size for both
+
+
+    Under about:config
+        set browser.fullscreen.autohide to False
+    Preferences -> General -> "Show windows and tabs from last time"
+
+    Sign in to chrome to get the settings below:
+    Set chrome to "remember where you left off"
+    Install ublock origin for chrome
+    Install "fixed width text for gmail" extension for chrome
+
+### Task warrior configuration
+
+    # This configuration assumes that after task integration is
+    # verified, you will import the tasks from other machines into the
+    # auto backup folder
+
+    dnf install task
+    mkdir /home/nharrington/Documents/auto_backup/task_warrior
+    ln -s /home/nharrington/Documents/auto_backup/task_warrior ~/.task
+    task 
+
+    (accept defaults)
+
+
+
