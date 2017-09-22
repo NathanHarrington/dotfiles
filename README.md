@@ -180,6 +180,9 @@ Lenovo w541 configuration:
     Use Vertex theme for gnome here (install from source):
         https://github.com/horst3180/vertex-theme
 
+    Change all screenshot shortcuts to use the 'folder' key in the top
+        right
+
 
 Integrate the shared drive where appropriate:
 
