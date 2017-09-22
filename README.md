@@ -5,35 +5,37 @@ environment configuration resources
 # System configuration instructions
 Based on stock Fedoara Core 26 install:
 
-    Install rpmfusion libraries (sudo dnf install command for adding repos)
+    Install rpmfusion libraries (dnf install command for adding repos)
 
-    > sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-    > dnf update -y
+    dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+    dnf update -y
     (about 20 minutes later...)
-    > reboot
+    reboot
 
 
     Install virtualbox first, and verify, as this is the longest cycle
     testing to make sure the system has kernel configurations that are
     compatible.
-    > dnf install VirtualBox
-    > install the extension pack that exactly matches the virtualbox version number 5.2.16-r7771323 etc.
+    dnf install VirtualBox
+    install the extension pack that exactly matches the virtualbox version number 5.2.16-r7771323 etc.
 
+    After installing virtualbox, add the current user to the vboxusers group for usb access
+    usermod -a -G vboxusers nharrington
 
-    > import the appliance for enlightendev
-    > import the appliance for dash3
-    > import the base win7 and win10 appliances for cloning
+    import the appliance for enlightendev
+    import the appliance for dash3
+    import the base win7 and win10 appliances for cloning
 
 
 
     # Basic development environment
-    sudo dnf -y install make automake gcc gcc-c++ kernel-devel cmake
-    sudo dnf -y install git autossh tmux
-    sudo dnf -y install redhat-rpm-config python-devel
+    dnf -y install make automake gcc gcc-c++ kernel-devel cmake
+    dnf -y install git autossh tmux
+    dnf -y install redhat-rpm-config python-devel
 
     git clone https://github.com/NathanHarrington/dotfiles ~/projects/dotfiles
 
-    sudo dnf -y install parcellite vim 
+    dnf -y install parcellite vim 
     
     start parcellite, check "Use Copy" and "Use Primary", then click synchronize clipboards
 
@@ -42,7 +44,7 @@ Based on stock Fedoara Core 26 install:
     external mouse.
 
     # Enable the timewaster blocks crontab entry as root:
-    sudo su -
+    su -
     crontab -e
     59 * * * * /home/nharrington/projects/dotfiles/hosts_block.sh
 
@@ -89,7 +91,7 @@ tmux configuration:
 
     Install xclip to enable copying from the tmux scrollback buffer to
     the system clipboard:
-    sudo dnf install xclip
+    dnf install xclip
     
 
 Gnome Configuration (3.204):
@@ -119,8 +121,8 @@ Miscellaneous configuration:
     git config --global core.editor "vim"
     git config --global credential.helper "cache --timeout=360000"
 
-    sudo systemctl enable sshd
-    sudo systemctl start sshd
+    systemctl enable sshd
+    systemctl start sshd
     
 
     # Pre-20160525 vim instructions are in wasatch.vimrc
@@ -148,11 +150,11 @@ Miscellaneous configuration:
 
 Lenovo U430-touch specifics:
 
-    sudo hostnamectl set-hostname u430touch
+    hostnamectl set-hostname u430touch
 
 Asus Zenbook UX305C specifics:
 
-    sudo hostnamectl set-hostname zenbook
+    hostnamectl set-hostname zenbook
 
     FC24 will not display all 16:9 options. All you really want is 1920x1080:
     Edit /etc/default/grub
@@ -166,22 +168,6 @@ Asus Zenbook UX305C specifics:
     In keyboard shortcuts, set brightness up/down to windows+F5/F6
 
 
-MacBook Pro 
-    sudo hostnamectl set-hostname mbp-fc23
-    sudo dnf -y update
-    sudo dnf install -y 
-    
-    Install rpm fusion libraries as described here:
-        http://rpmfusion.org/Configuration/
-    
-    Use the onpub.com broadcom installation script described here:
-        https://onpub.com/install-broadcom-linux-wi-fi-driver-on-fedora-23-s7-a192
-
-    This will lead to "almost works" status with the built-in broadcom
-    chipset. Alternatives include wired access and external dongles.
-    Unfortunately there are also various standby issues at this time, so
-    inhibiting the macbook pro experiment.
-
 Lenovo w541 configuration:
     Swap Fn and Ctrl in BIOS
     Use Vertex theme for gnome here:
@@ -190,8 +176,8 @@ Lenovo w541 configuration:
 
 Integrate the shared drive where appropriate:
 
-    sudo mkdir -p /mnt/cifs_share/share_data
-    sudo mount --verbose -t cifs -o uid=1000 \
+    mkdir -p /mnt/cifs_share/share_data
+    mount --verbose -t cifs -o uid=1000 \
         //192.168.1.250/was-share1 /mnt/cifs_share/share_data/
 
     (press enter for no password)
@@ -233,13 +219,13 @@ Integrate the shared drive where appropriate:
 
     These are based on: http://crashmag.net/setting-up-ssmtp-with-gmail
 
-    sudo dnf -y install ssmtp mailx
+    dnf -y install ssmtp mailx
 
     # Update the ssmtp.conf file as shown below, where domain is a
     "google apps for business" hosted domain, such as
     wasatchphotonics.com
-    
-    sudo vi /etc/ssmtp/ssmtp.conf
+     
+    vi /etc/ssmtp/ssmtp.conf
 
     root=username@domain
     mailhub=smtp.gmail.com:587
@@ -249,7 +235,7 @@ Integrate the shared drive where appropriate:
     AuthUser=username@domain
     AuthPass=<app password created from google)
 
-    sudo alternatives --config mta
+    alternatives --config mta
     (select sendmail.ssmtp)
 
     echo "username@domain" > ~/.forward
@@ -266,9 +252,6 @@ Integrate the shared drive where appropriate:
         http://download.virtualbox.org/virtualbox/5.0.22/VirtualBox-5.0-5.0.22_108108_fedora24-1.x86_64.rpm
     Download expansion pack: 
         http://download.virtualbox.org/virtualbox/5.0.22/Oracle_VM_VirtualBox_Extension_Pack-5.0.22-108108.vbox-extpack
-    
-    After installing virtualbox, add the current user to the vboxusers group for usb access
-    sudo usermod -a -G vboxusers nharrington
     
 
 TODO:
@@ -296,7 +279,7 @@ store all of these settings in dotfiles repositories to make environment
 
     Logitech Performance MX Mouse
     
-    sudo dnf install xdotool xbindkeys
+    dnf install xdotool xbindkeys
     
     cat > ~/.xbindkeysrc
     "xdotool key Super"
@@ -310,12 +293,12 @@ store all of these settings in dotfiles repositories to make environment
 
     run:
 
-    sudo dnf install ./nomachine
+    dnf install ./nomachine
 
     If you get a message about an selinux failure with systemd read from
     nxserver.service as describe here: https://www.nomachine.com/TR11N07360
 
-    sudo vi /etc/selinux/config
+    vi /etc/selinux/config
 
     change 'enforcing' to 'permissive'
 
