@@ -176,7 +176,7 @@ Asus Zenbook UX305C specifics:
 Lenovo w541 configuration:
 
     Swap Fn and Ctrl in BIOS
-    Use Vertex theme for gnome here:
+    Use Vertex theme for gnome here (install from source):
         https://github.com/horst3180/vertex-theme
 
 
