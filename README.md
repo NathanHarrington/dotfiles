@@ -3,13 +3,26 @@ environment configuration resources
 
 
 # System configuration instructions
-Based on Fedoara Core 24:
+Based on stock Fedoara Core 26 install:
 
-    sudo dnf -y update
+    Install rpmfusion libraries (sudo dnf install command for adding repos)
 
+    > sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+    > dnf update -y
     (about 20 minutes later...)
-    
-    (system specific integrations here - scroll down)
+    > reboot
+
+
+    Install virtualbox first, and verify, as this is the longest cycle
+    testing to make sure the system has kernel configurations that are
+    compatible.
+    > dnf install VirtualBox
+    > install the extension pack that exactly matches the virtualbox version number 5.2.16-r7771323 etc.
+
+
+    > import the appliance for enlightendev
+    > import the appliance for dash3
+    > import the base win7 and win10 appliances for cloning
 
 
 
