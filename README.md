@@ -82,16 +82,30 @@ Encrypt home folder:
 
 tmux configuration:
 
-    Setup tmux with the instructions from:
-    http://tony.github.io/tmux-config/
-    (Make sure to run the pip and sudo commands from the powerline section in a terminal)
-
-    Copy the custom tmux configuration:
-    cp custom.tmux.conf ~/.tmux.conf
-
     Install xclip to enable copying from the tmux scrollback buffer to
     the system clipboard:
     dnf install xclip
+
+    Setup tmux with the instructions from http://tony.github.io/tmux-config/:
+
+    git clone https://github.com/tony/tmux-config.git ~/.tmux
+    ln -s ~/.tmux/.tmux.conf ~/.tmux.conf
+    cd ~/.tmux
+    git submodule init
+    git submodule update
+    cd ~/.tmux/vendor/tmux-mem-cpu-load
+    cmake .
+    sudo make install
+
+    cd ~
+    tmux 
+    ( press control + a then d to exit)
+    tmux source-file ~/.tmux.conf
+
+    Copy the custom tmux configuration:
+    cp custom.tmux.conf ~/.tmux.conf
+    tmux source-file ~/.tmux.conf
+
     
 
 Gnome Configuration (3.204):
