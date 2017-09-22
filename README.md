@@ -137,7 +137,8 @@ Miscellaneous configuration:
 
     systemctl enable sshd
     systemctl start sshd
-    
+
+    dnf install w3m nmap    
 
 Miscellaneous Configuration:
 
@@ -315,7 +316,6 @@ Integrate the shared drive where appropriate:
 
 ### Firefox and Chrome configuration
     Update to at least firefox version 54.0
-    Install vimfx plugin
 
     Install ublock origin for firefox
     Install disable ctrl-q exit plugin for firefox
