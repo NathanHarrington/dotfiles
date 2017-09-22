@@ -118,8 +118,8 @@ Gnome Configuration (3.204):
     In workspaces, change workspace creation to static, create 7 workspaces.
     Top Bar show date, show seconds
     Extensions, Launch new instance to On
-    Applications, global dark theme to On
     Extensions, Alternatetab to On
+    Appearance, global dark theme to On
     
     Keyboard shortcuts, set Switch to workspace 1-4 to Alt-[1234]
     Add new shortcuts for workspaces 5,6,7 with the custom command type:
@@ -129,7 +129,7 @@ Gnome Configuration (3.204):
 
 Miscellaneous configuration:
 
-    (in dotfiles)
+    cd ~/projects/dotfiles
     cp .bashrc ~/
     
     git config --global core.editor "vim"
@@ -139,13 +139,7 @@ Miscellaneous configuration:
     systemctl start sshd
     
 
-    # Pre-20160525 vim instructions are in wasatch.vimrc
-    You probably don't want those. You want:
-    https://github.com/amix/vimrc
-
-    Then copy the custom config:
-    cp nharrington_vim_config ~/.vim_runtime/my_configs.vim
-
+Miscellaneous Configuration:
 
     To connect with other systems from this new system:
     ssh-keygen 
@@ -158,13 +152,10 @@ Miscellaneous configuration:
 
     ssh (other system)
 
-
     Copy .gnupg from backup to ~/
+    scp -r (backup-system) ~/.gnupg .
 
-
-Lenovo U430-touch specifics:
-
-    hostnamectl set-hostname u430touch
+    hostnamectl set-hostname new_computer_hostname
 
 Asus Zenbook UX305C specifics:
 
@@ -183,6 +174,7 @@ Asus Zenbook UX305C specifics:
 
 
 Lenovo w541 configuration:
+
     Swap Fn and Ctrl in BIOS
     Use Vertex theme for gnome here:
         https://github.com/horst3180/vertex-theme
@@ -190,12 +182,14 @@ Lenovo w541 configuration:
 
 Integrate the shared drive where appropriate:
 
+    # These two as sudo
     mkdir -p /mnt/cifs_share/share_data
+
+    (press enter for no remote system password)
     mount --verbose -t cifs -o uid=1000 \
         //192.168.1.250/was-share1 /mnt/cifs_share/share_data/
 
-    (press enter for no password)
-
+    # Run these as nharrington
     mkdir /home/nharrington/wasatch
     ln -s /mnt/cifs_share/share_data /home/nharrington/wasatch
 
@@ -207,10 +201,11 @@ Integrate the shared drive where appropriate:
     Create the references to the various cloud storage options with:
 
     rclone config  
+    Copy .rclone.conf from backup system
+    scp -r (backup-system):.rclone.conf .
 
-    (google drive, onedrive, dropbox, etc.)
 
-    After the .gnupg copy as described above, and with a fully verified key
+    After the .gnupg directory copy as described above, and with a fully verified key
     management and recovery system:
 
     # Anything you put in the folder below will be auto-backed up to the
@@ -226,7 +221,7 @@ Integrate the shared drive where appropriate:
     
     # Email a summary of the backup directories for hand verification
     MAIL_DEST="nharrington@wasatchphotonics.com" 
-    28 3 * * * $SCRIPTS/mail_summary >>$SCRIPTS/backup.log 2>&1
+    29 3 * * * $SCRIPTS/mail_summary >>$SCRIPTS/backup.log 2>&1
 
 
 ### rclone backup sends verification emails as well, so configure ssmtp:
@@ -259,18 +254,6 @@ Integrate the shared drive where appropriate:
     echo "Test mail to root" | mail -s "Test root essmtp" root
     echo "Test mail to local" | mail -s "Test local" nharrington
     echo "Test mail to gmail" | mail -s "Test gmail" username@domain
-
-### Virtualbox configuration instructions
-    
-    Download virtualbox: 
-        http://download.virtualbox.org/virtualbox/5.0.22/VirtualBox-5.0-5.0.22_108108_fedora24-1.x86_64.rpm
-    Download expansion pack: 
-        http://download.virtualbox.org/virtualbox/5.0.22/Oracle_VM_VirtualBox_Extension_Pack-5.0.22-108108.vbox-extpack
-    
-
-TODO:
-store all of these settings in dotfiles repositories to make environment
-    more portable
 
 ### Autossh systemd service configuration instructions
 
@@ -355,6 +338,12 @@ store all of these settings in dotfiles repositories to make environment
         set browser.fullscreen.autohide to False
     Preferences -> General -> "Show windows and tabs from last time"
 
+    Install Dark Blue theme by G4Oblivion
+
+    Install google crhome from the google repo:
+	https://www.if-not-true-then-false.com/2010/install-\
+		google-chrome-with-yum-on-fedora-red-hat-rhel/
+
     Sign in to chrome to get the settings below:
     Set chrome to "remember where you left off"
     Install ublock origin for chrome
@@ -375,6 +364,14 @@ store all of these settings in dotfiles repositories to make environment
 
 
 ### Vim configuration
+
+    # Use vim awesome from: https://github.com/amix/vimrc
+    git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
+    sh ~/.vim_runtime/install_awesome_vimrc.sh
+
+    Then copy the custom config:
+    cp nharrington_vim_config ~/.vim_runtime/my_configs.vim
+
 
     # Install the DrawIt plugin
     # wget https://vim.sourceforge.io/scripts/script.php?script_id=40
