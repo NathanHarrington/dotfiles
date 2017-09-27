@@ -408,25 +408,24 @@ Integrate the shared drive where appropriate:
     Use vlock from: http://vlock.sourcearchive.com/
     This has been tested with version 2.2.2-5 on Fedora Core 26
 
-
     Add the file below as: /usr/lib/systemd/system-sleep/console_locker.sh
 
     sudo chmod a+x /usr/lib/systemd/system-sleep/console_locker.sh
 
-```
-#!/bin/sh
-# Place this on your system as:
-# /usr/lib/systemd/system-sleep/console_locker.sh
-# sudo chmod a+x /usr/lib/systemd/system-sleep/console_locker.sh
-
-LOGFILE=/tmp/systemd_suspend_test
-
-if [ "${1}" == "pre" ]; then
-  echo "Suspending at $(date)..." >> $LOGFILE
-
-elif [ "${1}" == "post" ]; then
-  echo "Resume from $(date)" >> $LOGFILE
-  /usr/local/bin/vlock -an 2>> $LOGFILE >> $LOGFILE
-fi
-```
+    ```
+    #!/bin/sh
+    # Place this on your system as:
+    # /usr/lib/systemd/system-sleep/console_locker.sh
+    # sudo chmod a+x /usr/lib/systemd/system-sleep/console_locker.sh
+    
+    LOGFILE=/tmp/systemd_suspend_test
+    
+    if [ "${1}" == "pre" ]; then
+    echo "Suspending at $(date)..." >> $LOGFILE
+    
+    elif [ "${1}" == "post" ]; then
+    echo "Resume from $(date)" >> $LOGFILE
+    /usr/local/bin/vlock -an 2>> $LOGFILE >> $LOGFILE
+    fi
+    ```
 
