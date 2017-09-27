@@ -151,7 +151,7 @@ Miscellaneous Configuration:
     chmod 0700 ~/.ssh
     chmod 0600 ~/.ssh/{authorized_keys,id_rsa}
 
-    ssh (other system)
+    ssh (other system) # verify passwordless connectivity
 
     Copy .gnupg from backup to ~/
     scp -r (backup-system) ~/.gnupg .
@@ -394,4 +394,39 @@ Integrate the shared drive where appropriate:
     :DIstart
     
 
+### Virtual console locking setup
+
+    The goal here is to be able to use tmux on the virtual console to
+    stay as much as possible in command line mode.
+
+    You want the computer to lock when you close the lid. You want to
+    enter a password once and have all virtual consoles and gnome sessions
+    unlocked.
+
+    In gnome-> Privacy, turn off Screen Lock
+
+    Use vlock from: http://vlock.sourcearchive.com/
+    This has been tested with version 2.2.2-5 on Fedora Core 26
+
+
+    Add the file below as: /usr/lib/systemd/system-sleep/console_locker.sh
+
+    sudo chmod a+x /usr/lib/systemd/system-sleep/console_locker.sh
+
+```
+#!/bin/sh
+# Place this on your system as:
+# /usr/lib/systemd/system-sleep/console_locker.sh
+# sudo chmod a+x /usr/lib/systemd/system-sleep/console_locker.sh
+
+LOGFILE=/tmp/systemd_suspend_test
+
+if [ "${1}" == "pre" ]; then
+  echo "Suspending at $(date)..." >> $LOGFILE
+
+elif [ "${1}" == "post" ]; then
+  echo "Resume from $(date)" >> $LOGFILE
+  /usr/local/bin/vlock -an 2>> $LOGFILE >> $LOGFILE
+fi
+```
 
