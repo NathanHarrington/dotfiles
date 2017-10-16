@@ -97,14 +97,23 @@ tmux configuration:
     cmake .
     sudo make install
 
+
+
     cd ~
     tmux 
     ( press control + a then d to exit)
     tmux source-file ~/.tmux.conf
 
+    # Install tmux plugin manager
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
     Copy the custom tmux configuration:
     cp custom.tmux.conf ~/.tmux.conf
     tmux source-file ~/.tmux.conf
+
+
+    # Install tmux battery monitor
+    # Press control-a shift-I to load plugins
 
     
 
