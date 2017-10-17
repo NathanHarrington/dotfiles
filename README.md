@@ -438,3 +438,13 @@ elif [ "${1}" == "post" ]; then
 fi
 ```
 
+## Transition from mutt to sup
+
+    Tested on FC26
+    sudo dnf install sup
+
+    sup configuration:
+    Disable ruby warnings on command line with bash:
+
+
+
