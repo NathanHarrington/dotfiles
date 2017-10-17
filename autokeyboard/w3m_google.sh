@@ -7,7 +7,7 @@
 #
 INTRA_KEY_DELAY=0.05
 # Open new tab
-sleep 0.1
+sleep 0.3
 xdotool key "T"
 
 # Goto url
