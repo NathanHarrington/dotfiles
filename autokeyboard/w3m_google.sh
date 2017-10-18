@@ -40,19 +40,24 @@ xdotool key m
 sleep INTRA_KEY_DELAY
 xdotool key Return
 
-# 13 tabs', then press enter
-sleep 0.5
+# 13 tabs', then press enter - this stopped working after the custom
+# google doodle was changed
+#sleep 0.5
+#xdotool key Tab
+#xdotool key Return
+
+# Move down 5 lines, press tab, then press enter
+sleep INTRA_KEY_DELAY
+xdotool key Down
+sleep INTRA_KEY_DELAY
+xdotool key Down
+sleep INTRA_KEY_DELAY
+xdotool key Down
+sleep INTRA_KEY_DELAY
+xdotool key Down
+sleep INTRA_KEY_DELAY
+xdotool key Down
+sleep INTRA_KEY_DELAY
 xdotool key Tab
-xdotool key Tab
-xdotool key Tab
-xdotool key Tab
-xdotool key Tab
-xdotool key Tab
-xdotool key Tab
-xdotool key Tab
-xdotool key Tab
-xdotool key Tab
-xdotool key Tab
-xdotool key Tab
-xdotool key Tab
+sleep INTRA_KEY_DELAY
 xdotool key Return
