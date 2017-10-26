@@ -445,6 +445,30 @@ fi
 
     sup configuration:
     Disable ruby warnings on command line with bash:
+    export RUBYOPT="-W0"
 
+Follow the configuration here:
 
+https://github.com/sup-heliotrope/sup/wiki/Complete-gmail-configuration
+
+dnf install offlineimap msmtp
+Change the cert line in offlineimaprc from:
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+to:
+sslcacertfile = /etc/ssl/certs/ca-bundle.crt
+
+mkdir -p ~/mail/personal
+
+Create app password for google, add to the .offlineimaprc file
+
+In the Repository personal-remote section, add the line:
+auth_mechanisms = LOGIN
+
+This will prevent the error message:
+XOAUTH2 authentication failed: AUTHENTICATE command error: BAD ['Client
+aborted AUTHENTICATE command...
+
+run sup-config
+create maildir source of ~/mail/personal/archive
+store sent mail in maildir personal/archive
 
