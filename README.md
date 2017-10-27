@@ -472,3 +472,5 @@ run sup-config
 create maildir source of ~/mail/personal/archive
 store sent mail in maildir personal/archive
 
+# Left off at running through the msmtp configuration from this page:
+https://github.com/sup-heliotrope/sup/wiki/Complete-gmail-configuration
