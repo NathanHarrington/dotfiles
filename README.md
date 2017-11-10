@@ -440,37 +440,70 @@ fi
 
 ## Transition from mutt to sup
 
-    Tested on FC26
-    sudo dnf install sup
+    Tested on FC26, based heavily on:
+    https://github.com/sup-heliotrope/sup/wiki/Complete-gmail-configuration
 
-    sup configuration:
+    sudo dnf install sup offlineimap msmtp
+
     Disable ruby warnings on command line with bash:
     export RUBYOPT="-W0"
 
-Follow the configuration here:
+	Place the contents below in .offlineimaprc, update the app password and email
+```
+[general]
+accounts = personal
+ui = ttyui
 
-https://github.com/sup-heliotrope/sup/wiki/Complete-gmail-configuration
+[Account personal]
+localrepository = personal-local
+remoterepository = personal-remote
+status_backend = sqlite
 
-dnf install offlineimap msmtp
-Change the cert line in offlineimaprc from:
-sslcacertfile = /etc/ssl/certs/ca-certificates.crt
-to:
+[Repository personal-local]
+type = Maildir
+localfolders = ~/mail/personal
+# Spaces in pathname are bad. Lets use `archive` which is a simple word
+# Besides, we only need `All Mail` folder.
+# Sup would manage mails on its own.
+# If your GMail language setting is not English, you can execute
+# `offlineimap --info` to find out the name of folder which is
+# translated and encoded after your account is configured.
+nametrans = lambda folder: {'archive': '[Gmail]/All Mail',
+                            }.get(folder, folder)
+
+[Repository personal-remote]
+# IMAP with hardcoded GMail config
+type = Gmail
+#
+# The path of ca-certfile for Fedora 
+#
 sslcacertfile = /etc/ssl/certs/ca-bundle.crt
+#
+# Don't pollute the log with failed login mechanisms of:
+#    XOAUTH2 authentication failed: AUTHENTICATE command error: BAD ['Client 
+#    aborted AUTHENTICATE command...
+auth_mechanisms = LOGIN
+#
+# Remember that GMail requires full mail address as username
+remoteuser = user@domain.com
+remotepass = app_password
+nametrans = lambda folder: {'[Gmail]/All Mail': 'archive',
+                            }.get(folder, folder)
+folderfilter = lambda folder: folder == '[Gmail]/All Mail'
+# Or, if you have a lot of mail and don't want to wait for a long time before
+# using sup, you can archive all your old mails on Gmail and only sync the
+# inbox with the following line replacing the previous `folderfilter` line:
+# folderfilter = lambda folder: folder == 'INBOX'
+```
+
 
 mkdir -p ~/mail/personal
 
-Create app password for google, add to the .offlineimaprc file
-
-In the Repository personal-remote section, add the line:
-auth_mechanisms = LOGIN
-
-This will prevent the error message:
-XOAUTH2 authentication failed: AUTHENTICATE command error: BAD ['Client
-aborted AUTHENTICATE command...
 
 run sup-config
 create maildir source of ~/mail/personal/archive
-store sent mail in maildir personal/archive
+(accept all defaults)
+store sent mail in maildir ~/mail/personal/archive
 
 # Left off at running through the msmtp configuration from this page:
 https://github.com/sup-heliotrope/sup/wiki/Complete-gmail-configuration

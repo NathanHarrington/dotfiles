@@ -13,15 +13,24 @@ mkfifo /tmp/srv-input
 tail -f /tmp/srv-input | bluetoothctl &
 
 # Loop forever, attempt to connect every 2 seconds and set the sink
-while [ true ]
-do
+#while [ true ]
+#do
 # u430 touch with in-ears
-#echo  "connect 04:52:C7:1B:D7:F7" > /tmp/srv-input
-#pactl set-default-sink bluez_sink.04_52_C7_1B_D7_F7
+echo  "disconnect" > /tmp/srv-input
+sleep 1
+echo  "power off" > /tmp/srv-input
+sleep 1
+echo  "power on" > /tmp/srv-input
+sleep 1
+echo  "connect 04:52:C7:1B:D7:F7" > /tmp/srv-input
+sleep 1
+pactl set-default-sink bluez_sink.04_52_C7_1B_D7_F7
 
+sleep 1
+pkill bluetoothctl
 # Zenbook with bose over-ears
-echo  "connect 04:52:C7:35:09:EF" > /tmp/srv-input
-pactl set-default-sink bluez_sink.04_52_C7_35_09_EF
+#echo  "connect 04:52:C7:35:09:EF" > /tmp/srv-input
+#pactl set-default-sink bluez_sink.04_52_C7_35_09_EF
 
-sleep 2
-done
+#sleep 2
+#done
