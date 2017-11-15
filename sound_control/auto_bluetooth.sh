@@ -17,17 +17,23 @@ tail -f /tmp/srv-input | bluetoothctl &
 #do
 # u430 touch with in-ears
 echo  "disconnect" > /tmp/srv-input
-sleep 1
+sleep 3
 echo  "power off" > /tmp/srv-input
-sleep 1
+sleep 3
 echo  "power on" > /tmp/srv-input
-sleep 1
+sleep 3
 echo  "connect 04:52:C7:1B:D7:F7" > /tmp/srv-input
-sleep 1
+sleep 3
+#echo "Set card profile increment"
+#pactl set-card-profile 55 a2dp_sink
+
+echo "set default sink"
 pactl set-default-sink bluez_sink.04_52_C7_1B_D7_F7
 
-sleep 1
+sleep 5
 pkill bluetoothctl
+echo "Did you disable the XT1526 phone connection?
+
 # Zenbook with bose over-ears
 #echo  "connect 04:52:C7:35:09:EF" > /tmp/srv-input
 #pactl set-default-sink bluez_sink.04_52_C7_35_09_EF
