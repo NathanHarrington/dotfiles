@@ -8,6 +8,7 @@
 # Use the pulsemixer from: https://github.com/GeorgeFilipkin/pulsemixer
 # to control sound levels on command line like alsamixer
 
+sudo systemctl restart bluetooth
 # Create an input stream for the bluetoothctrl command
 mkfifo /tmp/srv-input 
 tail -f /tmp/srv-input | bluetoothctl &
@@ -23,7 +24,7 @@ sleep 3
 echo  "power on" > /tmp/srv-input
 sleep 3
 echo  "connect 04:52:C7:1B:D7:F7" > /tmp/srv-input
-sleep 3
+sleep 5
 #echo "Set card profile increment"
 #pactl set-card-profile 55 a2dp_sink
 
@@ -32,7 +33,7 @@ pactl set-default-sink bluez_sink.04_52_C7_1B_D7_F7
 
 sleep 5
 pkill bluetoothctl
-echo "Did you disable the XT1526 phone connection?
+echo "Did you disable the XT1526 phone connection?"
 
 # Zenbook with bose over-ears
 #echo  "connect 04:52:C7:35:09:EF" > /tmp/srv-input
