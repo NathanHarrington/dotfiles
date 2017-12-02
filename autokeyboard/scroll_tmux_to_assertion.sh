@@ -17,7 +17,7 @@ sleep INTRA_KEY_DELAY
 xdotool type ?
 sleep INTRA_KEY_DELAY
 
-xdotool type AssertionError
+xdotool type Error
 sleep INTRA_KEY_DELAY
 
 xdotool key Return
