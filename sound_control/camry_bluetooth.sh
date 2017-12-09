@@ -5,7 +5,7 @@ sudo systemctl restart bluetooth
 mkfifo /tmp/srv-input 
 tail -f /tmp/srv-input | bluetoothctl &
 
-echo  "disconnect" > /tmp/srv-input
+echo  "disconnect 20:02:AF:78:9D:8B" > /tmp/srv-input
 sleep 3
 echo  "power off" > /tmp/srv-input
 sleep 3
