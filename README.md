@@ -130,11 +130,16 @@ Gnome Configuration (3.204):
     Extensions, Alternatetab to On
     Appearance, global dark theme to On
     
+    dnf install wmctrl
+
     Keyboard shortcuts, set Switch to workspace 1-4 to Alt-[1234]
     Add new shortcuts for workspaces 5,6,7 with the custom command type:
     wmctrl -s (workspace number-1)
 
-    dnf install wmctrl
+    Use Vertex theme for gnome here (install from source):
+        https://github.com/horst3180/vertex-theme
+
+    Open gnome-tweak-tool select GTK+ theme vertex-dark
 
 Miscellaneous configuration:
 
@@ -186,11 +191,6 @@ Asus Zenbook UX305C specifics:
 Lenovo w541 configuration:
 
     Swap Fn and Ctrl in BIOS
-    Use Vertex theme for gnome here (install from source):
-        https://github.com/horst3180/vertex-theme
-
-    Change all screenshot shortcuts to use the 'folder' key in the top
-        right
 
 
 Integrate the shared drive where appropriate:
@@ -268,23 +268,6 @@ Integrate the shared drive where appropriate:
     echo "Test mail to local" | mail -s "Test local" nharrington
     echo "Test mail to gmail" | mail -s "Test gmail" username@domain
 
-### Autossh systemd service configuration instructions
-
-    Edit the autossh.service file. Change the CUSTOM_REMOTE_PORT
-    variable to a unique value for the host.  That is, make sure it's a
-    port that isn't used by any other forwarding setup.  Add the correct
-    reference to the private key. Change the ssh hostname and port
-    numbers as required.
-
-    First, ssh into the system in question to make sure the manual key
-    agreement process is executed.
-
-    cp autossh.service /etc/systemd/system/autossh.service
-    systemctl enable NetworkManager-wait-online.service
-    systemctl enable autossh
-
-    (reboot to test)
-
 ### Hardware specific configurations
 
     Logitech Performance MX Mouse
@@ -327,39 +310,30 @@ Integrate the shared drive where appropriate:
     git clone https://github.com/altercation/mutt-colors-solarized
 
 ### Firefox and Chrome configuration
-    Update to at least firefox version 54.0
-
-    Install ublock origin for firefox
-    Install disable ctrl-q exit plugin for firefox
-    Install vimfx plugin for firefox
-        (blacklist *mail.google.com*)
-        Enable (Prevent autofocus of text inputs)
-    Install Hide Caption Titlebar Plus for firefox
-        Under look and feel 2, select 
-            Smaller Tabs & Tab bar 
-                (smaller like classic tabs, new)
-            Smaller Toolbars & Buttons 
-                ([Old] smaller buttons)
     
-            Options for home button:
-                (Transparent style/color)
-                Select same icon size for both
+    Firefox 57 (Quantum) on Fedora:
+        Install uBlock Origin
+        Install LeechBlock NG
+        Install Vimium
+            (blacklist *mail.google.com*)
+            Enable (Prevent autofocus of text inputs)
 
+        Under about:config
+            set browser.fullscreen.autohide to False
+        
+        Preferences -> General -> "Show windows and tabs from last time"
+        
+        Customize -> Themes button on bottom -> Dark
 
-    Under about:config
-        set browser.fullscreen.autohide to False
-    Preferences -> General -> "Show windows and tabs from last time"
+    Google Chrome:
+        Install google crhome from the google repo:
+	    https://www.if-not-true-then-false.com/2010/install-\
+		    google-chrome-with-yum-on-fedora-red-hat-rhel/
 
-    Install Dark Blue theme by G4Oblivion
-
-    Install google crhome from the google repo:
-	https://www.if-not-true-then-false.com/2010/install-\
-		google-chrome-with-yum-on-fedora-red-hat-rhel/
-
-    Sign in to chrome to get the settings below:
-    Set chrome to "remember where you left off"
-    Install ublock origin for chrome
-    Install "fixed width text for gmail" extension for chrome
+        Sign in to chrome to get the settings below:
+        Set chrome to "remember where you left off"
+        Install ublock origin for chrome
+        
 
 ### Task warrior configuration
 
@@ -384,126 +358,3 @@ Integrate the shared drive where appropriate:
     Then copy the custom config:
     cp nharrington_vim_config ~/.vim_runtime/my_configs.vim
 
-
-    # Install the DrawIt plugin
-    # wget https://vim.sourceforge.io/scripts/script.php?script_id=40
-     wget  \
-        https://vim.sourceforge.io/scripts/download_script.php?src_id=21108
-        -O DrawIt.vba.gz
-
-    vi DrawIt.vba.gz
-    :so %
-
-    # Exit vim, restart vim
-
-    # Apparently the \ leader character conflicts with a tmux setting,
-    # so every time you want to use the DrawIt plugin, the workflow is:
-
-    :let mapleader="-"
-    :DIstart
-    
-
-### Virtual console locking setup
-
-    The goal here is to be able to use tmux on the virtual console to
-    stay as much as possible in command line mode.
-
-    You want the computer to lock when you close the lid. You want to
-    enter a password once and have all virtual consoles and gnome sessions
-    unlocked.
-
-    In gnome-> Privacy, turn off Screen Lock
-
-    Use vlock from: http://vlock.sourcearchive.com/
-    This has been tested with version 2.2.2-5 on Fedora Core 26
-
-    Add the file below as: /usr/lib/systemd/system-sleep/console_locker.sh
-
-    sudo chmod a+x /usr/lib/systemd/system-sleep/console_locker.sh
-
-```
-#!/bin/sh
-# Place this on your system as:
-# /usr/lib/systemd/system-sleep/console_locker.sh
-# sudo chmod a+x /usr/lib/systemd/system-sleep/console_locker.sh
-
-LOGFILE=/tmp/systemd_suspend_test
-
-if [ "${1}" == "pre" ]; then
-  echo "Suspending at $(date)..." >> $LOGFILE
-
-elif [ "${1}" == "post" ]; then
-  echo "Resume from $(date)" >> $LOGFILE
-  /usr/local/bin/vlock -an 2>> $LOGFILE >> $LOGFILE
-fi
-```
-
-## Transition from mutt to sup
-
-    Tested on FC26, based heavily on:
-    https://github.com/sup-heliotrope/sup/wiki/Complete-gmail-configuration
-
-    sudo dnf install sup offlineimap msmtp
-
-    Disable ruby warnings on command line with bash:
-    export RUBYOPT="-W0"
-
-	Place the contents below in .offlineimaprc, update the app password and email
-```
-[general]
-accounts = personal
-ui = ttyui
-
-[Account personal]
-localrepository = personal-local
-remoterepository = personal-remote
-status_backend = sqlite
-
-[Repository personal-local]
-type = Maildir
-localfolders = ~/mail/personal
-# Spaces in pathname are bad. Lets use `archive` which is a simple word
-# Besides, we only need `All Mail` folder.
-# Sup would manage mails on its own.
-# If your GMail language setting is not English, you can execute
-# `offlineimap --info` to find out the name of folder which is
-# translated and encoded after your account is configured.
-nametrans = lambda folder: {'archive': '[Gmail]/All Mail',
-                            }.get(folder, folder)
-
-[Repository personal-remote]
-# IMAP with hardcoded GMail config
-type = Gmail
-#
-# The path of ca-certfile for Fedora 
-#
-sslcacertfile = /etc/ssl/certs/ca-bundle.crt
-#
-# Don't pollute the log with failed login mechanisms of:
-#    XOAUTH2 authentication failed: AUTHENTICATE command error: BAD ['Client 
-#    aborted AUTHENTICATE command...
-auth_mechanisms = LOGIN
-#
-# Remember that GMail requires full mail address as username
-remoteuser = user@domain.com
-remotepass = app_password
-nametrans = lambda folder: {'[Gmail]/All Mail': 'archive',
-                            }.get(folder, folder)
-folderfilter = lambda folder: folder == '[Gmail]/All Mail'
-# Or, if you have a lot of mail and don't want to wait for a long time before
-# using sup, you can archive all your old mails on Gmail and only sync the
-# inbox with the following line replacing the previous `folderfilter` line:
-# folderfilter = lambda folder: folder == 'INBOX'
-```
-
-
-mkdir -p ~/mail/personal
-
-
-run sup-config
-create maildir source of ~/mail/personal/archive
-(accept all defaults)
-store sent mail in maildir ~/mail/personal/archive
-
-# Left off at running through the msmtp configuration from this page:
-https://github.com/sup-heliotrope/sup/wiki/Complete-gmail-configuration
