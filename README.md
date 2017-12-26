@@ -233,7 +233,7 @@ Integrate the shared drive where appropriate:
     44 * * * * $SCRIPTS/rclone_hourly >>$SCRIPTS/backup.log 2>&1
     
     # Email a summary of the backup directories for hand verification
-    MAIL_DEST="nharrington@wasatchphotonics.com" 
+    MAIL_DEST="username@domain.com"  (change this to the correct email!)
     29 3 * * * $SCRIPTS/mail_summary >>$SCRIPTS/backup.log 2>&1
 
 
