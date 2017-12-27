@@ -5,6 +5,10 @@ environment configuration resources
 # System configuration instructions
 Based on stock Fedoara Core 26 install:
 
+    During the installation process, set the hostname:
+    The procedure below expects the entire drive to be dedicated to the
+    fedora install, with the 'auto' partitioning setup.
+
     Install rpmfusion libraries (dnf install command for adding repos)
 
     dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
@@ -65,8 +69,9 @@ Encrypt home folder:
 
     su - nharrington
 
-    # Write down the wrapped passphrase elsewhere...
-    ecryptfs-unwrap-passphrase ~/.ecryptfs/wrapped-passphrase 
+    # Execute the unwrapped passphrase command and write down the
+    # unwrapped passphrase elsewhere if you're paranoid
+    # ecryptfs-unwrap-passphrase 
 
     # Include it locally...
     ecryptfs-insert-wrapped-passphrase-into-keyring ~/.ecryptfs/wrapped-passphrase
@@ -111,8 +116,9 @@ tmux configuration:
     cp custom.tmux.conf ~/.tmux.conf
     tmux source-file ~/.tmux.conf
 
+    # Start a tmux session:
+    tmux
 
-    # Install tmux battery monitor
     # Press control-a shift-I to load plugins
 
     
@@ -120,9 +126,6 @@ tmux configuration:
 Gnome Configuration (3.204):
 
     Install and run gnome-tweak-tool
-
-    Problems? run gnome-control-center from command line, looks for
-    library fails
 
     In workspaces, change workspace creation to static, create 7 workspaces.
     Top Bar show date, show seconds
@@ -141,6 +144,16 @@ Gnome Configuration (3.204):
 
     Open gnome-tweak-tool select GTK+ theme vertex-dark
 
+    Turn off all search options (no shop, no docs, etc.)
+
+    Set to lock after 1 minute
+
+    Change gnome-terminal settings:
+        green on black colors
+        No scrollbars shown
+        Change profile name to green
+        Turn off show menubar by default
+
 Miscellaneous configuration:
 
     cd ~/projects/dotfiles
@@ -152,9 +165,14 @@ Miscellaneous configuration:
     systemctl enable sshd
     systemctl start sshd
 
-    dnf install w3m nmap    
+    dnf -y install gimp inkscape graphviz w3m nmap thunar ImageMagick
 
-Miscellaneous Configuration:
+    Copy .gnupg from backup to ~/
+    scp -r (backup-system) ~/.gnupg .
+
+    
+
+SSH Configuration:
 
     To connect with other systems from this new system:
     ssh-keygen 
@@ -167,30 +185,7 @@ Miscellaneous Configuration:
 
     ssh (other system) # verify passwordless connectivity
 
-    Copy .gnupg from backup to ~/
-    scp -r (backup-system) ~/.gnupg .
-
-    hostnamectl set-hostname new_computer_hostname
-
-Asus Zenbook UX305C specifics:
-
-    hostnamectl set-hostname zenbook
-
-    FC24 will not display all 16:9 options. All you really want is 1920x1080:
-    Edit /etc/default/grub
-    Append: video=1920x1080 to the CMDLINE_LINUX variable.
     
-    Run: grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg as root
-    
-    This will "kick the 16:9" mode into place as described here:
-    https://bugzilla.redhat.com/show_bug.cgi?id=1339930
-
-    In keyboard shortcuts, set brightness up/down to windows+F5/F6
-
-
-Lenovo w541 configuration:
-
-    Swap Fn and Ctrl in BIOS
 
 
 Integrate the shared drive where appropriate:
