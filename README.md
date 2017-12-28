@@ -166,9 +166,14 @@ Miscellaneous configuration:
     systemctl start sshd
 
     dnf -y install gimp inkscape graphviz w3m nmap thunar ImageMagick
+    dnf -y install surfraw
 
     Copy .gnupg from backup to ~/
     scp -r (backup-system) ~/.gnupg .
+
+    cp .surfraw.conf ~/
+    
+    # Start w3m, change color of anchor to yellow
 
     
 
