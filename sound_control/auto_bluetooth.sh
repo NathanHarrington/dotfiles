@@ -7,10 +7,22 @@
 # this on every reboot
 # Use the pulsemixer from: https://github.com/GeorgeFilipkin/pulsemixer
 # to control sound levels on command line like alsamixer
+#
+# Trouble getting headset to operate the in a2dp_sink mode? Does it
+# always go to 'phone mode', no matter how you connect it? Does it do
+# the beep and reset then lost thing?  Here's how you fix that:
+# connect the bose headset with blueman-manager
+# run the script below, after it connects open gnome sound settings
+# Change the sink from headset to a2dp sink
+# (it will probably have already done the beep reset thing)
+# Close the sound settings
+# Power off the bose headset
+# Wait 3 seconds
+# Power on the bose headset
 
 sudo systemctl restart bluetooth
 # Create an input stream for the bluetoothctrl command
-mkfifo /tmp/srv-input 
+mkfifo /tmp/srv-input
 tail -f /tmp/srv-input | bluetoothctl &
 
 # Loop forever, attempt to connect every 2 seconds and set the sink
