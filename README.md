@@ -312,6 +312,8 @@ Integrate the shared drive where appropriate:
 ### Firefox and Chrome configuration
     
     Firefox 57 (Quantum) on Fedora:
+        about:config -> dom.webnotifications.enabled set to false
+
         Install uBlock Origin
         Install LeechBlock NG
         Install Vimium
