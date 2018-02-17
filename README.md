@@ -85,6 +85,23 @@ Encrypt home folder:
     # Setup swap encryption, reboot
     ecryptfs-setup-swap
 
+    # On the Lenovo u430 touch from 2013, an encrypted swap will lead to system
+    # wide lock ups. If this failure repeats on other systems, the workaround is to
+    # have a secondary swap file created according to:
+    #  https://www.linux.com/learn/ \
+          increase-your-available-swap-space-swap-file 
+
+    # dd if=/dev/zero of=/extraswap bs=1M count=4096 
+    # chmod 0600 /extraswap 
+    # mkswap /extraswap 
+    # cp /etc/fstab /etc/fstab.mybackup 
+
+    # Add the line to fstab: 
+    # /extraswap   none swap   sw   0   0
+
+    # Reboot - Now when you run `swapon -s` you'll see the /extraswap 4GB file
+    # be used under heavy load, and the existing encrypted swap as a backup.
+
 tmux configuration:
 
     Install xclip to enable copying from the tmux scrollback buffer to
