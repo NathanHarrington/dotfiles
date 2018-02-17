@@ -38,3 +38,6 @@ export PYTHONDONTWRITEBYTECODE=1
 
 alias conda3='export PATH=/home/nharrington/miniconda3/bin:$PATH'
 alias conda2='export PATH=/home/nharrington/miniconda2/bin:$PATH'
+
+# Surfraw isn't short enough
+alias gg='sr google'
