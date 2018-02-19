@@ -285,6 +285,13 @@ Integrate the shared drive where appropriate:
     echo "Test mail to local" | mail -s "Test local" nharrington
     echo "Test mail to gmail" | mail -s "Test gmail" username@domain
 
+
+### Sound specific configurations
+    
+    See the notes in sound_control/README.md for details on how to
+    configure a Bose QuietControl 30 headset with bluetooth, and for using
+    cmus.
+
 ### Hardware specific configurations
 
     Logitech Performance MX Mouse
