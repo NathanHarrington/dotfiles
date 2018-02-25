@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """ Control the volume of a specific pulse audio sink input from the
 command line. This is designed to be used with an already running noise
 generating application like:
@@ -10,12 +10,14 @@ of application.name set to "SoX". As the environment dictates,
 independently control the noise level from the music level. Bind the
 commands below to the respsective shortcut keys:
 
-Name: Noise Level Up   Shortcut:  Ctrl+Shift+Alt+&
-Command: noise_vol.py --command up
+Name: Noise Level Up   Shortcut:  Ctrl+Shift+Alt+F3
+Command: <full_path>/noise_vol.py "--command up"
 
-Name: Noise Level Down Shortcut:  Ctrl+Shift+Alt+^
-Command: noise_vol.py --command down
+Name: Noise Level Down Shortcut:  Ctrl+Shift+Alt+F2
+Command: <full_path>/noise_vol.py "--command down"
 
+Requirements: https://github.com/mk-fg/python-pulse-control
+with the get input sink by name patch.
 """
 
 import sys
