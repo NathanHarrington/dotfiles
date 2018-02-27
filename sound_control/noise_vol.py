@@ -10,10 +10,10 @@ of application.name set to "SoX". As the environment dictates,
 independently control the noise level from the music level. Bind the
 commands below to the respsective shortcut keys:
 
-Name: Noise Level Up   Shortcut:  Ctrl+Shift+Alt+F3
+Name: Noise Level Up   Shortcut:  Ctrl+Shift+{
 Command: <full_path>/noise_vol.py "--command up"
 
-Name: Noise Level Down Shortcut:  Ctrl+Shift+Alt+F2
+Name: Noise Level Down Shortcut:  Ctrl+Shift+}
 Command: <full_path>/noise_vol.py "--command down"
 
 Requirements: https://github.com/mk-fg/python-pulse-control

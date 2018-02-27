@@ -19,7 +19,6 @@ Skip back 1 minute:
 cmus-remote --seek -1m
 Ctrl+Alt+Shift+{
 
-
 For details on the custom brownian noise machine and the individually
 controllable keyboard shortcuts, see: noise_vol.py
 
