@@ -173,10 +173,11 @@ Gnome Configuration (3.204):
     Set to lock after 1 minute
 
     Change gnome-terminal settings:
-        green on black colors
+        green on black colors -> Palettes -> Built in schemes: Xterm 
         No scrollbars shown
         Change profile name to green
         Turn off show menubar by default
+        
 
 Miscellaneous configuration:
 
