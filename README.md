@@ -382,6 +382,19 @@ Integrate the shared drive where appropriate:
 
     (accept defaults)
 
+### Watson time tracker configuration
+    
+    # Like task warrior above, this configuration assumes that you will
+    # restore the contents of the watson folder from a backup
+
+    mkdir /home/nharrington/Documents/auto_backup/watson
+    ln -s /home/nharrington/Documents/auto_backup/watson ~/.config/watson
+
+    # conda3, python3
+    conda create --name watson
+    source activate watson
+    pip install td-watson
+
 
 ### Vim configuration
 

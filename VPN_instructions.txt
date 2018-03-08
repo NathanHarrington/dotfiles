@@ -34,3 +34,11 @@ On EC2 Ubuntu instance:
 
 apt-get update
 apt-get install openvpn easy-rsa
+
+sudo su -
+gunzip -c /usr/share/doc/openvpn/examples/sample-config-files/server.conf.gz > /etc/openvpn/server.conf
+
+make-cadir /etc/openvpn/easy-rsa
+cd /etc/openvpn/easy-rsa/
+ln -s openssl-1.0.0.cnf openssl.cnf
+openssl dhparam 4096 > /etc/openvpn/dh4096.pem
