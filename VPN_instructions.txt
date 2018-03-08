@@ -1,0 +1,36 @@
+These are based heavily on:
+https://blogs.perficient.com/dataanalytics/2017/08/24/how-to-setup-your-own-vpn-server-using-amazon-web-services/
+
+Start a ubuntu t2.micro instance
+
+Open /etc/ssh/sshd_config
+Change server port to 6787
+systemctl restart sshd
+
+Then change the amazon instance network rules to open port 6787
+    EC2 Dashboard -> Network and security -> Security Groups
+        (Find most recent launch wizard, select)
+        Actions -> Edit inbound rules
+        Add rule for inbound port 6787
+
+
+
+Create a new inbound rule:
+
+    Custom UDP Rule
+    Port = 1194
+    Source = Any
+
+Create a new elastic IP:
+    EC2 Dashboard -> Elastic IPs -> Allocate New Address -> Allocate
+
+Click Actions -> Associate Address
+    Choose the instance ID of the ubuntu instance
+    Click the IP address that is available in the Private IP pull down
+    Click Associate
+
+
+On EC2 Ubuntu instance:
+
+apt-get update
+apt-get install openvpn easy-rsa
