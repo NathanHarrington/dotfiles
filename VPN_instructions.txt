@@ -115,3 +115,8 @@ cp client1.key /home/ubuntu
 cp ta.key /home/ubuntu
 cd /home/ubuntu
 chmod +r ca.crt client1.crt client1.key ta.key
+
+
+Continue following the VPN client setup instructions for the linux
+client. This will get you to a 'successful' vpn connection that does not
+appear to do any DNS lookups or routing. Bleck
