@@ -348,9 +348,8 @@ Integrate the shared drive where appropriate:
 
         Install uBlock Origin
         Install LeechBlock NG
-        Install Vimium
-            (blacklist *mail.google.com*)
-            Enable (Prevent autofocus of text inputs)
+        Install ForceFull Extension
+        Install Tridactyl from beta (nightly) builds
 
         Under about:config
             set browser.fullscreen.autohide to False

@@ -42,3 +42,76 @@ make-cadir /etc/openvpn/easy-rsa
 cd /etc/openvpn/easy-rsa/
 ln -s openssl-1.0.0.cnf openssl.cnf
 openssl dhparam 4096 > /etc/openvpn/dh4096.pem
+
+mkdir keys
+source ./vars
+./clean-all
+
+openvpn --genkey --secret /etc/openvpn/easy-rsa/keys/ta.key
+./build-ca
+(Accept all defaults)
+
+./build-key-server server
+(Accept defaults, enter y for sign certificate, enter y for commit)
+
+./build-key client1
+(Accept defaults, enter y for sign certificate, enter y for commit)
+
+Edit the file:
+vi /etc/openvpn/server.conf
+
+Replace the lines with the prefixes below to the newly created files:
+
+ca /etc/openvpn/easy-rsa/keys/ca.crt
+cert /etc/openvpn/easy-rsa/keys/server.crt
+key /etc/openvpn/easy-rsa/keys/server.key
+dh /etc/openvpn/dh4096.pem
+tls-auth /etc/openvpn/easy-rsa/keys/ta.key 0 # This file is secret
+
+user openvpn_server
+group nogroup
+
+Add to the end of the cipher section:
+
+cipher AES-256-CBC # AES
+
+Add these lines to the end of the file:
+auth SHA512
+tls-cipher TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:TLS-DHE-RSA-WITH-AES-128-GCM-SHA256:TLS-DHE-RSA-WITH-AES-256-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-256-CBC-SHA:TLS-DHE-RSA-WITH-AES-128-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-128-CBC-SHA
+
+Find the dhcp option lines, remove them and add the three lines below
+push "redirect-gateway def1 bypass-dhcp"
+push "dhcp-option DNS 208.67.222.222"
+push "dhcp-option DNS 208.67.220.220"
+
+# Create the user:
+adduser --system --shell /usr/sbin/nologin --no-create-home openvpn_server
+
+apt-get install iptables-persistent
+(Answer yes to all questions)
+
+iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
+echo 'net.ipv4.ip_forward=1' | tee -a /etc/sysctl.d/99-sysctl.conf
+sysctl -p
+
+dpkg-reconfigure iptables-persistent
+(Answer yes to all quetsions)
+
+systemctl enable openvpn.service
+systemctl start openvpn.service
+
+# Make sure it's running
+netstat -an |grep 1194
+ps -aef | grep vpn
+
+
+cp /usr/share/doc/openvpn/examples/sample-config-files/client.conf /home/ubuntu/client.ovpn
+ chmod +r /home/ubuntu/client.ovpn
+
+cd /etc/openvpn/easy-rsa/keys
+cp ca.crt /home/ubuntu
+cp client1.crt /home/ubuntu
+cp client1.key /home/ubuntu
+cp ta.key /home/ubuntu
+cd /home/ubuntu
+chmod +r ca.crt client1.crt client1.key ta.key
