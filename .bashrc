@@ -41,3 +41,7 @@ alias conda2='export PATH=/home/nharrington/miniconda2/bin:$PATH'
 
 # Surfraw isn't short enough
 alias gg='sr google'
+
+# Ensure git forgets which account you are trying to push code with
+alias credkill='killall git-credential-cache--daemon'
+
