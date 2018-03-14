@@ -1,0 +1,36 @@
+#!/bin/sh
+#
+# This is designed to be run on a 1600x900 screen in gnome-terminal with
+# Monospace Regular font at size 10 in full screen. No menubars, no
+# titlebars.
+#
+# Built with tmux from source commit: 968296bb
+
+SESSIONNAME=system_stats
+
+# Add sleeps between the split window events to make sure the prompts
+# wrap correctly. I kid you not. If you set this too low, it will look
+# like:
+PANEWAIT=1
+
+tmux set-option remain-on-exit on
+
+# Single window on left, 3 windows on right
+tmux new-session -d -s "$SESSIONNAME" 'nmon'
+
+tmux split-window -h  'htop'
+sleep $PANEWAIT
+tmux split-window -v 'watch "swapon -s; df -h | grep -v tmpfs"'
+sleep $PANEWAIT
+tmux split-window -v 'watch sensors'
+sleep $PANEWAIT
+
+# Switch back to nmon pane, send configuration keys
+tmux select-pane -t 0
+tmux send-keys 'l'
+tmux send-keys 'V'
+tmux send-keys 'm'
+tmux send-keys 'D'
+tmux send-keys '.'
+
+tmux -2 attach-session -d -t "$SESSIONNAME"
