@@ -346,10 +346,12 @@ Integrate the shared drive where appropriate:
     Firefox 57 (Quantum) on Fedora:
         about:config -> dom.webnotifications.enabled set to false
 
-        Install uBlock Origin
-        Install LeechBlock NG
-        Install ForceFull Extension
-        Install Tridactyl from beta (nightly) builds
+        Install Firefox Extensions:
+        uBlock Origin
+        LeechBlock NG
+        ForceFull 
+        Open in Browser
+        Tridactyl from beta (nightly) builds
 
         Under about:config
             set browser.fullscreen.autohide to False
