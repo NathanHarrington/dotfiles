@@ -9,6 +9,13 @@
 cd ~/projects/nathanharrington.github.io
 SESSIONNAME=nathanharringtoninfo
 
+CHECK=$( tmux has-session -t $SESSIONNAME )
+
+if [[ $? -eq 0 ]] ; then
+    tmux -2 attach-session -d -t "$SESSIONNAME"
+    exit
+fi
+
 # Add sleeps between the split window events to make sure the prompts
 # wrap correctly. I kid you not. If you set this too low, it will look
 # like:

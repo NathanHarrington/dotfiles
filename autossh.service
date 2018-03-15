@@ -1,24 +1,49 @@
+# Autossh.service script
+#
+# This will not function with an encrypted user folder before that user
+# logs in. If you must have system-wide autossh, you'll need to put the
+# key in /root or create a user that has a non-encrypted folder. As it
+# is, this script will create a tunnel only after gdm or tty login.
+#
+# Installation:
+# Change remote_example.com to your server adddress
+# Change the port from 6000 to your sshd service port
+# Change example_user to the remote username
+# Change the remote tunnel port to something unique
+# Change the <full_path>/example_private_key to the right file
+# Make sure the permissions on the file are 0600
+#
+# cp autossh.service /etc/systemd/system/
+# systemctl daemon-reload
+# systemctl start autossh.service
+# systemctl enable autossh.service
+#
+# Connect to the remote_example.com machine from a different system,
+# Verify that the connection can go back through the tunnel.
+# Reboot the computer, verify that the tunnel comes back up after login
+#
 [Unit]
-Description=Keeps a tunnel to 'remote.example.com' open
-After=network-online.target
-Wants=network-online.target
+Description=Keeps a tunnel to 'remote.example.com' open, allows
+connections back through the tunnel to this machine
+After=network.target
 
 [Service]
 User=nharrington
 # -p [PORT]
-# -l [user]
+# -l [user]  (host)
 # -M 0 --> no monitoring
 # -N Just open the connection and do nothing (not interactive)
 # REMOTE_PORT -> The remote port on the server for sshd
 # CUSTOM_REMOTE_PORT -> The port for use on the server to tunnel back to
 # this system.
 #
+Environment="AUTOSSH_GATETIME=0"
 ExecStart=/usr/bin/autossh -M 0 -N -q \
 -o "ServerAliveInterval 60"  -o "ServerAliveCountMax 3" \
--p 6787 \
--l nharrington example_domain.com\
+-p 6000 \
+-l example_user remote_example.com \
 -R 9001:localhost:22 \
--i /home/nharrington/.ssh/locationof_key_cleaned
+-i <full_path>/example_private_key
 
 [Install]
 WantedBy=multi-user.target
