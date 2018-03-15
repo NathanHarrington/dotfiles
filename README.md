@@ -201,8 +201,7 @@ Miscellaneous configuration:
     # Start w3m, change color of anchor to yellow
 
     # Add autossh configuration to any remote systems on network
-    # availability with the instructions in:
-    [autossh.service](autossh.service)
+    # availability with the instructions in the file: autossh.service
 
 SSH Configuration:
 
