@@ -1,0 +1,21 @@
+#!/bin/sh
+#
+# This is designed to be run on a 1600x900 screen in gnome-terminal with
+# Monospace Regular font at size 10 in full screen. No menubars, no
+# titlebars.
+#
+# Built with tmux from source commit: 968296bb
+
+cd ~/Downloads
+SESSIONNAME=research_w3m
+
+CHECK=$( tmux has-session -t $SESSIONNAME )
+
+if [[ $? -eq 0 ]] ; then
+    tmux -2 attach-session -d -t "$SESSIONNAME"
+    exit
+fi
+
+tmux new-session -d -s "$SESSIONNAME" 'bash'
+
+tmux -2 attach-session -d -t "$SESSIONNAME"

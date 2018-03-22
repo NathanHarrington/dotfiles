@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# This is designed to be run on a 1600x900 screen in gnome-terminal with
+# Monospace Regular font at size 10 in full screen. No menubars, no
+# titlebars.
+#
+# Built with tmux from source commit: 968296bb
+
+cd ~/Documents/auto_backup
+SESSIONNAME=workflows
+
+CHECK=$( tmux has-session -t $SESSIONNAME )
+
+if [[ $? -eq 0 ]] ; then
+    tmux -2 attach-session -d -t "$SESSIONNAME"
+    exit
+fi
+
+tmux set-option remain-on-exit on
+
+# Single window on left, 3 windows on right
+tmux new-session -d -s "$SESSIONNAME" 'vi file5_u430_201610111309.txt'
+
+tmux new-window
+tmux split-window -h  
+
+tmux -2 attach-session -d -t "$SESSIONNAME"
