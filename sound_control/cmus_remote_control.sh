@@ -22,6 +22,14 @@ if [[ $# -eq 1 ]] ; then
     COMMAND=$1
 fi
 
+if [[ "$COMMAND" == "seek_forward" ]] ; then
+    COMMAND="seek +1m"
+fi
+
+if [[ "$COMMAND" == "seek_backward" ]] ; then
+    COMMAND="seek -1m"
+fi
+
 cmus-remote --server $IPADDRESS:$PORT --passwd $PASSWORD --$COMMAND
 
 

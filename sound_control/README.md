@@ -8,16 +8,9 @@ Next Track  Ctrl+Alt+]
 Play (or Play/Pause) Ctrl+Alt+l
 Previous Track  Ctrl+Alt+[
 
+Add the functions as showin in: cmus_remote_control.sh 
 
-Add new shortcuts:
-
-Skip ahead 1 minute: 
-cmus-remote --seek +1m
-Ctrl+Alt+Shift+}
-
-Skip back 1 minute: 
-cmus-remote --seek -1m
-Ctrl+Alt+Shift+{
+Make sure to start cmus with the --listen ip address:port option
 
 For details on the custom brownian noise machine and the individually
 controllable keyboard shortcuts, see: noise_vol.py
