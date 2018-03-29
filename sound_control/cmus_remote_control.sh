@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# Simple script to send forward, next, back commands across the lan to
+# the cmus audio application running on a different computer.
+#
+# Assumes cmus is running on a system with:
+# cmus --listen ip_address:port
+# (The the user types set:passwd=<password>
+#
+# Bind this script in gnome like:
+# ctrl+alt+]  <full_path>/cmus_remote_control.sh next
+# ctrl+alt+[  <full_path>/cmus_remote_control.sh previous
+# ctrl+alt+l  <full_path>/cmus_remote_control.sh pause
+
+IPADDRESS=192.168.0.70
+PORT=5577
+PASSWORD=cmuscontrolitifyouwant
+
+COMMAND=pause
+
+if [[ $# -eq 1 ]] ; then
+    COMMAND=$1
+fi
+
+cmus-remote --server $IPADDRESS:$PORT --passwd $PASSWORD --$COMMAND
+
+
