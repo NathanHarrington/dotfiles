@@ -1,6 +1,6 @@
 #!/bin/bash
 # Stop cmus current playing, play the handel organ concerto
-cmus-remote --pause
+/home/nharrington/projects/dotfiles/sound_control/cmus_remote_control.sh pause
 mplayer "/home/nharrington/Downloads/refined_mp3s/G._F._Haendel_-_Organ_Concertos.mp3"
-cmus-remote --play
+/home/nharrington/projects/dotfiles/sound_control/cmus_remote_control.sh pause
 
