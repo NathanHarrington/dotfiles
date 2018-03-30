@@ -4,15 +4,16 @@
 # the cmus audio application running on a different computer.
 #
 # Assumes cmus is running on a system with:
-# cmus --listen ip_address:port
+# cmus --listen avahi_servername:port
 # (The the user types set:passwd=<password>
 #
 # Bind this script in gnome like:
 # ctrl+alt+]  <full_path>/cmus_remote_control.sh next
 # ctrl+alt+[  <full_path>/cmus_remote_control.sh previous
 # ctrl+alt+l  <full_path>/cmus_remote_control.sh pause
+#
 
-IPADDRESS=192.168.0.70
+AVAHINAME=u430.local
 PORT=5577
 PASSWORD=cmuscontrolitifyouwant
 
@@ -30,6 +31,6 @@ if [[ "$COMMAND" == "seek_backward" ]] ; then
     COMMAND="seek -1m"
 fi
 
-cmus-remote --server $IPADDRESS:$PORT --passwd $PASSWORD --$COMMAND
+cmus-remote --server $AVAHINAME:$PORT --passwd $PASSWORD --$COMMAND
 
 
