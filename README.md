@@ -145,7 +145,14 @@ tmux configuration:
 
     # Press control-a shift-I to load plugins
 
-    
+   
+    > You must remember to open a tty and vlock the session before
+    > logout/login on gnome. This is because apparently the encrypted
+    > filesystem is unmounted for a full logout, then that kills all
+    > processes, period. All tmux sessions included. If you want the goodness
+    > of gnome session reset without loosing your tmux sessions, you must
+    > remember to do this.
+ 
 
 Gnome Configuration (3.204):
 
