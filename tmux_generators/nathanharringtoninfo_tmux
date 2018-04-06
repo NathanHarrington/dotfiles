@@ -17,8 +17,8 @@ if [[ $? -eq 0 ]] ; then
 fi
 
 # Add sleeps between the split window events to make sure the prompts
-# wrap correctly. I kid you not. If you set this too low, it will look
-# like:
+# wrap correctly. I kid you not. If you set this too low, you will try
+# writing a command in a 120 width terminal and it will wrap at 80ish
 PANEWAIT=2
 
 tmux set-option remain-on-exit on
