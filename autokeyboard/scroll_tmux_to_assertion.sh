@@ -12,16 +12,28 @@ sleep 0.3
 # Do the command mode, buffer scroll, search backwards, look for python
 # error, then press enter
 xdotool key ctrl+a
-sleep INTRA_KEY_DELAY
+sleep $INTRA_KEY_DELAY
 
 xdotool type [
-sleep INTRA_KEY_DELAY
+sleep $INTRA_KEY_DELAY
 
 xdotool type ?
-sleep INTRA_KEY_DELAY
+sleep $INTRA_KEY_DELAY
 
-xdotool type Error
-sleep INTRA_KEY_DELAY
+xdotool type E
+sleep $INTRA_KEY_DELAY
+
+xdotool type r
+sleep $INTRA_KEY_DELAY
+
+xdotool type r
+sleep $INTRA_KEY_DELAY
+
+xdotool type o
+sleep $INTRA_KEY_DELAY
+
+xdotool type r
+sleep $INTRA_KEY_DELAY
 
 xdotool key Return
 
