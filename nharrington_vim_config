@@ -19,4 +19,5 @@ set nosi "Smart indent
 " Turn off the blank space to the left of the main text area
 :set foldcolumn=0
 
-colors ir_black
+colors koehler
+let g:NERDTreeHijackNetrw=0
