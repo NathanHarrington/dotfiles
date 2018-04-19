@@ -23,16 +23,16 @@ sleep $INTRA_KEY_DELAY
 xdotool type E
 sleep $INTRA_KEY_DELAY
 
-xdotool type r
+xdotool key space
 sleep $INTRA_KEY_DELAY
 
-xdotool type r
+xdotool key space
 sleep $INTRA_KEY_DELAY
 
-xdotool type o
+xdotool key space
 sleep $INTRA_KEY_DELAY
 
-xdotool type r
+xdotool key space
 sleep $INTRA_KEY_DELAY
 
 xdotool key Return
