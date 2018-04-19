@@ -42,6 +42,9 @@ alias conda2='export PATH=/home/nharrington/miniconda2/bin:$PATH'
 # Surfraw isn't short enough
 alias gg='sr google'
 
-# Ensure git forgets which account you are trying to push code with
+# Ensure git forgets which account you are trying to push code with. For
+# making it easier to use multiple credentials on one machine.
 alias credkill='killall git-credential-cache--daemon'
+
+alias noise='play -c 2 -n synth brownnoise'
 
