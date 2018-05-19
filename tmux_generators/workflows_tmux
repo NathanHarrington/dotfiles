@@ -19,9 +19,10 @@ fi
 tmux set-option remain-on-exit on
 
 # Single window on left, 3 windows on right
-tmux new-session -d -s "$SESSIONNAME" 'vi file5_u430_201610111309.txt'
+tmux new-session -d -s "$SESSIONNAME" 'vim file5_u430_201610111309.txt'
 
 tmux new-window
 tmux split-window -h  
+sleep 1
 
 tmux -2 attach-session -d -t "$SESSIONNAME"
