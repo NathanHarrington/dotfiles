@@ -24,9 +24,14 @@ PANEWAIT=2
 tmux set-option remain-on-exit on
 
 # Single window on left, 3 windows on right
-tmux new-session -d -s "$SESSIONNAME" 'bash'
+tmux new-session -d -s "$SESSIONNAME" 'cmus --listen 192.168.0.70:5577'
+#tmux new-session -d -s "$SESSIONNAME" 'bash'
 
-tmux split-window -h 
+tmux split-window -h  '~/projects/pulsemixer/pulsemixer'
 sleep $PANEWAIT
+tmux split-window -v 'sleep 1; play -c 2 -n synth brownnoise'
+
+sleep $PANEWAIT
+tmux split-window -v 'sleep 1; bash'
 
 tmux -2 attach-session -d -t "$SESSIONNAME"
