@@ -11,7 +11,7 @@ SESSIONNAME=system_stats
 CHECK=$( tmux has-session -t $SESSIONNAME )
 
 if [[ $? -eq 0 ]] ; then
-    tmux -2 attach-session -d -t "$SESSIONNAME"
+    tmux -2 new-session -t "$SESSIONNAME"
     exit
 fi
 
@@ -40,4 +40,4 @@ tmux send-keys 'm'
 tmux send-keys 'D'
 tmux send-keys '.'
 
-tmux -2 attach-session -d -t "$SESSIONNAME"
+tmux -2 new-session -t "$SESSIONNAME"

@@ -12,7 +12,7 @@ SESSIONNAME=nathanharringtoninfo
 CHECK=$( tmux has-session -t $SESSIONNAME )
 
 if [[ $? -eq 0 ]] ; then
-    tmux -2 attach-session -d -t "$SESSIONNAME"
+    tmux -2 new-session -t "$SESSIONNAME"
     exit
 fi
 
@@ -33,4 +33,4 @@ sleep $PANEWAIT
 tmux split-window -v
 sleep $PANEWAIT
 
-tmux -2 attach-session -d -t "$SESSIONNAME"
+tmux -2 new-session -t "$SESSIONNAME"

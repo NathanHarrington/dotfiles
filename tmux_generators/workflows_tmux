@@ -12,7 +12,7 @@ SESSIONNAME=workflows
 CHECK=$( tmux has-session -t $SESSIONNAME )
 
 if [[ $? -eq 0 ]] ; then
-    tmux -2 attach-session -d -t "$SESSIONNAME"
+    tmux -2 new-session -t "$SESSIONNAME"
     exit
 fi
 
@@ -25,4 +25,4 @@ tmux new-window
 tmux split-window -h  
 sleep 1
 
-tmux -2 attach-session -d -t "$SESSIONNAME"
+tmux -2 new-session -t "$SESSIONNAME"
