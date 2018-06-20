@@ -5,7 +5,10 @@
 AVAHINAME=192.168.0.70
 PORT=5577
 PASSWORD=cmuscontrolitifyouwant
-QLIST=/home/nharrington/projects/dotfiles/sound_control/full_spectrum_music_queuelist.m3u
-cmus-remote --server $AVAHINAME:$PORT --passwd $PASSWORD -q $QLIST
+
+FLD=/home/nharrington/projects/dotfiles/sound_control
+cat $FLD/full_spectrum_music_queuelist.m3u | shuf > $FLD/shuf_list.m3u
+
+cmus-remote --server $AVAHINAME:$PORT --passwd $PASSWORD -q $FLD/shuf_list.m3u
 cmus-remote --server $AVAHINAME:$PORT --passwd $PASSWORD --next
 
