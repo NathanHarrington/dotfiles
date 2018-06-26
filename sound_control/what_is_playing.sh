@@ -5,7 +5,7 @@
 #  Prereqs: dnf install xosd
 #
 
-AVAHINAME=192.168.0.70
+AVAHINAME=u430.local
 PORT=5577
 PASSWORD=cmuscontrolitifyouwant
 
