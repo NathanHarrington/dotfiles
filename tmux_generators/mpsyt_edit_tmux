@@ -24,8 +24,7 @@ PANEWAIT=2
 tmux set-option remain-on-exit on
 
 # Single window on left, 3 windows on right
-AVAHI_ID=u430.local
-tmux new-session -d -s "$SESSIONNAME" 'cmus --listen u430.local'
+tmux new-session -d -s "$SESSIONNAME" 'cmus --listen u430.local:5577'
 sleep $PANEWAIT
 
 tmux split-window -h  '~/projects/pulsemixer/pulsemixer'

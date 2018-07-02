@@ -353,6 +353,7 @@ Integrate the shared drive where appropriate:
     
     Firefox 57 (Quantum) on Fedora:
         about:config -> dom.webnotifications.enabled set to false
+        about:config -> geo.enabled set to false
 
         Install Firefox Extensions:
         uBlock Origin
