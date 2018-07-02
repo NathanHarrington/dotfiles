@@ -1,0 +1,26 @@
+#!/bin/sh
+#
+# This is designed to be run on a 1600x900 screen in gnome-terminal with
+# Monospace Regular font at size 10 in full screen. No menubars, no
+# titlebars.
+#
+
+cd ~/projects/Deimos
+SESSIONNAME=deimos
+
+CHECK=$( tmux has-session -t $SESSIONNAME )
+
+if [[ $? -eq 0 ]] ; then
+    tmux -2 new-session -t "$SESSIONNAME"
+    exit
+fi
+
+tmux set-option remain-on-exit on
+
+# Single window on left, 3 windows on right
+tmux new-session -d -s "$SESSIONNAME"
+
+tmux split-window -h  
+sleep 1
+
+tmux -2 new-session -t "$SESSIONNAME"
