@@ -361,6 +361,8 @@ Integrate the shared drive where appropriate:
         ForceFull 
         Open in Browser
         Tridactyl from beta (nightly) builds
+        After tridactyl is installed:
+        :blacklistadd mail.google.com
 
         Under about:config
             set browser.fullscreen.autohide to False
