@@ -6,4 +6,5 @@
 # moving the hand to the mouse
 #
 # Map this to ctrl-alt-shift-m in gnome keyboard shortcuts
+sleep 2
 xdotool click 1
