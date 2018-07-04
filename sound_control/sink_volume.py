@@ -5,16 +5,34 @@ generating application like:
 
 $ play -c 2 -n synth brownnoise
 
-The will create a running noise generator with the pulse audio property
-of application.name set to "SoX". As the environment dictates,
-independently control the noise level from the music level. Bind the
-commands below to the respsective shortcut keys:
+The command above will create a running noise generator with the pulse
+audio property of application.name set to "SoX". As your auditory
+environment dictates, independently control the noise level from the
+music level.  Bind the commands below to the respsective shortcut keys:
 
 Name: Noise Level Up   Shortcut:  Ctrl+Shift+{
-Command: <full_path>/noise_vol.py "--command up"
+Command: <full_path>/sink_volume.py "--command up"
 
 Name: Noise Level Down Shortcut:  Ctrl+Shift+}
-Command: <full_path>/noise_vol.py "--command down"
+Command: <full_path>/sink_volume.py "--command down"
+
+If your music client is CMUS, try:
+
+Name: Music level down shortcut Ctrl+shift+F12
+Command: <full_path>/sink_volume.py "--name 'C* Music Player' --command down"
+
+Name: Music level down shortcut Ctrl+shift+F11
+Command: <full_path>/sink_volume.py "--name 'C* Music Player' --command up"
+
+It is often easier to create an executable in /usr/bin with the full
+python3 command and map that in gnome keyboard shortcuts like:
+
+cat /usr/bin/music_down
+
+python3 \
+/home/nharrington/projects/dotfiles/sound_control/sink_volume.py \
+--name 'C* Music Player' --command down
+
 
 Requirements: https://github.com/mk-fg/python-pulse-control
 with the get input sink by name patch.
