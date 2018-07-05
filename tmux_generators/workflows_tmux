@@ -18,11 +18,31 @@ fi
 
 tmux set-option remain-on-exit on
 
-# Single window on left, 3 windows on right
+# Double vertical window on the left, with one of them having a
+# single-character width because of the monitor edge issues
 tmux new-session -d -s "$SESSIONNAME" 'vim file5_u430_201610111309.txt'
 
 tmux new-window
-tmux split-window -h  
-sleep 1
+tmux split-window -h 
+tmux split-window -v
+tmux select-pane -t 0
+tmux split-window -h 
+tmux select-pane -t 0
+
+# After the session loads, issue the command below with the left most
+# pane focused
+#resize-pane -L 65 
+# Then clear the command line with:
+# export PS1=; clear
+#to get that 1-char wide left pane automate it here when you figure out
+# how to get it to work from a script
 
 tmux -2 new-session -t "$SESSIONNAME"
+
+
+
+#
+#tmux split-window -h  
+#sleep 1
+#
+#tmux -2 new-session -t "$SESSIONNAME"
