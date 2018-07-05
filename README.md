@@ -363,6 +363,7 @@ Integrate the shared drive where appropriate:
         Tridactyl from beta (nightly) builds
         After tridactyl is installed:
         :blacklistadd mail.google.com
+        :blacklistadd calendar.google.com
 
         Under about:config
             set browser.fullscreen.autohide to False
