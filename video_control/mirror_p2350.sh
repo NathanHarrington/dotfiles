@@ -28,7 +28,8 @@
 #
 # 3. Run this script
 # 4. The external display should now turn into the primary at what looks
-#    like full HD, and the laptop display is blank.
+#    like full HD, and the laptop display is blank. Or, the external
+#    display is blank and the laptop is 1600x900
 # 5. Use the hardware video display keys again to mirror the desktop.
 # 6. You should now see a slightly blurry 1600x900 overscanned full
 #     screen usage on the external and native 1600x900 on the laptop
