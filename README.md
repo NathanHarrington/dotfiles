@@ -367,6 +367,8 @@ Integrate the shared drive where appropriate:
 
         Under about:config
             set browser.fullscreen.autohide to False
+            set geo.enabled to false
+            set dom.webnotifications.enabled to false
         
         Preferences -> General -> "Show windows and tabs from last time"
         

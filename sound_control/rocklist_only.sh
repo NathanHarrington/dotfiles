@@ -2,7 +2,7 @@
 # Update the cmus queue with the 'full spectrum' music which is usually
 # metal. Anything that is low and high frequency, without words,
 # suitable for drownning out the sounds of a house with 9 people in it.
-AVAHINAME=u430.local
+AVAHINAME=127.0.0.1
 PORT=5577
 PASSWORD=cmuscontrolitifyouwant
 

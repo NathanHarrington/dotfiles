@@ -1,6 +1,6 @@
 #!/bin/bash
 # Update the cmus queue with the classical mps
-AVAHINAME=u430.local
+AVAHINAME=127.0.0.1
 PORT=5577
 PASSWORD=cmuscontrolitifyouwant
 

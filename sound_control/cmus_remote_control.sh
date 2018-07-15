@@ -13,7 +13,7 @@
 # ctrl+alt+l  <full_path>/cmus_remote_control.sh pause
 #
 
-AVAHINAME=u430.local
+AVAHINAME=127.0.0.1
 PORT=5577
 PASSWORD=cmuscontrolitifyouwant
 

@@ -5,6 +5,6 @@
 # This is designed for exiting modal windows and menu popups without
 # moving the hand to the mouse
 #
-# Map this to ctrl-alt-shift-m in gnome keyboard shortcuts
+# Map this to ctrl-alt-super-m in gnome keyboard shortcuts
 sleep 1
 xdotool click 1

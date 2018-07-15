@@ -14,7 +14,8 @@
 # /home/nharrington/projects/\
 #    dotfiles/autokeyboard/move_pointer.sh # down|up|left|right
 #
-# Map those scripts to ctrl-up|down|left|right in gnome keyboard shortcuts
+# Map those scripts to ctrl-super-alt up|down|left|right in
+# gnome keyboard shortcuts
 
 COMMAND="left"
 
