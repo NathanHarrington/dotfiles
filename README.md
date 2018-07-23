@@ -360,10 +360,13 @@ Integrate the shared drive where appropriate:
         LeechBlock NG
         ForceFull 
         Open in Browser
-        Tridactyl from beta (nightly) builds
-        After tridactyl is installed:
-        :blacklistadd mail.google.com
-        :blacklistadd calendar.google.com
+        Surfingkeys
+        After surfing keys is installed:
+            cp .surfingkeys.js ~
+
+        You may have to edit the surfing keys extension advanced
+        settings and point it to the .surfingkeys.js file. This is solely to get
+        the benefit of turning emoji completion off with iunmap(":")
 
         Under about:config
             set browser.fullscreen.autohide to False
