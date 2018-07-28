@@ -48,3 +48,5 @@ alias credkill='killall git-credential-cache--daemon'
 
 alias noise='play -c 2 -n synth brownnoise'
 
+# Make the screen entirelyblank
+alias cleanclear='export PS1="";clear'
