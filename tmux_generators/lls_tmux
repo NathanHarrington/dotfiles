@@ -4,10 +4,9 @@
 # Monospace Regular font at size 10 in full screen. No menubars, no
 # titlebars.
 #
-# Built with tmux from source commit: 968296bb
 
-cd ~/Documents/auto_backup
-SESSIONNAME=workflows
+cd ~/projects/lls_data
+SESSIONNAME=lls
 
 CHECK=$( tmux has-session -t $SESSIONNAME )
 
@@ -16,18 +15,21 @@ if [[ $? -eq 0 ]] ; then
     exit
 fi
 
-tmux set-option remain-on-exit on
+export PANEWAIT=0.3
 
-# Double vertical window on the left, with one of them having a
-# single-character width because of the monitor edge issues
-tmux new-session -d -s "$SESSIONNAME" 'vim file5_u430_201610111309.txt'
+tmux new-session -d -s "$SESSIONNAME" 
+sleep $PANEWAIT
 
-tmux new-window
 tmux split-window -h 
+sleep $PANEWAIT
 tmux split-window -v
+sleep $PANEWAIT
 tmux select-pane -t 0
+sleep $PANEWAIT
 tmux split-window -h 
+sleep $PANEWAIT
 tmux select-pane -t 0
+sleep $PANEWAIT
 
 # After the session loads, issue the command below with the left most
 # pane focused
