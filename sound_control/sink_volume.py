@@ -67,6 +67,10 @@ class VolumeApplication(object):
         nam_str = "Specify an audio sink application name"
         parser.add_argument("-n", "--name", type=str,
                             default="SoX", help=inc_str)
+
+        nam_str = "Exact volume"
+        parser.add_argument("-e", "--exact", type=float,
+                            default=-1, help=inc_str)
         return parser
 
     def run(self, argv):
@@ -79,7 +83,14 @@ class VolumeApplication(object):
 
         vol = pulse.volume_get_all_chans_by_name(self.args.name)
 
-        if self.args.command.upper() == "UP":
+        if self.args.exact > 1.0:
+            print("\n SPECIFY FLOATING POINT OR YOUR EARS EXPLODE \n")
+            sys.exit(1)
+
+        if self.args.exact != -1:
+            vol = self.args.exact
+
+        elif self.args.command.upper() == "UP":
             vol += self.args.increment
         else:
             vol -= self.args.increment
