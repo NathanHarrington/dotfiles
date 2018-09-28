@@ -423,6 +423,8 @@ Integrate the shared drive where appropriate:
     Then copy the custom config:
     cp nharrington_vim_config ~/.vim_runtime/my_configs.vim
 
+    # Install the flake8 package at the fedora system level
+    dnf install pyflakes
 
 ### Windows VM in VirtualBox
 
