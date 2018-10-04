@@ -7,7 +7,7 @@
 # tmux window is focused.
 #
 INTRA_KEY_DELAY=0.05
-sleep 0.3
+sleep 0.8
 
 # Do the command mode, buffer scroll, search backwards, look for python
 # error, then press enter
