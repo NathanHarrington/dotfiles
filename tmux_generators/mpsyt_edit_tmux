@@ -33,6 +33,9 @@ sleep $PANEWAIT
 tmux split-window -v 'sleep 1; play -c 2 -n synth brownnoise'
 sleep $PANEWAIT
 
+tmux split-window -v 'play -n -n --combine merge synth brownnoise band -n 750 750 tremolo .1 40'
+sleep $PANEWAIT 
+
 tmux split-window -v 'sleep 1; bash'
 sleep $PANEWAIT
 

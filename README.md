@@ -113,7 +113,7 @@ tmux configuration:
 
     Install xclip to enable copying from the tmux scrollback buffer to
     the system clipboard:
-    dnf install xclip
+    dnf install xclip urlview
 
     Setup tmux with the instructions from http://tony.github.io/tmux-config/:
 
@@ -198,7 +198,13 @@ Miscellaneous configuration:
     systemctl start sshd
 
     dnf -y install gimp inkscape graphviz w3m nmap thunar ImageMagick
-    dnf -y install surfraw
+    dnf -y install surfraw tig
+
+    cp tig-colors-neonwolf-256.tigrc  ~/.config/tig/
+
+    mkdir ~/.config/tig/
+    echo "source ~/.config/tig/tig-colors-neonwolf-256.tigrc" \
+        > ~/.config/tig/config
 
     Copy .gnupg from backup to ~/
     scp -r (backup-system) ~/.gnupg .

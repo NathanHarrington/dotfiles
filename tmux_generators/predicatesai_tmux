@@ -5,7 +5,7 @@
 # titlebars.
 #
 
-cd ~/projects/predicates.AI
+cd ~/projects/predicatesai
 SESSIONNAME=predicatesai
 
 CHECK=$( tmux has-session -t $SESSIONNAME )
