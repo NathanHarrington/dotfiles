@@ -18,9 +18,15 @@ fi
 # 80+
 PANEWAIT=1
 
+cd ~/projects/Titan/scripts/aws_ec2_control
+
 tmux new-session -d -s "$SESSIONNAME" 
 
 tmux split-window -v 
+sleep $PANEWAIT
+tmux split-window -h 
+sleep $PANEWAIT
+tmux split-window -h 
 sleep $PANEWAIT
 tmux split-window -h
 sleep $PANEWAIT

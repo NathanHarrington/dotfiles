@@ -3,6 +3,7 @@
 # Set the noise + music mix volumes to the default 'exercise' levels.
 #
 amixer set Master 66%
+amixer set Master unmute
 
 /home/nharrington/projects/dotfiles/sound_control/sink_volume.py \
 --name 'C* Music Player' --exact 0.82
