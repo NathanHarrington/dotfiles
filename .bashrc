@@ -12,6 +12,7 @@ fi
 
 alias l='ls -la'
 alias vi='vim'
+alias gg='sr google'
 
 # visual differentiator for core computer
 #PS1="# \W # "
@@ -39,14 +40,34 @@ export PYTHONDONTWRITEBYTECODE=1
 alias conda3='export PATH=/home/nharrington/miniconda3/bin:$PATH'
 alias conda2='export PATH=/home/nharrington/miniconda2/bin:$PATH'
 
-# Surfraw isn't short enough
-alias gg='sr google'
-
-# Ensure git forgets which account you are trying to push code with. For
-# making it easier to use multiple credentials on one machine.
+# For resetting the stored git credential cache in order to use multiple
+# git user id's on the same machine
 alias credkill='killall git-credential-cache--daemon'
-
 alias noise='play -c 2 -n synth brownnoise'
+
+# Use spyder from the full anaconda install for machine learning course
+alias spyder='export PATH=/home/nharrington/anaconda3/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/nharrington/.local/bin:/home/nharrington/bin; spyder'
+
+alias ml_path='export PATH=/home/nharrington/anaconda3/bin:$PATH'
 
 # Make the screen entirelyblank
 alias cleanclear='export PS1="";clear'
+
+eval "$BASH_POST_RC"
+
+
+function pybadge() {
+    echo "![pylint Score](https://mperlet.github.io/pybadge/badges/$(pylint ( 2> /dev/null | tail -n2 | awk '{print $7}' | cut -d"/" -f1).svg)"
+}
+
+# Tmux sessions
+alias deimostmux=~/projects/dotfiles/tmux_generators/deimos_tmux 
+alias titantmux=~/projects/dotfiles/tmux_generators/titan_tmux 
+alias llstmux=~/projects/dotfiles/tmux_generators/lls_tmux 
+alias workflowstmux=~/projects/dotfiles/tmux_generators/workflows_tmux
+alias tunnelstmux=~/projects/dotfiles/tmux_generators/tunnels_tmux
+alias w3mtmux=~/projects/dotfiles/tmux_generators/w3m_tmux
+alias rubberopticstmux=~/projects/dotfiles/tmux_generators/rubberoptics_tmux
+alias nathanharringtoninfotmux=~/projects/dotfiles/tmux_generators/nathanharringtoninfo_tmux
+alias universalcbtmux=~/projects/dotfiles/tmux_generators/universalcb_tmux
+alias mpsyttmux=~/projects/dotfiles/tmux_generators/mpsyt_edit_tmux
