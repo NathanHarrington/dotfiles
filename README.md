@@ -200,9 +200,9 @@ Miscellaneous configuration:
     dnf -y install gimp inkscape graphviz w3m nmap thunar ImageMagick
     dnf -y install surfraw tig
 
-    cp tig-colors-neonwolf-256.tigrc  ~/.config/tig/
 
     mkdir ~/.config/tig/
+    cp tig-colors-neonwolf-256.tigrc  ~/.config/tig/
     echo "source ~/.config/tig/tig-colors-neonwolf-256.tigrc" \
         > ~/.config/tig/config
 
@@ -428,6 +428,11 @@ Integrate the shared drive where appropriate:
 
     Then copy the custom config:
     cp nharrington_vim_config ~/.vim_runtime/my_configs.vim
+
+    # Edit the file below, and remove the vnoremap sections for $1, $2,
+    # etc.
+    vi ~/.vim_runtime/vimrcs/extended.vim
+
 
     # Install the flake8 package at the fedora system level
     dnf install pyflakes
