@@ -300,18 +300,6 @@ Integrate the shared drive where appropriate:
     for details on commonly used keyboard automation scripts and how
     they should be bound in gnome.
 
-### Hardware specific configurations
-
-    Logitech Performance MX Mouse
-    
-    dnf install xdotool xbindkeys
-    
-    cat > ~/.xbindkeysrc
-    "xdotool key Super"
-    release + b:10
-    
-    echo "xbindkeys" > ~/.config/autostart/xbindkeys.desktop
-
 ### Install nomachine
 
     Download nomachine from: https://www.nomachine.com/download/linux&id=1 
@@ -329,23 +317,10 @@ Integrate the shared drive where appropriate:
 
     reinstall nomachine
 
-### Mutt configuration
-
-    mkdir -p ~/.mutt/cache
-
-    cp /home/nharrington/projects/dotfiles/.muttrc ~/
-
-    Edit the .muttrc configuration to include the appropriate app
-    passwords, domain settings.
-
-    cd ~/.mutt
-    git clone https://github.com/altercation/mutt-colors-solarized
-
 ### Firefox and Chrome configuration
 
     Add streaming video support:
     dnf install gstreamer1-libav gstreamer1-plugins-ugly unrar compat-ffmpeg28 ffmpeg-libs
-
     
     Firefox 57 (Quantum) on Fedora:
         about:config -> dom.webnotifications.enabled set to false
@@ -355,25 +330,22 @@ Integrate the shared drive where appropriate:
 
         Install Firefox Extensions:
         uBlock Origin
-        LeechBlock NG
+        LeechBlock NG   -> see configuration details in time-wasters.md
         ForceFull 
         Open in Browser
         Surfingkeys
-        After surfing keys is installed:
-            cp .surfingkeys.js ~
-
-        You may have to edit the surfing keys extension advanced
-        settings and point it to the .surfingkeys.js file. This is solely to get
-        the benefit of turning emoji completion off with iunmap(":")
+            You may have to edit the surfing keys extension advanced
+            settings and point it to the .surfingkeys.js file. This is solely to get
+            the benefit of turning emoji completion off with iunmap(":")
 
         Preferences -> General -> "Restore previous session"
        	Turn off ctrl+tab cycles through tabs in recently used order
-	Turn off recommend extensions as you browse
-	Privacy and Security -> Turn off all privacy invasions
-	Home -> homepage is blank
-	home -> New tabs is blank page
-	Uncheck all firefox home contenG
-	Uncheck all 'one click search engines'
+	    Turn off recommend extensions as you browse
+	    Privacy and Security -> Turn off all privacy invasions
+	    Home -> homepage is blank
+	    home -> New tabs is blank page
+	    Uncheck all firefox home contenG
+	    Uncheck all 'one click search engines'
  
         Customize -> Themes button on bottom -> Dark
 
@@ -385,6 +357,7 @@ Integrate the shared drive where appropriate:
         Sign in to chrome to get the settings below:
         Set chrome to "remember where you left off"
         Install ublock origin for chrome
+        Install surfingkeys for chrome
         
 ### Vim configuration
 
@@ -395,7 +368,7 @@ Integrate the shared drive where appropriate:
     Then copy the custom config:
     cp nharrington_vim_config ~/.vim_runtime/my_configs.vim
 
-    # Edit the file below, and remove the vnoremap sections for $1, $2,
+    # Edit the file below, and comment out the vnoremap sections for $1, $2,
     # etc.
     vi ~/.vim_runtime/vimrcs/extended.vim
 
@@ -434,118 +407,47 @@ Integrate the shared drive where appropriate:
     edge hardware) that this can fail, and you want to know at the
     beginning, not at the end.
 
-    After VirtualBox is functional, follow the install instructions below for windows VM on fedora.
+    After VirtualBox is functional, follow the install instructions  in
+    windows-virtualbox.md for windows VM on fedora.
 
-Instructions for creating a bare-bones vm that can be used for cloning
-purposes. Based on what I could find online, any windows 10 installation
-can be used for free for 90 days without licensing issues. After 90
-days, you must completely destroy the instance. Use these instructions
-every 90 days to create a new windows virtual machine snapshot to then
-use for different dev builds.
+### Recovering from backup:
 
+    Restoring from old system encrypted home folder:
 
-Install VirtualBox 5.2.6
+    Plug in the old disk run:
+    pvscan
 
-Create a virtualbox session with 2TB disk, 4GB RAM and the iso image:
+    You should see something like the same volume group names listed below.
+    ACTIVE /dev/fedora/home    <- this is the current operating system
+    inactive /dev/fedora/home  <- this is your old disk
 
-Win10_1709_English_x64.iso 2017-10-01 4,587,268KB
+    Run:
+    vgdisplay
 
-Accept defaults until it gets to operating system selection, choose:
-Windows 10 Home
+    Get the VG UUID of the older disk
 
-Choose customer install
-Accept defaults
+    Rename the volume group of the older disk:
+    vgrename OLD_DISK_UUID  oldFedora
 
-At Sign in with microsoft -> Offline Account -> No
+    Unplug the disk, replug.
+    Mount by device name:
 
-Name: Win10 Development
-password: "password"
-password hint: the password
+    mkdir /media/DISK/home
+    mount /dev/oldFedora/home /media/DISK/home
 
-Make Cortana Personal Assistant -> No
-Set all privacy invasions to "Off"
+    Now if you do:
+    ls -la /media/DISK/home/nharrington
+    You should see blinking red failures to show you need to load the encryption
 
-After system boots for the first time:
+    The simple mode for read only access should be the command below. Make sure to run this
+    in a root shell session. It will not work with sudo!
 
-Open services, Right cick windows update, set to disabled
-Stop windows update service.
+    ecryptfs-recover-private /media/DISK/home/.ecryptfs/nharrington/.Private
+    Recover directory: yes
+    Do you know your login passphrase: yes
+    Enter your fedora gnome login password
 
-Privacy: Turn off everything. Literally, all access to anything under
-privacy settings should be set to off.
-
-Go through apps & features, remove anything that looks like bloatware
-   This should be nothing - as it's a pure windows install
-
-Reboot
-
-Disable cortana on taskbar
-Install chrome
-Install ublock origin
-
-Install classic shell from classicshell.net
-Reboot
-
-Install virtualbox extension pack on Host OS
-Shutdown VM
-
-On the host system
-VBoxManage setextradata "VM-Name" CustomVideoMode1 1920x1080x32
-
-Reboot virtual machine, set desktop resolution to 1920x1080
-
-Reboot
-Shutdown system
-
-1. Create a snapshot
-2. Clone the system
-Create a full clone, name it: XGUT_Windows10_development
-
-Further clones will all be linked back to this primary clone. Which in
-turn is a full clone of the windows 10 install.
-
-Export this virtual machine.  This is the 'base' on which to make
-further interations. Don't ever boot this snapshot again, always make a
-clone of it or re-import the exported virtual machine.
-
-
-Recovering from backup:
-
-Restoring from old system encrypted home folder:
-
-Plug in the old disk run:
-pvscan
-
-You should see something like the same volume group names listed below.
-ACTIVE /dev/fedora/home
-inactive /dev/fedora/home
-
-Run:
-vgdisplay
-
-Get the VG UUID of the older disk
-
-Rename the volume group of the older disk:
-vgrename OLD_DISK_UUID  oldFedora
-
-Unplug the disk, replug.
-Mount by device name:
-
-mkdir /media/DISK/home
-mount /dev/oldFedora/home /media/DISK/home
-
-Now if you do:
-ls -la /media/DISK/home/nharrington
-You should see blinking red failures to show you need to load the encryption
-
-The simple mode for read only access should be the command below. Make sure to run this
-in a root shell session. It will not work with sudo!
-
-ecryptfs-recover-private /media/DISK/home/.ecryptfs/nharrington/.Private
-Recover directory: yes
-Do you know your login passphrase: yes
-Enter your fedora gnome login password
-
-Details here:
-https://askubuntu.com/questions/238047/how-do-i-mount-an-encrypted-home-directory-on-another-ubuntu-machine
+    Details here:
+    https://askubuntu.com/questions/238047/how-do-i-mount-an-encrypted-home-directory-on-another-ubuntu-machine
 
 
