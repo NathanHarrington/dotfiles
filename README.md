@@ -2,7 +2,7 @@
 Nathan Harrington environment configuration resources
 
 
-# System configuration instructions
+### System configuration instructions
 Based on stock Fedora Core 29 workstation install.
 
     The procedure below expects the entire drive to be dedicated to the
@@ -54,7 +54,7 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
     Follow the time-wasters.md file for more details on the leechblock and other network-level blocking.
 
 
-Encrypt home folder:
+### Encrypt home folder:
 
     These are based on: 
     https://cloud-ninja.org/2014/04/05/fedora-encrypting-your-home-directory/
@@ -107,7 +107,7 @@ Encrypt home folder:
     # Reboot - Now when you run `swapon -s` you'll see the /extraswap 4GB file
     # be used under heavy load, and the existing encrypted swap as a backup.
 
-tmux configuration:
+### tmux configuration:
 
     Install xclip to enable copying from the tmux scrollback buffer to
     the system clipboard:
@@ -141,7 +141,7 @@ tmux configuration:
 
     # Press control-a shift-I to load plugins
 
-Gnome Configuration (3.204):
+### Gnome Configuration (3.204):
 
     Install and run gnome-tweak-tool
 
@@ -168,8 +168,7 @@ Gnome Configuration (3.204):
         Change profile name to green
         Turn off show menubar by default
 
-
-Miscellaneous configuration:
+### Miscellaneous configuration:
 
     cd ~/projects/dotfiles
     cp .bashrc ~/
@@ -199,7 +198,7 @@ Miscellaneous configuration:
     # Add autossh configuration to any remote systems on network
     # availability with the instructions in the file: autossh.service
 
-SSH Configuration:
+### SSH Configuration:
 
     To connect with other systems from this new system:
     ssh-keygen 
@@ -212,8 +211,7 @@ SSH Configuration:
 
     ssh (other system) # verify passwordless connectivity
 
-
-Integrate the shared drive where appropriate:
+### Integrate the shared drive where appropriate:
 
     # These two as sudo
     mkdir -p /mnt/cifs_share/share_data
