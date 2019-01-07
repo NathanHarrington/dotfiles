@@ -12,6 +12,8 @@
 # ctrl+alt+[  <full_path>/cmus_remote_control.sh previous
 # ctrl+alt+l  <full_path>/cmus_remote_control.sh pause
 #
+# ctrl+alt+shift+} <full_path>/cmus_remote_control.sh seek_forward
+# ctrl+alt+shift+{ <full_path>/cmus_remote_control.sh seek_backward
 
 AVAHINAME=127.0.0.1
 PORT=5577
