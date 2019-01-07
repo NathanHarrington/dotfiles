@@ -4,7 +4,7 @@
 #
 #  Prereqs: dnf install xosd
 #
-
+# Bind in gnome to ctrl+alt+shift+w
 AVAHINAME=127.0.0.1
 PORT=5577
 PASSWORD=cmuscontrolitifyouwant

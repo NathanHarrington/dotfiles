@@ -1,13 +1,27 @@
 # dotfiles
-environment configuration resources
+Nathan Harrington environment configuration resources
 
 
 # System configuration instructions
-Based on stock Fedoara Core 26 install:
+Based on stock Fedora Core 29 workstation install.
 
-    During the installation process, set the hostname:
     The procedure below expects the entire drive to be dedicated to the
     fedora install, with the 'auto' partitioning setup.
+
+Add wifi network connection
+Accept all defaults of installation process
+   Do not select 'encrypt my home folder'
+
+Reboot, at startup wizard, turn off privacy invasions.
+Skip connecting online accounts.
+Set username, password
+
+Reboot
+
+Clone this dotfiles repository
+git clone https://github.com/NathanHarrington/dotfiles ~/projects/dotfiles
+
+hostnamectl set-hostname "short computer hostname, like u430"
 
     Install rpmfusion libraries (dnf install command for adding repos)
 
@@ -17,47 +31,28 @@ Based on stock Fedoara Core 26 install:
     reboot
 
 
-    Install virtualbox first, and verify, as this is the longest cycle
-    testing to make sure the system has kernel configurations that are
-    compatible.
-
-    dnf install VirtualBox
-
-    # Install the extension pack that exactly matches the virtualbox
-    #    version: 5.2.16-r7771323 etc.
-
-    After installing virtualbox, add the current user to the vboxusers 
-    group for usb access:
-
-    usermod -a -G vboxusers nharrington
-
-    This can't be stressed enough: test virtualbox first on the machine
-    before you go full config. There are many ways (especially on bleeding
-    edge hardware) that this can fail, and you want to know at the
-    beginning, not at the end.
-
-    After VirtualBox is functional, skip to the VirtualBox section below
-    for more details.
+If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now so you don't have to wonder if it will ever work in the future.
 
     # Basic development environment
     dnf -y install make automake gcc gcc-c++ kernel-devel cmake
     dnf -y install git autossh tmux
     dnf -y install redhat-rpm-config python-devel
-
-    git clone https://github.com/NathanHarrington/dotfiles ~/projects/dotfiles
-
-    dnf -y install parcellite vim 
+    dnf -y install parcellite vim ncdu cmus sox
     
-    start parcellite, check "Use Copy" and "Use Primary", then click synchronize clipboards
+    start parcellite,
+	Activate the parcellite config interface by pressing ctrl+alt+p
+	If you can't see the preferences pop up, it may be because you are operating on wayland and not xorg.
 
-    You may have to go to mouse and touchpad, then turn off "emulate
-    middle click by clicking both left and right buttons" If using an
-    external mouse.
+	In parcellite config: 
+        check "Use Copy" and "Use Primary", then click synchronize clipboards
 
     # Enable the timewaster blocks crontab entry as root:
     su -
     crontab -e
     59 * * * * /home/nharrington/projects/dotfiles/hosts_block.sh
+
+    Follow the time-wasters.md file for more details on the leechblock and other network-level blocking.
+
 
 Encrypt home folder:
 
@@ -65,6 +60,9 @@ Encrypt home folder:
     https://cloud-ninja.org/2014/04/05/fedora-encrypting-your-home-directory/
 
     After a fresh reboot, with no users logged in.
+    In virtual console, login as nharrington, then sudo su -, then give the root account a password.
+
+    Reboot again, and with no users logged in.
     Open a virtual console, login as root:
 
     dnf -y install keyutils ecryptfs-utils pam_mount
@@ -83,7 +81,7 @@ Encrypt home folder:
     # Include it locally...
     ecryptfs-insert-wrapped-passphrase-into-keyring ~/.ecryptfs/wrapped-passphrase
 
-    # Reboot system, login as nharrington. Verify that the firefox history
+    # Reboot system, login as nharrington into gnome. Verify that the firefox history
     # is there, all the other expected files are there.
 
     # Remove the older, unencrypted home directory, something like:
@@ -126,8 +124,6 @@ tmux configuration:
     cmake .
     sudo make install
 
-
-
     cd ~
     tmux 
     ( press control + a then d to exit)
@@ -145,20 +141,11 @@ tmux configuration:
 
     # Press control-a shift-I to load plugins
 
-   
-    > You must remember to open a tty and vlock the session before
-    > logout/login on gnome. This is because apparently the encrypted
-    > filesystem is unmounted for a full logout, then that kills all
-    > processes, period. All tmux sessions included. If you want the goodness
-    > of gnome session reset without loosing your tmux sessions, you must
-    > remember to do this.
- 
-
 Gnome Configuration (3.204):
 
     Install and run gnome-tweak-tool
 
-    In workspaces, change workspace creation to static, create 7 workspaces.
+    In workspaces, change workspace creation to static, create 9 workspaces.
     Top Bar show date, show seconds
     Extensions, Launch new instance to On
     Extensions, Alternatetab to On
@@ -166,14 +153,10 @@ Gnome Configuration (3.204):
     
     dnf install wmctrl
 
+    Open gnome settings
     Keyboard shortcuts, set Switch to workspace 1-4 to Alt-[1234]
-    Add new shortcuts for workspaces 5,6,7 with the custom command type:
+    Add new shortcuts for workspaces 5-9 with the custom command type:
     wmctrl -s (workspace number-1)
-
-    Use Vertex theme for gnome here (install from source):
-        https://github.com/horst3180/vertex-theme
-
-    Open gnome-tweak-tool select GTK+ theme vertex-dark
 
     Turn off all search options (no shop, no docs, etc.)
 
@@ -184,7 +167,7 @@ Gnome Configuration (3.204):
         No scrollbars shown
         Change profile name to green
         Turn off show menubar by default
-        
+
 
 Miscellaneous configuration:
 
@@ -200,13 +183,13 @@ Miscellaneous configuration:
     dnf -y install gimp inkscape graphviz w3m nmap thunar ImageMagick
     dnf -y install surfraw tig
 
-
     mkdir ~/.config/tig/
     cp tig-colors-neonwolf-256.tigrc  ~/.config/tig/
     echo "source ~/.config/tig/tig-colors-neonwolf-256.tigrc" \
         > ~/.config/tig/config
 
     Copy .gnupg from backup to ~/
+    See notes below on 'recovering from backup' for details
     scp -r (backup-system) ~/.gnupg .
 
     cp .surfraw.conf ~/
@@ -229,8 +212,6 @@ SSH Configuration:
 
     ssh (other system) # verify passwordless connectivity
 
-    
-
 
 Integrate the shared drive where appropriate:
 
@@ -239,11 +220,11 @@ Integrate the shared drive where appropriate:
 
     (press enter for no remote system password)
     mount --verbose -t cifs -o uid=1000 \
-        //192.168.1.250/was-share1 /mnt/cifs_share/share_data/
+        //192.168.1.250/windows-share1 /mnt/cifs_share/share_data/
 
     # Run these as nharrington
-    mkdir /home/nharrington/wasatch
-    ln -s /mnt/cifs_share/share_data /home/nharrington/wasatch
+    mkdir /home/nharrington/sharename
+    ln -s /mnt/cifs_share/share_data /home/nharrington/sharename
 
 
 ### Setup the rclone backup option:
@@ -252,10 +233,10 @@ Integrate the shared drive where appropriate:
 
     Create the references to the various cloud storage options with:
 
-    rclone config  
+    rclone config, exit
     Copy .rclone.conf from backup system
-    scp -r (backup-system):.rclone.conf .
-
+    scp -r (backup-system):.rclone.conf .config/rclone/rclone.conf
+    chown nharrington.nharrington .config/rclone/rclone.conf
 
     After the .gnupg directory copy as described above, and with a fully verified key
     management and recovery system:
@@ -283,8 +264,7 @@ Integrate the shared drive where appropriate:
     dnf -y install ssmtp mailx
 
     # Update the ssmtp.conf file as shown below, where domain is a
-    "google apps for business" hosted domain, such as
-    wasatchphotonics.com
+    "google apps for business" hosted domain, such as mybusiness.com
      
     vi /etc/ssmtp/ssmtp.conf
 
@@ -313,6 +293,12 @@ Integrate the shared drive where appropriate:
     See the notes in sound_control/README.md for details on how to
     configure a Bose QuietControl 30 headset with bluetooth, and for using
     cmus.
+
+### Auto-keyboard configurations
+
+    See the notes in autokeyboard/*.sh
+    for details on commonly used keyboard automation scripts and how
+    they should be bound in gnome.
 
 ### Hardware specific configurations
 
@@ -356,10 +342,16 @@ Integrate the shared drive where appropriate:
     git clone https://github.com/altercation/mutt-colors-solarized
 
 ### Firefox and Chrome configuration
+
+    Add streaming video support:
+    dnf install gstreamer1-libav gstreamer1-plugins-ugly unrar compat-ffmpeg28 ffmpeg-libs
+
     
     Firefox 57 (Quantum) on Fedora:
         about:config -> dom.webnotifications.enabled set to false
         about:config -> geo.enabled set to false
+       	about:config -> browser.fullscreen.autohide to False
+       	about:config -> dom.event.contextmenu.enabled  to false
 
         Install Firefox Extensions:
         uBlock Origin
@@ -374,17 +366,19 @@ Integrate the shared drive where appropriate:
         settings and point it to the .surfingkeys.js file. This is solely to get
         the benefit of turning emoji completion off with iunmap(":")
 
-        Under about:config
-            set browser.fullscreen.autohide to False
-            set geo.enabled to false
-            set dom.webnotifications.enabled to false
-        
-        Preferences -> General -> "Show windows and tabs from last time"
-        
+        Preferences -> General -> "Restore previous session"
+       	Turn off ctrl+tab cycles through tabs in recently used order
+	Turn off recommend extensions as you browse
+	Privacy and Security -> Turn off all privacy invasions
+	Home -> homepage is blank
+	home -> New tabs is blank page
+	Uncheck all firefox home contenG
+	Uncheck all 'one click search engines'
+ 
         Customize -> Themes button on bottom -> Dark
 
     Google Chrome:
-        Install google crhome from the google repo:
+        Install google chrome from the google repo:
 	    https://www.if-not-true-then-false.com/2010/install-\
 		    google-chrome-with-yum-on-fedora-red-hat-rhel/
 
@@ -392,34 +386,6 @@ Integrate the shared drive where appropriate:
         Set chrome to "remember where you left off"
         Install ublock origin for chrome
         
-
-### Task warrior configuration
-
-    # This configuration assumes that after task integration is
-    # verified, you will import the tasks from other machines into the
-    # auto backup folder
-
-    dnf install task
-    mkdir /home/nharrington/Documents/auto_backup/task_warrior
-    ln -s /home/nharrington/Documents/auto_backup/task_warrior ~/.task
-    task 
-
-    (accept defaults)
-
-### Watson time tracker configuration
-    
-    # Like task warrior above, this configuration assumes that you will
-    # restore the contents of the watson folder from a backup
-
-    mkdir /home/nharrington/Documents/auto_backup/watson
-    ln -s /home/nharrington/Documents/auto_backup/watson ~/.config/watson
-
-    # conda3, python3
-    conda create --name watson
-    source activate watson
-    pip install td-watson
-
-
 ### Vim configuration
 
     # Use vim awesome from: https://github.com/amix/vimrc
@@ -433,11 +399,42 @@ Integrate the shared drive where appropriate:
     # etc.
     vi ~/.vim_runtime/vimrcs/extended.vim
 
-
     # Install the flake8 package at the fedora system level
     dnf install pyflakes
 
+### Task warrior configuration
+
+    # This configuration assumes that after task warrior is used just for
+    # calendar and calculator convenience, and is not actually used for task
+    # recording.
+
+    dnf install task
+    task
+    (accept defaults)
+
+
 ### Windows VM in VirtualBox
+
+    Install virtualbox first, and verify, as this is the longest cycle
+    testing to make sure the system has kernel configurations that are
+    compatible.
+
+    dnf install VirtualBox
+
+    # Install the extension pack that exactly matches the virtualbox
+    #    version: 5.2.16-r7771323 etc.
+
+    After installing virtualbox, add the current user to the vboxusers 
+    group for usb access:
+
+    usermod -a -G vboxusers nharrington
+
+    This can't be stressed enough: test virtualbox first on the machine
+    before you go full config. There are many ways (especially on bleeding
+    edge hardware) that this can fail, and you want to know at the
+    beginning, not at the end.
+
+    After VirtualBox is functional, follow the install instructions below for windows VM on fedora.
 
 Instructions for creating a bare-bones vm that can be used for cloning
 purposes. Based on what I could find online, any windows 10 installation
@@ -509,4 +506,46 @@ turn is a full clone of the windows 10 install.
 Export this virtual machine.  This is the 'base' on which to make
 further interations. Don't ever boot this snapshot again, always make a
 clone of it or re-import the exported virtual machine.
+
+
+Recovering from backup:
+
+Restoring from old system encrypted home folder:
+
+Plug in the old disk run:
+pvscan
+
+You should see something like the same volume group names listed below.
+ACTIVE /dev/fedora/home
+inactive /dev/fedora/home
+
+Run:
+vgdisplay
+
+Get the VG UUID of the older disk
+
+Rename the volume group of the older disk:
+vgrename OLD_DISK_UUID  oldFedora
+
+Unplug the disk, replug.
+Mount by device name:
+
+mkdir /media/DISK/home
+mount /dev/oldFedora/home /media/DISK/home
+
+Now if you do:
+ls -la /media/DISK/home/nharrington
+You should see blinking red failures to show you need to load the encryption
+
+The simple mode for read only access should be the command below. Make sure to run this
+in a root shell session. It will not work with sudo!
+
+ecryptfs-recover-private /media/DISK/home/.ecryptfs/nharrington/.Private
+Recover directory: yes
+Do you know your login passphrase: yes
+Enter your fedora gnome login password
+
+Details here:
+https://askubuntu.com/questions/238047/how-do-i-mount-an-encrypted-home-directory-on-another-ubuntu-machine
+
 

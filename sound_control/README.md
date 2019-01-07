@@ -8,10 +8,20 @@ Next Track  Ctrl+Alt+]
 Play (or Play/Pause) Ctrl+Alt+l
 Previous Track  Ctrl+Alt+[
 
-Add the functions as showin in: cmus_remote_control.sh 
 
+After you start cmus for the first time, make sure to run:
+    :set passwd=cmuscontrolitifyouwant
+
+
+Add the shortcuts for switching music focus modes in 
+focus_music.sh
+rocklist_only.sh
+what_is_playing.sh
+classical_only.sh
+
+
+If operating a music service on a different computer, add the functions
+    as showin in: cmus_remote_control.sh 
+    
 Make sure to start cmus with the --listen ip address:port option
-
-For details on the custom brownian noise machine and the individually
-controllable keyboard shortcuts, see: noise_vol.py
 
