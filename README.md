@@ -168,6 +168,11 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
         Change profile name to green
         Turn off show menubar by default
 
+    Set the workspaces to retain the same windows despite the external
+        monitor changing:
+
+    gsettings set org.gnome.shell.overrides workspaces-only-on-primary false
+
 ### Miscellaneous configuration:
 
     cd ~/projects/dotfiles

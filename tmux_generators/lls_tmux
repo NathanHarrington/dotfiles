@@ -22,14 +22,14 @@ sleep $PANEWAIT
 
 tmux split-window -h 
 sleep $PANEWAIT
-tmux split-window -v
-sleep $PANEWAIT
-tmux select-pane -t 0
-sleep $PANEWAIT
-tmux split-window -h 
-sleep $PANEWAIT
-tmux select-pane -t 0
-sleep $PANEWAIT
+#tmux split-window -v
+#sleep $PANEWAIT
+#tmux select-pane -t 0
+#sleep $PANEWAIT
+#tmux split-window -h 
+#sleep $PANEWAIT
+#tmux select-pane -t 0
+#sleep $PANEWAIT
 
 # After the session loads, issue the command below with the left most
 # pane focused

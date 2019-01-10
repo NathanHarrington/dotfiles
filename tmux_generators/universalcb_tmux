@@ -23,8 +23,8 @@ tmux new-session -d -s "$SESSIONNAME"
 tmux split-window -h  
 sleep 1
 
-tmux split-window -h  
-sleep 1
+#tmux split-window -h  
+#sleep 1
 
 # You want this to work, but it will cause the command line to wrap 
 #tmux select-pane -t 0
@@ -33,6 +33,6 @@ sleep 1
 #tmux resize-pane -L 65 
 
 # Now back to the central pane
-tmux select-pane -t 1
+#tmux select-pane -t 1
 
 tmux -2 new-session -t "$SESSIONNAME"
