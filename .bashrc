@@ -71,4 +71,5 @@ alias rubberopticstmux=~/projects/dotfiles/tmux_generators/rubberoptics_tmux
 alias nathanharringtoninfotmux=~/projects/dotfiles/tmux_generators/nathanharringtoninfo_tmux
 alias universalcbtmux=~/projects/dotfiles/tmux_generators/universalcb_tmux
 alias mpsyttmux=~/projects/dotfiles/tmux_generators/mpsyt_edit_tmux
-alias mpsyt='conda3; source activate conda_mpsyt; mpsyt'
+alias mpsyt='conda3; source activate mpsyt_py37; mpsyt'
+alias ucbfirmwaretmux=~/projects/dotfiles/tmux_generators/ucbfirmware_tmux
