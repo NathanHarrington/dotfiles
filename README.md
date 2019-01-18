@@ -330,6 +330,7 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
         about:config -> geo.enabled set to false
        	about:config -> browser.fullscreen.autohide to False
        	about:config -> dom.event.contextmenu.enabled  to false
+        about:config -> browser.link.open_newwindow.restriction to 0
 
         Install Firefox Extensions:
         uBlock Origin
