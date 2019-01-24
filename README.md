@@ -376,6 +376,18 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
     # etc.
     vi ~/.vim_runtime/vimrcs/extended.vim
 
+    # As of 2019-01-24 15:49, auto-pairs is included in the vim awesome
+    # config. Disable this by deleting the folder:
+
+    ~/.vim_runtime/sources_non_forked/auto-pairs/
+
+    and removing the line below from the file: 
+    vi ~/.vim_runtime/update_plugins.vim
+
+    Remove:    auto-pairs https://github.com/jiangmiao/auto-pairs
+
+    Then restart vim
+
     # Install the flake8 package at the fedora system level
     dnf install pyflakes
 
