@@ -73,3 +73,4 @@ alias universalcbtmux=~/projects/dotfiles/tmux_generators/universalcb_tmux
 alias mpsyttmux=~/projects/dotfiles/tmux_generators/mpsyt_edit_tmux
 alias mpsyt='conda3; source activate mpsyt_py37; mpsyt'
 alias ucbfirmwaretmux=~/projects/dotfiles/tmux_generators/ucbfirmware_tmux
+alias labdiscoverytmux=~/projects/dotfiles/tmux_generators/labdiscovery_tmux
