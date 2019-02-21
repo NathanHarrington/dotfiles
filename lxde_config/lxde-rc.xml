@@ -354,6 +354,15 @@
         <command>firefox -P nathan@cordince.com</command>
       </action>
     </keybind>
+    <keybind key="C-A-Shift-w">
+      <action name="Execute">
+        <startupnotify>
+          <enabled>true</enabled>
+          <name>Music Track info</name>
+        </startupnotify>
+        <command>~/projects/dotfiles/sound_control/what_is_playing.sh</command>
+      </action>
+    </keybind>
     <keybind key="C-A-l">
       <action name="Execute">
         <startupnotify>
