@@ -318,6 +318,60 @@
         <command>pcmanfm</command>
       </action>
     </keybind>
+    <keybind key="C-A-l">
+      <action name="Execute">
+        <startupnotify>
+          <enabled>true</enabled>
+          <name>Music Pause/play</name>
+        </startupnotify>
+        <command>~/projects/dotfiles/sound_control/cmus_remote_control.sh pause </command>
+      </action>
+    </keybind>
+    <keybind key="C-A-Shift-braceright">
+      <action name="Execute">
+        <startupnotify>
+          <enabled>true</enabled>
+          <name>Music Next</name>
+        </startupnotify>
+        <command>~/projects/dotfiles/sound_control/cmus_remote_control.sh seek_forward</command>
+      </action>
+    </keybind>
+    <keybind key="C-A-Shift-braceleft">
+      <action name="Execute">
+        <startupnotify>
+          <enabled>true</enabled>
+          <name>Music Previous</name>
+        </startupnotify>
+        <command>~/projects/dotfiles/sound_control/cmus_remote_control.sh seek_backward</command>
+      </action>
+    </keybind>
+    <keybind key="C-A-bracketright">
+      <action name="Execute">
+        <startupnotify>
+          <enabled>true</enabled>
+          <name>Music Next</name>
+        </startupnotify>
+        <command>~/projects/dotfiles/sound_control/cmus_remote_control.sh next</command>
+      </action>
+    </keybind>
+    <keybind key="C-A-bracketleft">
+      <action name="Execute">
+        <startupnotify>
+          <enabled>true</enabled>
+          <name>Music Previous</name>
+        </startupnotify>
+        <command>~/projects/dotfiles/sound_control/cmus_remote_control.sh prev</command>
+      </action>
+    </keybind>
+    <keybind key="C-Shift-G">
+      <action name="Execute">
+        <startupnotify>
+          <enabled>true</enabled>
+          <name>w3m google search</name>
+        </startupnotify>
+        <command>~/projects/dotfiles/autokeyboard/w3m_google.sh</command>
+      </action>
+    </keybind>
     <!-- Keybindings for finding files -->
     <keybind key="W-f">
       <action name="Execute">
