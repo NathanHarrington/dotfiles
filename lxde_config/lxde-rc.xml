@@ -318,6 +318,24 @@
         <command>pcmanfm</command>
       </action>
     </keybind>
+    <keybind key="C-A-t">
+      <action name="Execute">
+        <startupnotify>
+          <enabled>true</enabled>
+          <name>terminal</name>
+        </startupnotify>
+        <command>lxterminal --loginshell</command>
+      </action>
+    </keybind>
+    <keybind key="C-Shift-5">
+      <action name="Execute">
+        <startupnotify>
+          <enabled>true</enabled>
+          <name>resize tmux pane left</name>
+        </startupnotify>
+        <command>~/projects/dotfiles/autokeyboard/resize_tmux_pane.sh</command>
+      </action>
+    </keybind>
     <keybind key="C-A-1">
       <action name="Execute">
         <startupnotify>
