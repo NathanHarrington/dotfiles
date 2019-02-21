@@ -318,6 +318,24 @@
         <command>pcmanfm</command>
       </action>
     </keybind>
+    <keybind key="C-A-1">
+      <action name="Execute">
+        <startupnotify>
+          <enabled>true</enabled>
+          <name>firefox </name>
+        </startupnotify>
+        <command>firefox -P harrington.nathan@gmail.com</command>
+      </action>
+    </keybind>
+    <keybind key="C-A-3">
+      <action name="Execute">
+        <startupnotify>
+          <enabled>true</enabled>
+          <name>firefox </name>
+        </startupnotify>
+        <command>firefox -P nathan@cordince.com</command>
+      </action>
+    </keybind>
     <keybind key="C-A-l">
       <action name="Execute">
         <startupnotify>
