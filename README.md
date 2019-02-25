@@ -173,17 +173,6 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
 
     gsettings set org.gnome.shell.overrides workspaces-only-on-primary false
 
-### LXDE with Openbox Configuration (3.6.1)
-
-    # Disable package update popups
-    dnf erase dnfdragora-gui
-
-    # Remove xscreensaver from autostart:
-    vi ~/.config/lxsession/LXDE/autostart
-
-    @lxpanel --profile LXDE
-    @pcmanfm --desktop --profile LXDE
-
 ### MATE configuration (1.20.4)
     # Why MATE? out of the box screen locking and suspend that is
     # closest to regular Gnome. Significantly faster performance in
@@ -204,7 +193,6 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
     # dnfdragora
     # Anything else that appears unecessary
  
-
     # MATE appears to not recognize the Ctrl-Shift-% keyboard shortcut
     # Map the auto-keyboard functions to something else:
 
@@ -399,7 +387,6 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
         Install surfingkeys for chrome
         
 ### Vim configuration
-
     
     # Based heavily on:
     # https://github.com/sloria/dotfiles#what-if-i-only-want-your-vim
@@ -408,6 +395,7 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
     cp vim_configuration/.vimrc ~/.vimrc
 
     # Start vim, run :PlugInstall
+    # Restart vim
 
 ### Task warrior configuration
 

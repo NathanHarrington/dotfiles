@@ -155,6 +155,7 @@ Plug 'majutsushi/tagbar', {'on': 'Tagbar'}
 map <leader>\ :Tagbar<CR>
 let g:tagbar_autofocus = 1
 " COLOR
+Plug 'flazz/vim-colorschemes'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'sloria/vim-hybrid'  " hybrid with easier-to-read line numbers
 
@@ -204,7 +205,7 @@ set noerrorbells visualbell t_vb=
 
 """ VISUAL SETTINGS """
 if &term =~ '256color' | set t_ut= | endif
-set background=light | colorscheme railscasts
+set background=dark | colorscheme railscasts
 
 " Show trailing whitespace
 set list listchars=tab:▸\ ,trail:▫
