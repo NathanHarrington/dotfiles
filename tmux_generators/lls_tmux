@@ -15,7 +15,7 @@ if [[ $? -eq 0 ]] ; then
     exit
 fi
 
-export PANEWAIT=0.3
+export PANEWAIT=2
 
 tmux new-session -d -s "$SESSIONNAME" 
 sleep $PANEWAIT

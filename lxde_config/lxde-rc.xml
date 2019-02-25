@@ -318,6 +318,9 @@
         <command>pcmanfm</command>
       </action>
     </keybind>
+    <keybind key="A-F7">
+        <action name="Move"/>
+    </keybind>
     <keybind key="C-A-t">
       <action name="Execute">
         <startupnotify>
@@ -325,6 +328,15 @@
           <name>terminal</name>
         </startupnotify>
         <command>lxterminal --loginshell</command>
+      </action>
+    </keybind>
+    <keybind key="C-A-Shift-t">
+      <action name="Execute">
+        <startupnotify>
+          <enabled>true</enabled>
+          <name>full spectrum music</name>
+        </startupnotify>
+        <command>~/projects/dotfiles/sound_control/rocklist_only.sh</command>
       </action>
     </keybind>
     <keybind key="C-Shift-5">

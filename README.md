@@ -173,6 +173,41 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
 
     gsettings set org.gnome.shell.overrides workspaces-only-on-primary false
 
+### LXDE with Openbox Configuration (3.6.1)
+
+    # Disable package update popups
+    dnf erase dnfdragora-gui
+
+    # Remove xscreensaver from autostart:
+    vi ~/.config/lxsession/LXDE/autostart
+
+    @lxpanel --profile LXDE
+    @pcmanfm --desktop --profile LXDE
+
+### MATE configuration (1.20.4)
+    # Why MATE? out of the box screen locking and suspend that is
+    # closest to regular Gnome. Significantly faster performance in
+    # other areas. Basically a usuable gnome.
+
+    # Remove screen tearing at the cost of a window compositor
+    gsettings set org.mate.Marco.general compositing-manager false 
+
+    # On Lenovo U430, map lcd/external monitor cycling to Windows Key +
+    # F10   
+    dnf install disper
+    # Keyboard Shortcuts -> New Shortcut -> Name -> Cycle displays
+    # Command:  disper --cycle
+   
+
+    # Edit startup applications, remove:
+    # clipit (use parcellite instead)
+    # dnfdragora
+    # Anything else that appears unecessary
+ 
+
+    # MATE appears to not recognize the Ctrl-Shift-% keyboard shortcut
+    # Map the auto-keyboard functions to something else:
+
 ### Miscellaneous configuration:
 
     cd ~/projects/dotfiles
@@ -365,31 +400,14 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
         
 ### Vim configuration
 
-    # Use vim awesome from: https://github.com/amix/vimrc
-    git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
-    sh ~/.vim_runtime/install_awesome_vimrc.sh
+    
+    # Based heavily on:
+    # https://github.com/sloria/dotfiles#what-if-i-only-want-your-vim
 
-    Then copy the custom config:
-    cp nharrington_vim_config ~/.vim_runtime/my_configs.vim
+    cp vim_configuration/plug.vim  ~/.vim/autoload/
+    cp vim_configuration/.vimrc ~/.vimrc
 
-    # Edit the file below, and comment out the vnoremap sections for $1, $2,
-    # etc.
-    vi ~/.vim_runtime/vimrcs/extended.vim
-
-    # As of 2019-01-24 15:49, auto-pairs is included in the vim awesome
-    # config. Disable this by deleting the folder:
-
-    ~/.vim_runtime/sources_non_forked/auto-pairs/
-
-    and removing the line below from the file: 
-    vi ~/.vim_runtime/update_plugins.vim
-
-    Remove:    auto-pairs https://github.com/jiangmiao/auto-pairs
-
-    Then restart vim
-
-    # Install the flake8 package at the fedora system level
-    dnf install pyflakes
+    # Start vim, run :PlugInstall
 
 ### Task warrior configuration
 
