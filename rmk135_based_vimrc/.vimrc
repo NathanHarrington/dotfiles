@@ -1,283 +1,305 @@
-" Based heavily on: https://github.com/rmk135/vimrc
-"
-" cp .vimrc ~/.vimrc
-" mkdir ~/.vim
-" git clone https://github.com/gmarik/Vundle.vim.git  ~/.vim/bundle/Vundle.vim
-"
-" Run vim, ignore errors
-" vim
-" 
-" Install VIM Plugins (inside VIM)
-" :PluginInstall
-"
-" Restart vim
-"
-"
-"
-"
-"
-" Pre - 20160316 instructions group:
-" To install on windows, run the following in a git-bash window 
-" same install procedure as for linux:
-"
-" git clone https://github.com/rmk135/vimrc.git ~/vimrc
-"
-" This is the only deviation from the original instructions, just use
-" the .vimrc file supplied in this dotfiles project.
-" Use the windows.vimrc or the .vimrc for linux
-" cp .vimrc ~/.vimrc
-" 
-" mkdir ~/.vim && cp -r ~/vimrc/.vim ~/
-" git clone https://github.com/gmarik/Vundle.vim.git  ~/.vim/bundle/Vundle.vim
-"
-" Run vim, ignore errors
-" vim
-" 
-" Install VIM Plugins (inside VIM)
-" :PluginInstall
-"
-" Restart vim
-"
-" If you want NERDTreeTabs:
-" At the start of every vim session, run :NERDTreeTabsToggle twice, and
-" the nerd tree will always be on the right, on every buffer/tab
-"
-" NERDTree is disabled by default.
-"
-" On windows, copy the .vim/colors/* to c:\program files\vim73\colors
-" On windows, disable the Jedi lines
-"
-"
-" Be iMproved
-set nocompatible
+" Temporary workaround for python 3.7: https://github.com/vim/vim/issues/3117#issuecomment-406853295
+if has('python3') && !has('patch-8.1.201')
+  silent! python3 1
+endif
+" Spacebar is a much better leader than \ or ,
+let mapleader = "\<Space>"
 
-"=====================================================
-"" Vundle settings
-"=====================================================
-filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+""""" PLUGINS """""
+call plug#begin()
+" ESSENTIALS
+Plug 'tpope/vim-sensible' " Sensible defaults
+Plug 'rstacruz/vim-opinion' " More sensible defaults
+Plug 'ervandew/supertab' " Tab complete everything
+Plug 'ctrlpvim/ctrlp.vim' " Fuzzy-matching go-to file
+nnoremap <C-b> :CtrlPBuffer<CR>
+map <C-t> :CtrlPBufTag<CR>
+" Make ctrlp faster
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+if has('python') ||  has('python3')
+  " Faster and more accurate fuzzy-matching
+  Plug 'felikz/ctrlp-py-matcher'
+  let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+endif
+" rg-powered search with in-place editing
+Plug 'dyng/ctrlsf.vim'
+let g:ctrlsf_ackprg = 'rg'
+let g:ctrlsf_auto_focus = {'at': 'start'}  " Automatically focus search results
+nmap     <C-f>f :CtrlSF ''<Left>
+nmap     <C-f>n <Plug>CtrlSFCwordPath
+nnoremap <C-f>t :CtrlSFToggle<CR>
+Plug 'tpope/vim-rsi'  " unix keybindings in insert mode
+Plug 'tpope/vim-repeat'  " make more actions repeatable with .
+Plug 'machakann/vim-sandwich' " motions for handling surrounding characters
+Plug 'tpope/vim-unimpaired'  " useful bracket maps and option toggling
+Plug 'tomtom/tcomment_vim'  " for code comments
+" Toggle comment with space-/
+nmap <leader>/ <Plug>TComment_<c-_><c-_>
+vmap <leader>/ <Plug>TComment_<c-_><c-_>
+" Buffers
+Plug 'moll/vim-bbye'  " delete buffer without closing window
+nnoremap X :Bdelete<CR>
+Plug 'vim-scripts/BufOnly.vim'  " delete all but current buffer
 
-Plugin 'gmarik/Vundle.vim'                  " let Vundle manage Vundle, required
+Plug 'scrooloose/nerdtree', {'on': ['NERDTreeToggle', 'NERDTreeFind']}
+nnoremap <leader>d :NERDTreeToggle<CR>
+nnoremap <leader>D :NERDTreeFind<CR>
+let g:NERDTreeRespectWildIgnore = 1
 
-"-------------------=== Code/Project navigation ===-------------
-"Plugin 'scrooloose/nerdtree' 	    	    " Project and file navigation
-"Plugin 'jistr/vim-nerdtree-tabs'            " Always display the nerdtree
-" Disabled because of ctags error
-"Plugin 'majutsushi/tagbar'          	    " Class/module browser
-Plugin 'kien/ctrlp.vim'                     " Fast transitions on project files
+Plug 'w0rp/ale'  " Async linting
+nmap <silent> [s <Plug>(ale_previous_wrap)
+nmap <silent> ]s <Plug>(ale_next_wrap)
+nmap <leader>= <Plug>(ale_fix)
+let g:ale_pattern_options = {
+\   '.*\.md$': {'ale_enabled': 0},
+\   '.*\.markdown$': {'ale_enabled': 0},
+\   '.*\.rst$': {'ale_enabled': 0},
+\   '.*\.txt$': {'ale_enabled': 0},
+\   '.*\.tex$': {'ale_enabled': 0},
+\}
+nmap <leader>+ :let b:ale_enabled=1<cr>
+" Quickly open the loclist to see syntax errors
+nmap <leader>' :lopen<CR>
+let g:ale_maximum_file_size = 500000  " Don't lint large files (> 500KB), it can slow things down
+let g:ale_linters = {}
+let g:ale_linters.javascript = ['eslint', 'tsserver']
+let g:ale_linters.python = ['flake8', 'mypy', 'pyls']
+let g:ale_linters.html = []
+let g:ale_fixers = {}
+let g:ale_fixers.javascript = ['prettier']
+let g:ale_fixers.typescript = ['prettier']
+let g:ale_fixers.python = ['black']
+let g:ale_fixers.css = ['prettier']
+let g:ale_completion_enabled = 1
+" Prevent completion from autoinserting. See :help ale-completion-completopt-bug
+set completeopt=menu,menuone,preview,noselect,noinsert
+" Disable pycodestyle in pyls; let flake8 do that
+let g:ale_python_pyls_config = {'pyls': {'plugins': {'pycodestyle': {'enabled': v:false}}}}
+nmap gd <Plug>(ale_go_to_definition)
+" NICE TO HAVE
+Plug 'AndrewRadev/splitjoin.vim'  " Language-specific split/join with gS and gJ
+let g:splitjoin_python_brackets_on_separate_lines = 1
+let g:splitjoin_trailing_comma = 1
+Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
+let g:airline_left_sep=''
+let g:airline_right_sep=''
+let g:airline_theme='tomorrow'
+" Explicitly specify which extensions to use
+let g:airline_extensions = ['branch', 'ctrlp', 'tabline', 'ale', 'whitespace']
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'jszakmeister/vim-togglecursor'  " change cursor shape when entering insert mode
+" Snippets
+if version >= 704 && has('python') || has('python3') | Plug 'SirVer/ultisnips' | endif
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+Plug 'honza/vim-snippets'
+Plug 'fcpg/vim-spotlightify'  " Highlight and show number of matches when searching
+Plug 'wellle/targets.vim'  " because cin), etc. is awesome
+Plug 'tpope/vim-dispatch' " So we can run tests asynchronously
+Plug 'janko-m/vim-test'  " For running tests
+let test#python#runner = 'pytest'
+nmap <silent> <leader>tt :TestNearest<CR>
+nmap <silent> <leader>tf :TestFile<CR>
+nmap <silent> <leader>tl :TestLast<CR>
+let test#strategy = "dispatch"
+" -s for ipdb support; disable cacheprovider so we don't break 'py.test --lf'
+let test#python#pytest#options = '-s -p no:cacheprovider'
 
-"-------------------=== Other ===-------------------------------
-Plugin 'bling/vim-airline'   	    	    " Lean & mean status/tabline for vim
-Plugin 'Lokaltog/powerline'                 " Powerline fonts plugin
-Plugin 'fisadev/FixedTaskList.vim'  	    " Pending tasks list
-Plugin 'rosenfeld/conque-term'      	    " Consoles as buffers
-Plugin 'tpope/vim-surround'                 " Parentheses, brackets, quotes, XML tags, and more
+Plug 'mattn/emmet-vim'  " Write HTML fast
+" When in javascript, expand to 'className' (for jsx support)
+let g:user_emmet_settings = {
+  \    'javascript': {'extends': 'jsx'},
+  \    'javascript.jsx': {'extends': 'jsx'}
+  \ }
+Plug 'jiangmiao/auto-pairs' " autoclose parens, quotes, etc.
+autocmd FileType python let b:AutoPairs = AutoPairsDefine({'f"': '"', "f'": "'"})
+Plug 'mtth/scratch.vim'
+let g:scratch_no_mappings = 1
+let g:scratch_height = 20
+let g:scratch_filetype = 'markdown'
+let g:scratch_persistence_file = '.scratch'
+" Open scratch buffer with space-tab (automatically set syntax to python)
+nnoremap <silent> <leader><tab> :Scratch<cr>
+Plug 'tpope/vim-sleuth'  " Detect indent settings
+Plug 'machakann/vim-highlightedyank'  " Highlight yank
+if !exists('##TextYankPost') | map y <Plug>(highlightedyank) | endif
+" GIT
+Plug 'airblade/vim-gitgutter'
+" Set gitgutter's bindings manually to avoid clashes
+let g:gitgutter_map_keys = 0
+nmap <leader>gh <Plug>GitGutterStageHunk
+nmap <leader>gH <Plug>GitGutterUndoHunk
+nmap [h <Plug>GitGutterPrevHunk
+nmap ]h <Plug>GitGutterNextHunk
+set updatetime=200 " faster updates
+Plug 'tpope/vim-fugitive'  " git integration
+Plug 'tpope/vim-rhubarb'  " For :Gbrowse
+map <leader>gs :Gstatus<CR>
+map <leader>gb :Gblame<CR>
+" Open current file on Github
+map <leader>gB :Gbrowse -<CR>
+" Open currently selected lines on Github
+vmap <leader>gB :Gbrowse -<CR>
+map <leader>gr :Gread<CR>
+map <leader>gw :Gwrite<CR>
+noremap <Leader>gp :Gpush<CR>
+Plug 'mattn/webapi-vim' | Plug 'mattn/gist-vim', {'on': 'Gist'}
+" Make gists private by default
+let g:gist_post_private = 1
+" Browse to gist after posting it
+let g:gist_open_browser_after_post = 1
+" Use gr to replace text without blowing away clipboard
+Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'majutsushi/tagbar', {'on': 'Tagbar'}
+" Open tagbar
+map <leader>\ :Tagbar<CR>
+let g:tagbar_autofocus = 1
+" COLOR
+source ~/.vim/setcolors.vim
+Plug 'flazz/vim-colorschemes'
+Plug 'NLKNguyen/papercolor-theme'
+Plug 'sloria/vim-hybrid'  " hybrid with easier-to-read line numbers
 
-"-------------------=== Snippets support ===--------------------
-Plugin 'garbas/vim-snipmate'                " Snippets manager
-Plugin 'MarcWeber/vim-addon-mw-utils'       " dependencies #1
-Plugin 'tomtom/tlib_vim'                    " dependencies #2
-Plugin 'honza/vim-snippets'                 " snippets repo
+" LANGUAGE-SPECIFIC
+Plug 'sheerun/vim-polyglot'  " syntax files for most languages
+let g:polyglot_disabled = ['python', 'latex'] " Use python-syntax and vimtex
+let g:jsx_ext_required = 0
+let g:markdown_fenced_languages = ['javascript', 'python', 'clojure', 'ruby']
+Plug 'peitalin/vim-jsx-typescript'
+Plug 'lervag/vimtex'
+" --- Python ---
+Plug 'vim-python/python-syntax'  " Improved python syntax
+let g:python_highlight_all = 1
+Plug 'Vimjas/vim-python-pep8-indent'  " Proper python indenting
+" --- Javascript ---
+Plug 'lfilho/cosco.vim'  " Quick insertion of commas and semicolons
+augroup cosco
+  autocmd!
+  autocmd FileType javascript,css nmap <silent> <Leader>; <Plug>(cosco-commaOrSemiColon)
+augroup END
+Plug 'heavenshell/vim-jsdoc'  " For making JS docstrings
+map <C-c>j <Plug>(jsdoc)
+" --- CSS ---
+Plug 'chrisbra/Colorizer'  " Highlight CSS colors
+let g:colorizer_auto_filetype='css,html'
 
-"-------------------=== Languages support ===-------------------
-Plugin 'scrooloose/syntastic'               " Syntax checking plugin for Vim
-Plugin 'tpope/vim-commentary'               " Comment stuff out
-Plugin 'mitsuhiko/vim-sparkup'              " Sparkup(XML/jinja/htlm-django/etc.) support
-Plugin 'Rykka/riv.vim'                      " ReStructuredText plugin
-
-"-------------------=== Python  ===-----------------------------
-Plugin 'klen/python-mode'                   " Python mode (docs, refactor, lints...)
-Plugin 'davidhalter/jedi-vim'               " Jedi-vim autocomplete plugin
-Plugin 'mitsuhiko/vim-jinja'                " Jinja support for vim
-Plugin 'mitsuhiko/vim-python-combined'      " Combined Python 2/3 for Vim
-Plugin 'hynek/vim-python-pep8-indent'       " PEP8 indent
-Plugin 'jmcantrell/vim-virtualenv'          " Virtualenv support in VIM
-
-call vundle#end()                           " required
-filetype on
-filetype plugin on
+call plug#end()
 filetype plugin indent on
+""" end plugins """
 
-"=====================================================
-"" General settings
-"=====================================================
-syntax enable                               " syntax highlight
-set number                                  " show line numbers
-set ruler
-set ttyfast                                 " terminal acceleration
+""" BASE CUSTOMIZATIONS """
+" NOTE: Many base customizations come from vim-sensible and vim-opinion
+set encoding=utf-8
+set relativenumber
+set autoread " reload files when changed on disk, i.e. via `git checkout`
+set clipboard^=unnamedplus,unnamed " Make "yanks" work with system clipboard
+set exrc secure  " Project-specific vimrcs
 
-set tabstop=4                               " 4 whitespaces for tabs visual presentation
-set shiftwidth=4                            " shift lines by 4 spaces
-set smarttab                                " set tabs for a shifttabs logic
-set expandtab                               " expand tabs into spaces
-set autoindent                              " indent when moving to the next line while writing code
+" Indents
+set autoindent
+set expandtab " expand tabs by default (overloadable per file type later)
+set tabstop=4 softtabstop=4 shiftwidth=4
+set shiftround " use multiple of shiftwidth when indenting with '<' and '>'
 
-set cursorline                              " shows line under the cursor's line
-set showmatch                               " shows matching part of bracket pairs (), [], {}
+" No bells
+set noerrorbells visualbell t_vb=
 
-set t_Co=256                                " set 256 colors
-"colorscheme wombat256                      " set color scheme linux
-colorscheme koehler                         " set color scheme windows
+""" VISUAL SETTINGS """
+if &term =~ '256color' | set t_ut= | endif
+"set background=dark | colorscheme railscasts
+set background=dark | colorscheme relaxedgreen
 
-set enc=utf-8	                            " utf-8 by default
+" Show trailing whitespace
+set list listchars=tab:▸\ ,trail:▫
 
-set nobackup 	                            " no backup files
-set nowritebackup                           " only in case you don't want a backup file while editing
-set noswapfile 	                            " no swap files
+set cursorline  " have a line indicate cursor location
+set previewheight=25  " Larger preview height
 
-set backspace=indent,eol,start              " backspace removes all (indents, EOLs, start) What is start?
+" Set minimum window size to 79x5.
+set winwidth=79 winheight=5 winminheight=5
 
-set scrolloff=10                            " let 10 lines before/after cursor during scroll
+" Patterns to ignore for expand(), ctrlp, etc.
+set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz,*.swp,*~,._*,*.pyc,*__pycache__*,*.egg-info
 
-set clipboard=unnamed                       " use system clipboard
+" Persistent undo (can use undos after exiting and restarting)
+if exists("+undofile")
+  if isdirectory($HOME . '/.vim/undo') == 0
+    :silent !mkdir -p ~/.vim/undo > /dev/null 2>&1
+  endif
+  set undodir=./.vim-undo// undodir+=~/.vim/undo// undofile
+endif
 
-"=====================================================
-"" Tabs / Buffers settings
-"=====================================================
-tab sball
-set switchbuf=useopen
-set laststatus=2
-nmap <F9> :bprev<CR>
-nmap <F10> :bnext<CR>
-nmap <silent> <leader>q :SyntasticCheck # <CR> :bp <BAR> bd #<CR>
+""" SHORTCUTS """
+" Quickly edit vimrc
+nmap <leader>, :e $MYVIMRC<CR>
+" Reload vimrc
+noremap <silent> <leader>V :source $MYVIMRC<cr>
+" Search and replace, using : as a separator instead of /
+noremap <leader>sr :%s:::cg<Left><Left><Left><Left>
+" Switch between files
+nnoremap <leader>b :e#<CR>
+" Remove trailing whitespace with Backspace
+nnoremap <BS> :%s/\s\+$//<cr>:let @/=''<CR>
+" select last pasted text
+nnoremap gp `[v`]
+" Easy syntax switching
+nnoremap <leader>Tp :set ft=python<CR>
+nnoremap <leader>Tj :set ft=javascript<CR>
+nnoremap <leader>Tm :set ft=markdown<CR>
+nnoremap <leader>Ty :set ft=yaml<CR>
+" Quickly write/quit
+nnoremap <leader>w :w<CR>
+nnoremap <leader>q :q<CR>
+" Quickly open netrw
+nnoremap <leader>e :e.<CR>
+" Quick split
+nnoremap <Leader>v <C-w>v<C-w>w
+" Quick select whole file
+map <leader>a ggVG
+" Make D delete to end of line
+nnoremap D d$
+" Make Y yank to end of line
+nnoremap Y y$
+" Go to beginning/end of line
+noremap <leader>h ^
+noremap <leader>l $
+" Execute macro
+nnoremap Q @q
+" Move vertically over wrapped lines
+nmap j gj
+nmap k gk
+" Set cwd to current file
+nnoremap <leader>cd :lcd %:p:h<CR>
+" Split lines (opposite of J)
+nnoremap S i<CR><Esc>
+nnoremap <leader>N "=strftime("%F")<CR>P
+inoremap <C-r>n <C-R>=strftime("%F")<CR>
 
-"" Search settings
-"=====================================================
-set incsearch	                            " incremental search
-set hlsearch	                            " highlight search results
+augroup configgroup
+  autocmd!
+  " Make sure Vim returns to the same line when you reopen a file.
+  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute 'normal! g`"zvzz' | endif
 
-"=====================================================
-"" AirLine settings
-"=====================================================
-"let g:airline_theme='badwolf'
-let g:airline#extensions#tabline#enabled=1
-let g:airline#extensions#tabline#formatter='unique_tail'
-let g:airline_powerline_fonts=1
+  " Automatically adjust quickfix window depending on how much text there is
+  autocmd FileType qf call AdjustWindowHeight(3, 20)
+  function! AdjustWindowHeight(minheight, maxheight)
+    exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
+  endfunction
 
-"=====================================================
-"" TagBar settings
-"=====================================================
-" Disabled because of ctags error
-"let g:tagbar_autofocus=0
-"let g:tagbar_width=42
-"autocmd BufEnter *.py :call tagbar#autoopen(0)
-"autocmd BufWinLeave *.py :TagbarClose
-
-"=====================================================
-"" NERDTree settings
-"=====================================================
-"let NERDTreeIgnore=['\.pyc$', '\.pyo$']     " Ignore files in NERDTree
-"let NERDTreeWinSize=40
-"autocmd VimEnter * NERDTree                 " NERDTree autoload
-"autocmd VimEnter * if !argc() | NERDTree | endif
-"" Move nerdtree to the right side of the window
-"let NERDTreeWinPos="right"
-
-"=====================================================
-"" SnipMate settings
-"=====================================================
-let g:snippets_dir='~/.vim/vim-snippets/snippets'
-
-"=====================================================
-"" Riv.vim settings
-"=====================================================
-let g:riv_disable_folding=1
-
-"=====================================================
-"" Python settings
-"=====================================================
-
-" omnicomplete
-set completeopt-=preview                    " remove omnicompletion dropdown
-
-" rope
-let g:pymode_rope=0
-let g:pymode_rope_completion=0
-let g:pymode_rope_complete_on_dot=0
-let g:pymode_rope_auto_project=0
-let g:pymode_rope_enable_autoimport=0
-let g:pymode_rope_autoimport_generate=0
-let g:pymode_rope_guess_project=0
-
-" documentation
-let g:pymode_doc=0
-let g:pymode_doc_key='K'
-
-" lints
-let g:pymode_lint=0
-let g:pymode_lint_checker='flake8,pep257'
-let g:pymode_lint_write=0                   " run lints after file save
-let g:pymode_lint_ignore=''                 " ignore lint errors
-
-" virtualenv
-let g:pymode_virtualenv=1
-
-" breakpoints
-let g:pymode_breakpoint=1
-let g:pymode_breakpoint_key='<leader>b'
-
-" syntax highlight
-let python_highlight_all=1
-let python_highlight_exceptions=1
-let python_highlight_builtins=1
-let python_slow_sync=1
-let g:pymode_syntax=1
-let g:pymode_syntax_all=1
-let g:pymode_syntax_indent_errors=g:pymode_syntax_all
-let g:pymode_syntax_space_errors=g:pymode_syntax_all
-
-" highlight 'long' lines (>= 80 symbols) in python files
-augroup vimrc_autocmds
-    autocmd!
-    autocmd FileType python,rst highlight Excess ctermbg=DarkGrey guibg=Black
-    autocmd FileType python,rst match Excess /\%81v.*/
-    autocmd FileType python,rst set nowrap
+  """ Languages
+  " prose (hard wrap and autoformat paragraphs)
+  autocmd BufRead,BufNewFile jrnl*.txt,editor*.txt set filetype=markdown
+  autocmd BufRead,BufNewFile *.mdx set filetype=markdown
+  autocmd BufRead,BufNewFile *.js.flow set filetype=javascript
+  autocmd BufRead,BufNewFile jrnl*.txt,editor*.txt,*.md,*.rst setlocal nolist wrap linebreak formatoptions+=ntl textwidth=72 wrapmargin=0
+  autocmd BufRead,BufNewFile .eslintrc set filetype=json
+  autocmd BufRead,BufNewFile .babelrc set filetype=json5
+  " commit messages
+  autocmd Filetype gitcommit setlocal nolist textwidth=72
 augroup END
 
-" code folding
-let g:pymode_folding=0
-
-" code running
-let g:pymode_run=0
-
-" jedi-vim
-let g:jedi#popup_select_first=0             " Disable choose first option on autocomplete
-let g:jedi#show_call_signatures=0           " Show call signatures
-let g:jedi#popup_on_dot=1                   " Enable autocomplete on dot
-
-" syntastic
-let g:syntastic_always_populate_loc_list=1
-let g:syntastic_auto_loc_list=1
-let g:syntastic_enable_signs=1
-let g:syntastic_check_on_wq=0
-let g:syntastic_aggregate_errors=1
-let g:syntastic_error_symbol='X'
-let g:syntastic_style_error_symbol='X'
-let g:syntastic_warning_symbol='x'
-let g:syntastic_style_warning_symbol='x'
-let g:syntastic_python_checkers = ['flake8', 'pep257', 'python']
-
-" Print an ISO timestamp
-nnoremap <F5> m'A<C-R>="".strftime('%Y-%m-%d %H:%M')<CR>
-map! <F5> <C-R>="".strftime('%Y-%m-%d %H:%M')<CR>
-
-" More margin for better flow
-set tw=72
-set ignorecase
-
-" alternative tab navigation
-nnoremap th  :tabfirst<CR>
-nnoremap tj  :tabnext<CR>
-nnoremap tk  :tabprev<CR>
-nnoremap tl  :tablast<CR>
-nnoremap tt  :tabedit<Space>
-nnoremap tn  :tabnext<Space>
-nnoremap tm  :tabm<Space>
-nnoremap td  :tabclose<CR>
-
-
-" check file change every 4 seconds ('CursorHold') and reload the buffer
-" upon detecting change
-set autoread
-au CursorHold * checktime
+" GUI settings, e.g. MacVim
+" set guifont=Ubuntu\ Mono:h14
+set guifont=Hack:h12
+" Hide scrollbars and menu
+set guioptions-=T guioptions-=R guioptions-=r guioptions-=m guioptions-=l guioptions-=L
