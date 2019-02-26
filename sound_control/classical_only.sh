@@ -8,7 +8,14 @@ PASSWORD=cmuscontrolitifyouwant
 /home/nharrington/projects/dotfiles/sound_control/clear_playlist.sh
 
 FLD=/home/nharrington/projects/dotfiles/sound_control
-cat $FLD/classical_cmus_queuelist.m3u | shuf > $FLD/shuf_list.m3u
+LIST_FILE=$FLD/classical_cmus_queuelist.m3u
+MUSIC_FOLDER=/home/nharrington/Downloads/refined_mp3s
+
+ls -1 ${MUSIC_FOLDER}/bach/* > $LIST_FILE
+ls -1 ${MUSIC_FOLDER}/beethoven/* >> $LIST_FILE
+ls -1 ${MUSIC_FOLDER}/classical/* >> $LIST_FILE
+
+cat $LIST_FILE | shuf > $FLD/shuf_list.m3u
 
 cmus-remote --server $AVAHINAME:$PORT --passwd $PASSWORD -q $FLD/shuf_list.m3u
 cmus-remote --server $AVAHINAME:$PORT --passwd $PASSWORD --next

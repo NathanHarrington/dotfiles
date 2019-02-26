@@ -292,6 +292,7 @@ augroup configgroup
   autocmd BufRead,BufNewFile *.mdx set filetype=markdown
   autocmd BufRead,BufNewFile *.js.flow set filetype=javascript
   autocmd BufRead,BufNewFile jrnl*.txt,editor*.txt,*.md,*.rst setlocal nolist wrap linebreak formatoptions+=ntl textwidth=72 wrapmargin=0
+  autocmd BufRead,BufNewFile *.txt setlocal nolist wrap linebreak formatoptions+=ntl textwidth=72 wrapmargin=0
   autocmd BufRead,BufNewFile .eslintrc set filetype=json
   autocmd BufRead,BufNewFile .babelrc set filetype=json5
   " commit messages
