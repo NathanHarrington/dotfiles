@@ -111,8 +111,8 @@ let g:user_emmet_settings = {
   \    'javascript': {'extends': 'jsx'},
   \    'javascript.jsx': {'extends': 'jsx'}
   \ }
-Plug 'jiangmiao/auto-pairs' " autoclose parens, quotes, etc.
-autocmd FileType python let b:AutoPairs = AutoPairsDefine({'f"': '"', "f'": "'"})
+"Plug 'jiangmiao/auto-pairs' " autoclose parens, quotes, etc.
+"autocmd FileType python let b:AutoPairs = AutoPairsDefine({'f"': '"', "f'": "'"})
 Plug 'mtth/scratch.vim'
 let g:scratch_no_mappings = 1
 let g:scratch_height = 20
@@ -155,6 +155,7 @@ Plug 'majutsushi/tagbar', {'on': 'Tagbar'}
 map <leader>\ :Tagbar<CR>
 let g:tagbar_autofocus = 1
 " COLOR
+source ~/.vim/setcolors.vim
 Plug 'flazz/vim-colorschemes'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'sloria/vim-hybrid'  " hybrid with easier-to-read line numbers
@@ -205,7 +206,14 @@ set noerrorbells visualbell t_vb=
 
 """ VISUAL SETTINGS """
 if &term =~ '256color' | set t_ut= | endif
-set background=dark | colorscheme railscasts
+" Looks nice, no black background
+"set background=dark | colorscheme railscasts
+" Confusing blue line bar
+"set background=dark | colorscheme relaxedgreen
+" tabe filename completion unreadable
+" set background=dark | colorscheme darkblack
+" Too much green
+set background=dark | colorscheme automation
 
 " Show trailing whitespace
 set list listchars=tab:▸\ ,trail:▫
@@ -290,6 +298,8 @@ augroup configgroup
   autocmd BufRead,BufNewFile *.mdx set filetype=markdown
   autocmd BufRead,BufNewFile *.js.flow set filetype=javascript
   autocmd BufRead,BufNewFile jrnl*.txt,editor*.txt,*.md,*.rst setlocal nolist wrap linebreak formatoptions+=ntl textwidth=72 wrapmargin=0
+  autocmd BufRead,BufNewFile *.txt setlocal nolist wrap linebreak formatoptions+=ntl textwidth=72 wrapmargin=0
+  autocmd BufRead,BufNewFile *.py setlocal nolist wrap linebreak formatoptions+=ntl textwidth=72 wrapmargin=0
   autocmd BufRead,BufNewFile .eslintrc set filetype=json
   autocmd BufRead,BufNewFile .babelrc set filetype=json5
   " commit messages
@@ -301,3 +311,8 @@ augroup END
 set guifont=Hack:h12
 " Hide scrollbars and menu
 set guioptions-=T guioptions-=R guioptions-=r guioptions-=m guioptions-=l guioptions-=L
+
+" When using tab completion on filename open, display unlikely options last
+" set suffixes+=.egg-info/
+" When using tab completion on filename open, never show these:
+set wildignore+=*.egg-info/
