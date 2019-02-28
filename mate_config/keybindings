@@ -1,0 +1,80 @@
+# These were exported and imported according to:
+# https://unix.stackexchange.com/questions/119432/save-custom-keyboard-shortcuts-in-gnome
+#
+# dconf dump /org/mate/desktop/keybindings/ > keybindings
+#
+# dconf load /org/mate/desktop/keybindings/ < keybindings
+[custom0]
+action='disper --cycle'
+binding='<Mod4>p'
+name='cycle displays'
+
+[custom1]
+action='mate-terminal'
+binding='<Primary><Alt>t'
+name='mate-terminal'
+
+[custom2]
+action='firefox -P nathan@cordince.com'
+binding='<Primary><Alt>3'
+name='firefox cordince'
+
+[custom3]
+action='firefox -P harrington.nathan@gmail.com'
+binding='<Primary><Alt>1'
+name='firefox harrington.nathan'
+
+[custom4]
+action='/home/nharrington/projects/dotfiles/autokeyboard/w3m_google.sh'
+binding='<Primary><Shift>g'
+name='w3m google'
+
+[custom5]
+action='mate-terminal'
+binding='<Primary><Shift>percent'
+name='resize tmux pane'
+
+[custom10]
+action='/home/nharrington/projects/dotfiles/sound_control/classical_only.sh'
+binding='<Primary><Shift><Alt>c'
+name='classical music'
+
+[custom6]
+action='/home/nharrington/projects/dotfiles/sound_control/cmus_remote_control.sh next'
+binding='<Primary><Alt>bracketright'
+name='cmus next'
+
+[custom11]
+action='/home/nharrington/projects/dotfiles/sound_control/rocklist_only.sh'
+binding='<Primary><Shift><Alt>t'
+name='full spectrum music'
+
+[custom7]
+action='/home/nharrington/projects/dotfiles/sound_control/cmus_remote_control.sh prev'
+binding='<Primary><Alt>bracketleft'
+name='cmus prev'
+
+[custom12]
+action="mate-terminal --full-screen -- sh -c '/home/nharrington/projects/dotfiles/sound_control/fullscreen_bluetooth.sh'"
+binding='<Primary><Shift><Alt>b'
+name='reconnect bluetooth'
+
+[custom8]
+action='/home/nharrington/projects/dotfiles/sound_control/cmus_remote_control.sh seek_forward'
+binding='<Primary><Alt><Mod4>bracketright'
+name='cmus skip forward'
+
+[custom13]
+action='/home/nharrington/projects/dotfiles/sound_control/cmus_remote_control.sh play'
+binding='<Primary><Alt>l'
+name='cmus pause/play'
+
+[custom9]
+action='/home/nharrington/projects/dotfiles/sound_control/cmus_remote_control.sh seek_backward'
+binding='<Primary><Alt><Mod4>bracketleft'
+name='cmus skip backward'
+
+[custom14]
+action='/home/nharrington/projects/dotfiles/sound_control/what_is_playing.sh'
+binding='<Primary><Shift><Alt>w'
+name='what is playing'
