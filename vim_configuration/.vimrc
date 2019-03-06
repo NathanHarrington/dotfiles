@@ -314,5 +314,14 @@ set guioptions-=T guioptions-=R guioptions-=r guioptions-=m guioptions-=l guiopt
 
 " When using tab completion on filename open, display unlikely options last
 " set suffixes+=.egg-info/
-" When using tab completion on filename open, never show these:
+" When using tab completion on filename open, never show these:,*.o,*.obj,*.jpg,*.pnpg
 set wildignore+=*.egg-info/
+
+" Without the reset of ttimeout, the vim-sensible plugin will set 'b' for word
+" back followed <100ms by another 'b' to insert-mode.
+set ttimeout
+set ttimeoutlen=0
+
+" Print an ISO timestamp
+nnoremap <F5> m'A<C-R>="".strftime('%Y-%m-%d %H:%M')<CR>
+map! <F5> <C-R>="".strftime('%Y-%m-%d %H:%M')<CR>

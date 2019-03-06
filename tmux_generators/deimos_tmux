@@ -16,22 +16,26 @@ if [[ $? -eq 0 ]] ; then
 fi
 
 tmux set-option remain-on-exit on
+export PANEWAIT=2
 
 # Single window on left, 3 windows on right
 tmux new-session -d -s "$SESSIONNAME"
 
 tmux split-window -h  
-sleep 1
+sleep $PANEWAIT
 
 tmux split-window -h  
-sleep 1
+sleep $PANEWAIT
 
 tmux select-pane -t 0
-sleep 1
+sleep $PANEWAIT
 tmux resize-pane -L 65 
+sleep $PANEWAIT
 tmux resize-pane -L 65 
+sleep $PANEWAIT
 
 # Now back to the central pane
 tmux select-pane -t 1
+sleep $PANEWAIT
 
 tmux -2 new-session -t "$SESSIONNAME"
