@@ -5,9 +5,9 @@
 #
 # dconf load /org/mate/desktop/keybindings/ < keybindings
 [custom0]
-action='disper --cycle'
-binding='<Mod4>p'
-name='cycle displays'
+action='disper --clone'
+binding='<Primary><Alt><Mod4>p'
+name='clone display'
 
 [custom1]
 action='mate-terminal'
@@ -36,45 +36,55 @@ name='resize tmux pane'
 
 [custom10]
 action='/home/nharrington/projects/dotfiles/sound_control/classical_only.sh'
-binding='<Primary><Shift><Alt>c'
+binding='<Primary><Alt><Mod4>c'
 name='classical music'
 
 [custom6]
 action='/home/nharrington/projects/dotfiles/sound_control/cmus_remote_control.sh next'
-binding='<Primary><Alt>bracketright'
+binding='<Primary><Alt><Mod4>bracketright'
 name='cmus next'
 
 [custom11]
 action='/home/nharrington/projects/dotfiles/sound_control/rocklist_only.sh'
-binding='<Primary><Shift><Alt>t'
+binding='<Primary><Alt><Mod4>t'
 name='full spectrum music'
 
 [custom7]
 action='/home/nharrington/projects/dotfiles/sound_control/cmus_remote_control.sh prev'
-binding='<Primary><Alt>bracketleft'
+binding='<Primary><Alt><Mod4>bracketleft'
 name='cmus prev'
 
 [custom12]
 action="mate-terminal --full-screen -- sh -c '/home/nharrington/projects/dotfiles/sound_control/fullscreen_bluetooth.sh'"
-binding='<Primary><Shift><Alt>b'
+binding='<Primary><Alt><Mod4>b'
 name='reconnect bluetooth'
 
 [custom8]
 action='/home/nharrington/projects/dotfiles/sound_control/cmus_remote_control.sh seek_forward'
-binding='<Primary><Alt><Mod4>bracketright'
+binding='<Primary><Alt><Mod4>Page_Down'
 name='cmus skip forward'
 
 [custom13]
-action='/home/nharrington/projects/dotfiles/sound_control/cmus_remote_control.sh play'
-binding='<Primary><Alt>l'
+action='/home/nharrington/projects/dotfiles/sound_control/cmus_remote_control.sh toggle'
+binding='<Primary><Alt><Mod4>l'
 name='cmus pause/play'
 
 [custom9]
 action='/home/nharrington/projects/dotfiles/sound_control/cmus_remote_control.sh seek_backward'
-binding='<Primary><Alt><Mod4>bracketleft'
+binding='<Primary><Alt><Mod4>Page_Up'
 name='cmus skip backward'
 
 [custom14]
 action='/home/nharrington/projects/dotfiles/sound_control/what_is_playing.sh'
-binding='<Primary><Shift><Alt>w'
+binding='<Primary><Alt><Mod4>w'
 name='what is playing'
+
+[custom15]
+action='/home/nharrington/projects/dotfiles/autokeyboard/scroll_tmux_to_assertion.sh'
+binding='<Primary><Alt><Mod4>6'
+name='tmux scroll to assertion'
+
+[custom16]
+action='gmrun'
+binding='<Alt>F3'
+name='gmrun'
