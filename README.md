@@ -176,16 +176,26 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
 ### MATE configuration (1.20.4)
     # Why MATE? out of the box screen locking and suspend that is
     # closest to regular Gnome. Significantly faster performance in
-    # other areas. Basically a usuable gnome.
+    # other areas. Basically a usable gnome. Unfortunately it won't
+    # handle plug and unplug of a monitor correctly. The work around
+    # is to # manually clone the displays before you unplug.
 
     # Remove screen tearing at the cost of a window compositor
     gsettings set org.mate.Marco.general compositing-manager false 
 
-    # On Lenovo U430, map lcd/external monitor cycling to Windows Key +
-    # F10   
     dnf install disper
+    # On Lenovo U430, map lcd/external monitor cycling to:
+    # ctrl+alt+mod4+m (mod4=windows key)
     # Keyboard Shortcuts -> New Shortcut -> Name -> Cycle displays
-    # Command:  disper --cycle
+    # Command:  disper --clone
+    #
+    # This will find a resolution that both monitors can do. Then unplug
+    # the hdmi display, and do disper -s to select just the internal
+    # display. If you get a black screen, the virtual console is still
+    # available at alt+ctrl+f3. Run: 
+    # export DISPLAY=:0; sleep 3; disper --clone
+    # Then do ctrl-alt-f1 to get back to your black screen desktop and
+    # it should mirror the display to a usable state again.
    
 
     # Edit startup applications, remove:
