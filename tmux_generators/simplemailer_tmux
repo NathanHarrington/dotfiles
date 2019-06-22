@@ -15,7 +15,7 @@ if [[ $? -eq 0 ]] ; then
     exit
 fi
 
-tmux set-option remain-on-exit on
+#tmux set-option remain-on-exit on
 
 # Single window on left, 3 windows on right
 tmux new-session -d -s "$SESSIONNAME"
