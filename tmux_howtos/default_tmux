@@ -4,7 +4,15 @@
 # Monospace Regular font at size 10 in full screen. No menubars, no
 # titlebars.
 #
-# Built with tmux from source commit: 968296bb
+# Copy this file and change the session name variable and starting directory.
+# Make sure to start a single version of this at a time, or panes will apppear
+# in tmux sessions where you do not want them.
+#
+# Put the file in the previously git ignored tmux_generators folder:
+#
+# Then add an alias in your .bashrc like: 
+# alias w3mtmux='/home/nharrington/projects/dotfiles/tmux_generators/w3m_tmux'
+
 
 cd ~/Documents/auto_backup
 SESSIONNAME=workflows
@@ -16,15 +24,13 @@ if [[ $? -eq 0 ]] ; then
     exit
 fi
 
-
 # Add sleeps between the split window events to make sure the prompts
-# wrap correctly. I kid you not. If you set this too low, it will look
-# like:
+# wrap correctly. I kid you not. 
 PANEWAIT=2
 
 # Double vertical window on the left, with one of them having a
 # single-character width because of the monitor edge issues
-tmux new-session -d -s "$SESSIONNAME" 'vim file5_u430_201610111309.txt'
+tmux new-session -d -s "$SESSIONNAME" 'vim somefile.txt'
 sleep $PANEWAIT
 
 tmux new-window
