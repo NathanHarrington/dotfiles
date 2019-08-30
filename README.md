@@ -401,7 +401,7 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
     # Based heavily on:
     # https://github.com/sloria/dotfiles#what-if-i-only-want-your-vim
 
-    mkidr -p ~/.vim/autoload
+    mkdir -p ~/.vim/autoload
     cp vim_configuration/plug.vim  ~/.vim/autoload/
     cp vim_configuration/.vimrc ~/.vimrc
     cp vim_configuration/setcolors.vim ~/.vim/
