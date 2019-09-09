@@ -8,15 +8,13 @@
 # (The the user types set:passwd=<password>
 #
 # Bind this script in gnome or mate like shown below, where all the music and volume
-# controls have the ctrl+left windows key+alt prefix
-# ctrl+alt+Mod4+l  <full_path>/cmus_remote_control.sh toggle
+# controls have the left side of the keyboard ctrl-alt-mod4 prefix
 #
-# ctrl+alt+Mod4+]  <full_path>/cmus_remote_control.sh next
-# ctrl+alt+Mod4+[  <full_path>/cmus_remote_control.sh previous
-# ctrl+alt+Mod4+l  <full_path>/cmus_remote_control.sh pause
+# ctrl+alt+Mod4+pagedown <full_path>/cmus_remote_control.sh seek_forward
+# ctrl+alt+Mod4+pageup <full_path>/cmus_remote_control.sh seek_backward
 #
-# ctrl+alt+Mod4+shift+} <full_path>/cmus_remote_control.sh seek_forward
-# ctrl+alt+Mod4+shift+{ <full_path>/cmus_remote_control.sh seek_backward
+# ctrl+alt+Mod4+] <full_path>/cmus_remote_control.sh next
+# ctrl+alt+Mod4+[ <full_path>/cmus_remote_control.sh back
 
 AVAHINAME=127.0.0.1
 PORT=5577
