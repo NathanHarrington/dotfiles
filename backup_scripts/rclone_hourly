@@ -42,9 +42,9 @@
 
 
 # rclone remote names
-declare -a dest=("${BACKUP_PREFIX}dropbox" "${BACKUP_PREFIX}gdrive"
+declare -a dest=("${BACKUP_PREFIX}jottacloud" "${BACKUP_PREFIX}gdrive"
 "${BACKUP_PREFIX}backblaze" "${BACKUP_PREFIX}onedrive")
-#declare -a dest=("${BACKUP_PREFIX}backblaze")
+#declare -a dest=("${BACKUP_PREFIX}jottacloud")
 
 RCLONE=/usr/bin/rclone
 RCLONE_OPTS="--verbose --size-only"
