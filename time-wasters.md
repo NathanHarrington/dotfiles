@@ -1,6 +1,6 @@
 This configuration is awesome - this truly helps focus.
 
-Leechblock on all firefox web browsers.
+Leechblock on all web browsers.
 
 Config:
 

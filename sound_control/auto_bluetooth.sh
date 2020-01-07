@@ -1,5 +1,13 @@
 # Automatically connect to the bluetooth headset, and set as the default
 # sink.
+#
+#
+# Most of this is vestigal as of FC31 on 2020-01-06. It was such a headache I'm
+# leaving it in here in case it ever comes up again. For right now, bluetooth
+# in MATE desktop works exactly as expected. Simply connect to it once, and
+# every subsequent power on things just work the way you'd expect.
+#
+#
 # Bose QuietControl 30 on Fedora Core 24
 # In /etc/bluetooth/main.conf, make sure to set:
 # ControllerMode = bredr

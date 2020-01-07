@@ -24,31 +24,13 @@ export PS1="# \W \[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\] # "
 export PS1="\u@\h \W\[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\] "
 
 
-# 2015-10-26 07:54 No more .pyc files cluttering the directory. Are you
-# sure you want to do this? Are you going to get bit later in
-# productions or on a different system where it finds an old .pyc file
-# and you've lost familiarity with that error pattern? It will manifest
-# as importing a module or access some code that should not exist on
-# disk because you deleted the file.py file, but the file.pyc file is
-# still there.
+# No more .pyc files cluttering the directory.
 export PYTHONDONTWRITEBYTECODE=1
-
-# Avoid inadvertent global package installation - this is good for older
-# style virtual-env integrations, but will break conda
-#export PIP_REQUIRE_VIRTUALENV=true
-
-alias conda3='export PATH=/home/nharrington/miniconda3/bin:$PATH'
-alias conda2='export PATH=/home/nharrington/miniconda2/bin:$PATH'
 
 # For resetting the stored git credential cache in order to use multiple
 # git user id's on the same machine
 alias credkill='killall git-credential-cache--daemon'
 alias noise='play -c 2 -n synth brownnoise'
-
-# Use spyder from the full anaconda install for machine learning course
-alias spyder='export PATH=/home/nharrington/anaconda3/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/nharrington/.local/bin:/home/nharrington/bin; spyder'
-
-alias ml_path='export PATH=/home/nharrington/anaconda3/bin:$PATH'
 
 # Make the screen entirelyblank
 alias cleanclear='export PS1="";clear'
@@ -67,7 +49,6 @@ alias llstmux=~/projects/dotfiles/tmux_generators/lls_tmux
 alias workflowstmux=~/projects/dotfiles/tmux_generators/workflows_tmux
 alias tunnelstmux=~/projects/dotfiles/tmux_generators/tunnels_tmux
 alias w3mtmux=~/projects/dotfiles/tmux_generators/w3m_tmux
-alias rubberopticstmux=~/projects/dotfiles/tmux_generators/rubberoptics_tmux
 alias nathanharringtoninfotmux=~/projects/dotfiles/tmux_generators/nathanharringtoninfo_tmux
 alias universalcbtmux=~/projects/dotfiles/tmux_generators/universalcb_tmux
 alias mpsyttmux=~/projects/dotfiles/tmux_generators/mpsyt_edit_tmux

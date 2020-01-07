@@ -3,7 +3,7 @@ Nathan Harrington environment configuration resources
 
 
 ### System configuration instructions
-Based on stock Fedora Core 29 workstation install.
+Based on stock Fedora Core 31 workstation install.
 
     The procedure below expects the entire drive to be dedicated to the
     fedora install, with the 'auto' partitioning setup.
@@ -30,14 +30,59 @@ hostnamectl set-hostname "short computer hostname, like u430"
     (about 20 minutes later...)
     reboot
 
+If it says flatpak failed, run dnf update -y again
 
-If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now so you don't have to wonder if it will ever work in the future.
+### MATE configuration (1.22.2)
+
+<pre>
+    dnf install @mate-desktop-environment
+    # If you get a message like:
+    #Error: 
+    #Problem: problem with installed package fedora-release-workstation-31-2.noarch
+    #- package fedora-release-workstation-31-2.noarch conflicts with system-release provided by fedora-release-matecompiz-31-1.noarch
+    
+    #Then run the command:
+    dnf install @mate-desktop-environment --allow-erasing
+
+    # Reboot, select mate for desktop environment on login
+
+    # Why MATE? out of the box screen locking and suspend that is
+    # closest to regular Gnome. Significantly faster performance in
+    # other areas. Basically a usable gnome. Unfortunately it won't
+    # handle plug and unplug of a monitor correctly. The work around
+    # is to manually clone the displays before you unplug.
+
+    # If you still need that fix, here's the instructions:
+        # Remove screen tearing at the cost of a window compositor
+        gsettings set org.mate.Marco.general compositing-manager false 
+
+        dnf install disper
+        # On Lenovo U430, map lcd/external monitor cycling to:
+        # ctrl+alt+mod4+m (mod4=windows key)
+        # Keyboard Shortcuts -> New Shortcut -> Name -> Cycle displays
+        # Command:  disper --clone
+        #
+        # This will find a resolution that both monitors can do. Then unplug
+        # the hdmi display, and do disper -s to select just the internal
+        # display. If you get a black screen, the virtual console is still
+        # available at alt+ctrl+f3. Run: 
+        # export DISPLAY=:0; sleep 3; disper --clone
+        # Then do ctrl-alt-f1 to get back to your black screen desktop and
+        # it should mirror the display to a usable state again.
+</pre> 
+
+### After MATE setup has been verified, continue with the environment setup
+
+    # Edit startup applications, remove:
+    # clipit (use parcellite instead)
+    # dnfdragora
+    # Anything else that appears unecessary
 
     # Basic development environment
     dnf -y install make automake gcc gcc-c++ kernel-devel cmake
     dnf -y install git autossh tmux
     dnf -y install redhat-rpm-config python-devel
-    dnf -y install parcellite vim ncdu cmus sox
+    dnf -y install parcellite vim ncdu cmus sox rofi
     
     start parcellite,
 	Activate the parcellite config interface by pressing ctrl+alt+p
@@ -53,59 +98,12 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
 
     Follow the time-wasters.md file for more details on the leechblock and other network-level blocking.
 
+    # MATE Keyboard shortcuts
+    run a terminal  Ctrl+Alt+T
+    Switch to workspace N  Alt-N
 
-### Encrypt home folder:
-
-    These are based on: 
-    https://cloud-ninja.org/2014/04/05/fedora-encrypting-your-home-directory/
-
-    After a fresh reboot, with no users logged in.
-    In virtual console, login as nharrington, then sudo su -, then give the root account a password.
-
-    Reboot again, and with no users logged in.
-    Open a virtual console, login as root:
-
-    dnf -y install keyutils ecryptfs-utils pam_mount
-    authconfig --enableecryptfs --updateall
-    usermod -aG ecryptfs nharrington
-    ecryptfs-migrate-home -u nharrington
-
-    # After perusing the messages about what to do next...
-
-    su - nharrington
-
-    # Execute the unwrapped passphrase command and write down the
-    # unwrapped passphrase elsewhere if you're paranoid
-    # ecryptfs-unwrap-passphrase 
-
-    # Include it locally...
-    ecryptfs-insert-wrapped-passphrase-into-keyring ~/.ecryptfs/wrapped-passphrase
-
-    # Reboot system, login as nharrington into gnome. Verify that the firefox history
-    # is there, all the other expected files are there.
-
-    # Remove the older, unencrypted home directory, something like:
-    # rm -rf /home/nharrington.YwNG1Fho
-
-    # Setup swap encryption, reboot
-    ecryptfs-setup-swap
-
-    # On the Lenovo u430 touch from 2013, an encrypted swap will lead to system
-    # wide lock ups. If this failure repeats on other systems, the workaround is to
-    # have a secondary swap file created according to:
-    #  https://www.linux.com/learn/ \
-          increase-your-available-swap-space-swap-file 
-
-    # dd if=/dev/zero of=/extraswap bs=1M count=4096 
-    # chmod 0600 /extraswap 
-    # mkswap /extraswap 
-    # cp /etc/fstab /etc/fstab.mybackup 
-
-    # Add the line to fstab: 
-    # /extraswap   none swap   sw   0   0
-
-    # Reboot - Now when you run `swapon -s` you'll see the /extraswap 4GB file
-    # be used under heavy load, and the existing encrypted swap as a backup.
+    Create custom shortcut for Alt+F3 with:
+      rofi -monitor -1 -show run
 
 ### tmux configuration:
 
@@ -133,6 +131,7 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
     Copy the custom tmux configuration:
+    cd ~/projects/dotfiles
     cp custom.tmux.conf ~/.tmux.conf
     tmux source-file ~/.tmux.conf
 
@@ -140,72 +139,7 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
     tmux
 
     # Press control-a shift-I to load plugins
-
-### Gnome Configuration (3.204):
-
-    Install and run gnome-tweak-tool
-
-    In workspaces, change workspace creation to static, create 9 workspaces.
-    Top Bar show date, show seconds
-    Extensions, Launch new instance to On
-    Extensions, Alternatetab to On
-    Appearance, global dark theme to On
-    
-    dnf install wmctrl
-
-    Open gnome settings
-    Keyboard shortcuts, set Switch to workspace 1-4 to Alt-[1234]
-    Add new shortcuts for workspaces 5-9 with the custom command type:
-    wmctrl -s (workspace number-1)
-
-    Turn off all search options (no shop, no docs, etc.)
-
-    Set to lock after 1 minute
-
-    Change gnome-terminal settings:
-        green on black colors -> Palettes -> Built in schemes: Xterm 
-        No scrollbars shown
-        Change profile name to green
-        Turn off show menubar by default
-
-    Set the workspaces to retain the same windows despite the external
-        monitor changing:
-
-    gsettings set org.gnome.shell.overrides workspaces-only-on-primary false
-
-### MATE configuration (1.20.4)
-    # Why MATE? out of the box screen locking and suspend that is
-    # closest to regular Gnome. Significantly faster performance in
-    # other areas. Basically a usable gnome. Unfortunately it won't
-    # handle plug and unplug of a monitor correctly. The work around
-    # is to # manually clone the displays before you unplug.
-
-    # Remove screen tearing at the cost of a window compositor
-    gsettings set org.mate.Marco.general compositing-manager false 
-
-    dnf install disper
-    # On Lenovo U430, map lcd/external monitor cycling to:
-    # ctrl+alt+mod4+m (mod4=windows key)
-    # Keyboard Shortcuts -> New Shortcut -> Name -> Cycle displays
-    # Command:  disper --clone
-    #
-    # This will find a resolution that both monitors can do. Then unplug
-    # the hdmi display, and do disper -s to select just the internal
-    # display. If you get a black screen, the virtual console is still
-    # available at alt+ctrl+f3. Run: 
-    # export DISPLAY=:0; sleep 3; disper --clone
-    # Then do ctrl-alt-f1 to get back to your black screen desktop and
-    # it should mirror the display to a usable state again.
-   
-
-    # Edit startup applications, remove:
-    # clipit (use parcellite instead)
-    # dnfdragora
-    # Anything else that appears unecessary
  
-    # MATE appears to not recognize the Ctrl-Shift-% keyboard shortcut
-    # Map the auto-keyboard functions to something else:
-
 ### Miscellaneous configuration:
 
     cd ~/projects/dotfiles
@@ -225,16 +159,28 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
     echo "source ~/.config/tig/tig-colors-neonwolf-256.tigrc" \
         > ~/.config/tig/config
 
-    Copy .gnupg from backup to ~/
-    See notes below on 'recovering from backup' for details
+    # Copy .gnupg from backup to ~/
+    # See notes below on 'recovering from backup' for details
     scp -r (backup-system) ~/.gnupg .
 
     cp .surfraw.conf ~/
     
     # Start w3m, change color of anchor to yellow
 
-    # Add autossh configuration to any remote systems on network
-    # availability with the instructions in the file: autossh.service
+    # Install ghi from the curl setup, setup auth
+
+### Firefox and Chrome configuration
+
+    #Add streaming video support:
+    #dnf install gstreamer1-libav gstreamer1-plugins-ugly unrar compat-ffmpeg28 ffmpeg-libs
+
+    Google Chrome:
+        Install google chrome from the google repo
+        Sign in to chrome to get the settings below, or start a new profile 
+	with the fundamentals:
+            Set chrome to "remember where you left off"
+            Install ublock origin for chrome
+            Install surfingkeys for chrome
 
 ### SSH Configuration:
 
@@ -249,20 +195,6 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
 
     ssh (other system) # verify passwordless connectivity
 
-### Integrate the shared drive where appropriate:
-
-    # These two as sudo
-    mkdir -p /mnt/cifs_share/share_data
-
-    (press enter for no remote system password)
-    mount --verbose -t cifs -o uid=1000 \
-        //192.168.1.250/windows-share1 /mnt/cifs_share/share_data/
-
-    # Run these as nharrington
-    mkdir /home/nharrington/sharename
-    ln -s /mnt/cifs_share/share_data /home/nharrington/sharename
-
-
 ### Setup the rclone backup option:
 
     Download and install rclone according to: http://rclone.org/install/
@@ -271,8 +203,9 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
 
     rclone config, exit
     Copy .rclone.conf from backup system
+    mkdir ~/.config/rclone/
     scp -r (backup-system):.rclone.conf .config/rclone/rclone.conf
-    chown nharrington.nharrington .config/rclone/rclone.conf
+    chown username.username .config/rclone/rclone.conf
 
     After the .gnupg directory copy as described above, and with a fully verified key
     management and recovery system:
@@ -315,6 +248,7 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
     alternatives --config mta
     (select sendmail.ssmtp)
 
+    # Issue this command as root and primary userid
     echo "username@domain" > ~/.forward
 
     Test mail configuration:
@@ -334,7 +268,7 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
 
     See the notes in autokeyboard/*.sh
     for details on commonly used keyboard automation scripts and how
-    they should be bound in gnome.
+    they should be bound in MATE.
 
 ### Install nomachine
 
@@ -352,49 +286,6 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
     change 'enforcing' to 'permissive'
 
     reinstall nomachine
-
-### Firefox and Chrome configuration
-
-    Add streaming video support:
-    dnf install gstreamer1-libav gstreamer1-plugins-ugly unrar compat-ffmpeg28 ffmpeg-libs
-    
-    Firefox 57 (Quantum) on Fedora:
-        about:config -> dom.webnotifications.enabled set to false
-        about:config -> geo.enabled set to false
-       	about:config -> browser.fullscreen.autohide to False
-       	about:config -> dom.event.contextmenu.enabled  to false
-        about:config -> browser.link.open_newwindow.restriction to 0
-
-        Install Firefox Extensions:
-        uBlock Origin
-        LeechBlock NG   -> see configuration details in time-wasters.md
-        ForceFull 
-        Open in Browser
-        Surfingkeys
-            You may have to edit the surfing keys extension advanced
-            settings and point it to the .surfingkeys.js file. This is solely to get
-            the benefit of turning emoji completion off with iunmap(":")
-
-        Preferences -> General -> "Restore previous session"
-       	Turn off ctrl+tab cycles through tabs in recently used order
-	    Turn off recommend extensions as you browse
-	    Privacy and Security -> Turn off all privacy invasions
-	    Home -> homepage is blank
-	    home -> New tabs is blank page
-	    Uncheck all firefox home contenG
-	    Uncheck all 'one click search engines'
- 
-        Customize -> Themes button on bottom -> Dark
-
-    Google Chrome:
-        Install google chrome from the google repo:
-	    https://www.if-not-true-then-false.com/2010/install-\
-		    google-chrome-with-yum-on-fedora-red-hat-rhel/
-
-        Sign in to chrome to get the settings below:
-        Set chrome to "remember where you left off"
-        Install ublock origin for chrome
-        Install surfingkeys for chrome
         
 ### Vim configuration
     
@@ -418,31 +309,6 @@ If you want virtualbox at any point, skip to the 'virtualbox' steps. Do it now s
     dnf install task
     task
     (accept defaults)
-
-
-### Windows VM in VirtualBox
-
-    Install virtualbox first, and verify, as this is the longest cycle
-    testing to make sure the system has kernel configurations that are
-    compatible.
-
-    dnf install VirtualBox
-
-    # Install the extension pack that exactly matches the virtualbox
-    #    version: 5.2.16-r7771323 etc.
-
-    After installing virtualbox, add the current user to the vboxusers 
-    group for usb access:
-
-    usermod -a -G vboxusers nharrington
-
-    This can't be stressed enough: test virtualbox first on the machine
-    before you go full config. There are many ways (especially on bleeding
-    edge hardware) that this can fail, and you want to know at the
-    beginning, not at the end.
-
-    After VirtualBox is functional, follow the install instructions  in
-    windows-virtualbox.md for windows VM on fedora.
 
 ### Recovering from backup:
 
