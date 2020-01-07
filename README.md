@@ -102,9 +102,6 @@ If it says flatpak failed, run dnf update -y again
     run a terminal  Ctrl+Alt+T
     Switch to workspace N  Alt-N
 
-    Create custom shortcut for Alt+F3 with:
-      rofi -monitor -1 -show run
-
 ### tmux configuration:
 
     Install xclip to enable copying from the tmux scrollback buffer to
@@ -181,6 +178,19 @@ If it says flatpak failed, run dnf update -y again
             Set chrome to "remember where you left off"
             Install ublock origin for chrome
             Install surfingkeys for chrome
+
+### Launcher setup
+
+   gmrun does bash-style path completion and command history search out
+   of the box.
+
+   Clone from: https://github.com/rtyler/gmrun or one of the newer forks
+
+   Run autogen.sh, then make, make install
+   
+   Create mate keyboard shortcut for Alt+F3 with:
+      gmrun
+
 
 ### SSH Configuration:
 
