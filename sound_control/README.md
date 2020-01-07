@@ -3,10 +3,13 @@ For details on Bose QuietControl 30 see the auto_bluetooth.sh file
 
 On the u430, there are no audio-next, previous, or play buttons etc.
 
-Open gnome keyboard settings and set shortcuts:
-Next Track  Ctrl+Alt+Mod4+]
-Play (or Play/Pause) Ctrl+Alt+Mod4+l
-Previous Track  Ctrl+Alt+Mod4+[
+Open mate keyboard settings and add custom shortcuts below. Reusing the
+next/play audio shortcuts will not work.
+# ctrl+alt+Mod4+pagedown <full_path>/cmus_remote_control.sh seek_forward
+# ctrl+alt+Mod4+pageup <full_path>/cmus_remote_control.sh seek_backward
+#
+# ctrl+alt+Mod4+] <full_path>/cmus_remote_control.sh next
+# ctrl+alt+Mod4+[ <full_path>/cmus_remote_control.sh back
 
 
 After you start cmus for the first time, make sure to run:
