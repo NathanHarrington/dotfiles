@@ -9,7 +9,7 @@ PASSWORD=cmuscontrolitifyouwant
 
 FLD=/home/nharrington/projects/dotfiles/sound_control
 LIST_FILE=$FLD/classical_cmus_queuelist.m3u
-MUSIC_FOLDER=/home/nharrington/Downloads/refined_mp3s
+MUSIC_FOLDER=/home/nharrington/projects/raw_data/all_in_one/refined_mp3s
 
 ls -1 ${MUSIC_FOLDER}/bach/* > $LIST_FILE
 ls -1 ${MUSIC_FOLDER}/beethoven/* >> $LIST_FILE

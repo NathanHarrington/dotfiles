@@ -8,7 +8,7 @@ PASSWORD=cmuscontrolitifyouwant
 /home/nharrington/projects/dotfiles/sound_control/clear_playlist.sh
 
 FLD=/home/nharrington/projects/dotfiles/sound_control
-DIRNAME="/home/nharrington/Downloads/refined_mp3s/classical/"
+DIRNAME="/home/nharrington/raw_data/all_in_one/refined_mp3s/classical/"
 echo "$DIRNAME/G._F._Haendel_-_Organ_Concertos.mp3"  \
     > $FLD/shuf_list.m3u
 
