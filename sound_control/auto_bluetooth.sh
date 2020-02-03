@@ -42,6 +42,8 @@ echo  "power on" > /tmp/srv-input
 sleep 3
 echo  "connect 04:52:C7:1B:D7:F7" > /tmp/srv-input
 sleep 5
+echo  "yes" > /tmp/srv-input
+sleep 5
 
 echo "set default sink"
 pactl set-default-sink bluez_sink.04_52_C7_1B_D7_F7
