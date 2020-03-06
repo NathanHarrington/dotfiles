@@ -298,17 +298,9 @@ If it says flatpak failed, run dnf update -y again
     reinstall nomachine
         
 ### Vim configuration
-    
-    # Based heavily on:
-    # https://github.com/sloria/dotfiles#what-if-i-only-want-your-vim
-
-    mkdir -p ~/.vim/autoload
-    cp vim_configuration/plug.vim  ~/.vim/autoload/
-    cp vim_configuration/.vimrc ~/.vimrc
-    cp vim_configuration/setcolors.vim ~/.vim/
-
-    # Start vim, run :PlugInstall
-    # Restart vim
+   
+    # Install SpaceVim!
+    # Use configuration in: spacevimrc
 
 ### Task warrior configuration
 

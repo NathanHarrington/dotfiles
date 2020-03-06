@@ -1,0 +1,52 @@
+"=============================================================================
+" vimrc --- Entry file for vim
+" Copyright (c) 2016-2017 Shidong Wang & Contributors
+" Author: Shidong Wang < wsdjeg at 163.com >
+" URL: https://spacevim.org
+" License: GPLv3
+"=============================================================================
+
+" Note: Skip initialization for vim-tiny or vim-small.
+if 1
+    let g:_spacevim_if_lua = 0
+    if has('lua')
+        if has('win16') || has('win32') || has('win64')
+            let s:plugin_dir = fnamemodify(expand('<sfile>'), ':h').'\lua'
+            let s:str = s:plugin_dir . '\?.lua;' . s:plugin_dir . '\?\init.lua;'
+        else
+            let s:plugin_dir = fnamemodify(expand('<sfile>'), ':h').'/lua'
+            let s:str = s:plugin_dir . '/?.lua;' . s:plugin_dir . '/?/init.lua;'
+        endif
+        silent! lua package.path=vim.eval("s:str") .. package.path
+        if empty(v:errmsg)
+            let g:_spacevim_if_lua = 1
+        endif
+    endif
+    execute 'source' fnamemodify(expand('<sfile>'), ':h').'/config/main.vim'
+endif
+" vim:set et sw=2
+
+
+" Custom settings. Designed to be places in ~/.SpaceVim/vimrc. Just about
+" everything works right out of the box.
+" 
+" Install nerd-fonts, set terminal to Mono Regular 10
+"
+" Make the following changes in ~/.SpaceVim.d/init.toml:
+"    colorscheme = "koehler"
+"    enable_guicolors = true
+"    statusline_separator = "arrow"
+"    statusline_inactive_separator = "bar"
+"    enable_tabline_filetype_icon = true
+"    enable_statusline_mode = true
+"    statusline_unicode_symbols = true
+
+" Add the lines below to ~/.SpaceVim/vimrc
+nnoremap <F5> m'A<C-R>="".strftime('%Y-%m-%d %H:%M')<CR>
+map! <F5> <C-R>="".strftime('%Y-%m-%d %H:%M')<CR>
+
+" More margin for better flow
+set tw=72
+set ignorecase
+
+highlight normal guifg=green

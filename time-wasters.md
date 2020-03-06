@@ -4,7 +4,8 @@ Leechblock on all web browsers.
 
 Config:
 
-First - give it an extremely long password. Something you can type in and during the entire process remind yourself over and over:
+First - give it an extremely long password. Something you can type in and
+during the entire process remind yourself over and over:
 
 Why am I doing this?
 
@@ -53,8 +54,10 @@ Hardware: TPLINK 450M Model No. TL-WR940N/TL-WR941ND
 The goal here is to stop all time wasters at the network level.
 Specific focus includes tablets - anything with a handheld modality needs extra restrictions.
 
-Make a logging into the router a significant speed bump.
-Store the router password backwards, with spaces between the portions and with gaps with descriptions in between to make it hard to cut and paste. Make it hard to disable. Make sure you never store it in web browser password manager.
+Make logging into the router a significant speed bump.
+Store the router password backwards, with spaces between the portions and with
+gaps with descriptions in between to make it hard to cut and paste. Make it
+hard to disable. Make sure you never store it in web browser password manager.
 
 Use OpenDNS filtering dns servers:
 Primary: 208.67.222.123
@@ -87,14 +90,17 @@ yetmorerule	all internals	  yet more time wasters	Permanent
 twtwo20180426	u430	          time wasters 20180426	Permanent
 social media 	u430	          facebook and twitter	Permanent
 
-Important to add specific rules blocking google image search on tablets. You can't block just by domain, but you can block the thumbnails effectively with:
+Important to add specific rules blocking google image search on tablets. You
+can't block just by domain, but you can block the thumbnails effectively with:
 	target description: gstatic.com	
 		domain: gstatic.com
 		domain: encrypted-tbn0.gstatic.com
 
 Then setup a rule to block that target on any handheld device.
 
-Track the time you spend on different sites. Plug in the MAC-based filtering rules at the network level and the leechblock level and the /etc/hosts level if you need to. Create those speed bumps to free yourself.
+Track the time you spend on different sites. Plug in the MAC-based filtering
+rules at the network level and the leechblock level and the /etc/hosts level if
+you need to. Create those speed bumps to free yourself.
 
 For example - how much time do you spend on wikipedia? If it's more than
 5 minutes per day you're probably wasting your life with entertainment
@@ -124,4 +130,5 @@ Set monday-friday 2 min daily limit - not sure what this does, but that was the 
 Now your phone gives you google play music, google maps for navigation, google voice for messaging and phone. 
 
 Make sure to turn off all notifications for all apps except calendar.
-For calendar, install "Calendar Snooze" free version, which will buzz repeatedly until a calendar notification is acknoledged.
+For calendar, install "Calendar Snooze" free version, which will buzz
+repeatedly until a calendar notification is acknoledged.

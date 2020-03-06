@@ -1,6 +1,9 @@
 " nharrington specify keymappings and settings for vim. Designed to work
 " with https://github.com/amix/vimrc 
 "
+" You probably want the spacevimrc file. This is historical as of
+" 2020-03-06 09:55
+"
 " Print an ISO timestamp
 nnoremap <F5> m'A<C-R>="".strftime('%Y-%m-%d %H:%M')<CR>
 map! <F5> <C-R>="".strftime('%Y-%m-%d %H:%M')<CR>
