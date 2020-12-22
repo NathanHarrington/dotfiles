@@ -11,9 +11,9 @@ FLD=/home/nharrington/projects/dotfiles/sound_control
 LIST_FILE=$FLD/classical_cmus_queuelist.m3u
 MUSIC_FOLDER=/home/nharrington/projects/raw_data/pre2020_u430_reload/refined_mp3s
 
-ls -1 ${MUSIC_FOLDER}/bach/* > $LIST_FILE
-ls -1 ${MUSIC_FOLDER}/beethoven/* >> $LIST_FILE
-ls -1 ${MUSIC_FOLDER}/classical/* >> $LIST_FILE
+ls -1 ${MUSIC_FOLDER}/bach/* |grep mp3 > $LIST_FILE
+ls -1 ${MUSIC_FOLDER}/beethoven/* |grep mp3 >> $LIST_FILE
+ls -1 ${MUSIC_FOLDER}/classical/* |grep mp3 >> $LIST_FILE
 
 cat $LIST_FILE | shuf > $FLD/shuf_list.m3u
 

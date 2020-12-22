@@ -82,6 +82,7 @@ class VolumeApplication(object):
         pulse = pulsectl.Pulse('my-client-name')
 
         vol = pulse.volume_get_all_chans_by_name(self.args.name)
+        print('vol: %s' % vol)
 
         if self.args.exact > 1.0:
             print("\n SPECIFY FLOATING POINT OR YOUR EARS EXPLODE \n")

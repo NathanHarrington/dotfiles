@@ -49,4 +49,8 @@ map! <F5> <C-R>="".strftime('%Y-%m-%d %H:%M')<CR>
 set tw=72
 set ignorecase
 
+" Default spacevim tab completion is to show a whole file then back out
+" to prefixes. Reverse that order:
+" set wildmode=longest:full,full
+
 highlight normal guifg=green
