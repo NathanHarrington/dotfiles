@@ -3,12 +3,15 @@ Nathan Harrington environment configuration resources
 
 
 ### System configuration instructions
-Based on stock Fedora Core 31 workstation install.
+Based on stock Fedora Core 33 workstation MATE-compiz install.
 
     The procedure below expects the entire drive to be dedicated to the
     fedora install, with the 'auto' partitioning setup.
 
+
 Add wifi network connection
+
+Pretty sure this is a typo: you do want to encrypt home folder
 Accept all defaults of installation process
    Do not select 'encrypt my home folder'
 
