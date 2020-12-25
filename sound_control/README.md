@@ -17,10 +17,12 @@ After you start cmus for the first time, make sure to run:
 
 
 Add the shortcuts for switching music focus modes in 
-focus_music.sh
-rocklist_only.sh
-what_is_playing.sh
-classical_only.sh
+set_chrome_volumes.sh*   ctrl+alt+Mod4+c
+set_music_volumes.sh*    ctrl+alt+Mod4+m
+what_is_playing.sh       ctrl+alt+mod4+w
+focus_music.sh           ctrl+alt+mod4+f
+rocklist_only.sh         ctrl+alt+mod4+r
+classical_only.sh        ctrl+alt+mod4+l
 
 
 If operating a music service on a different computer, add the functions

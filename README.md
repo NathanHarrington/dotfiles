@@ -3,23 +3,24 @@ Nathan Harrington environment configuration resources
 
 
 ### System configuration instructions
+<pre>
 Based on stock Fedora Core 33 workstation MATE-compiz install.
+  Why MATE? out of the box screen locking and suspend that is
+  closest to regular Gnome. 
 
-    The procedure below expects the entire drive to be dedicated to the
-    fedora install, with the 'auto' partitioning setup.
+The procedure below expects the entire drive to be dedicated to the
+fedora install, with the 'auto' partitioning setup.
 
+On MATE-live system boot to the desktop:
+Start the graphical install.
+System -> Installation Destination
+	Check the 'encrypt my data' box, set a passphrase.
 
-Add wifi network connection
+Network -> set the hostname.
 
-Pretty sure this is a typo: you do want to encrypt home folder
-Accept all defaults of installation process
-   Do not select 'encrypt my home folder'
+Create User -> set password, and check 'Make administrator'
 
-Reboot, at startup wizard, turn off privacy invasions.
-Skip connecting online accounts.
-Set username, password
-
-Reboot
+Accept all defaults, after the install has complete, reboot the system.
 
 Clone this dotfiles repository
 git clone https://github.com/NathanHarrington/dotfiles ~/projects/dotfiles
@@ -33,59 +34,33 @@ hostnamectl set-hostname "short computer hostname, like u430"
     (about 20 minutes later...)
     reboot
 
-If it says flatpak failed, run dnf update -y again
+</pre>
 
-### MATE configuration (1.22.2)
 
 <pre>
-    dnf install @mate-desktop-environment
-    # If you get a message like:
-    #Error: 
-    #Problem: problem with installed package fedora-release-workstation-31-2.noarch
-    #- package fedora-release-workstation-31-2.noarch conflicts with system-release provided by fedora-release-matecompiz-31-1.noarch
-    
-    #Then run the command:
-    dnf install @mate-desktop-environment --allow-erasing
+Edit startup applications, remove:
+dnfdragora
+Anything else that appears unecessary
 
-    # Reboot, select mate for desktop environment on login
+Right click the workspace panel in the lower right, make sure there are 9 total workspaces.
 
-    # Why MATE? out of the box screen locking and suspend that is
-    # closest to regular Gnome. Significantly faster performance in
-    # other areas. Basically a usable gnome. Unfortunately it won't
-    # handle plug and unplug of a monitor correctly. The work around
-    # is to manually clone the displays before you unplug.
+Control Center -> Keyboard shortcuts, manually set:
+run a terminal  Ctrl+Alt+T
+Switch to workspace N  Alt-N  (for workspaces 1-4)
+Add custom shortcuts for the rest of the workspaces:
+	switch to workspace 5   wmctrl -s 4  alt-5
+	switch to workspace 6   wmctrl -s 5  alt-6
+	switch to workspace 7   wmctrl -s 6  alt-7
+	switch to workspace 8   wmctrl -s 7  alt-8
+	switch to workspace 9   wmctrl -s 8  alt-9
 
-    # If you still need that fix, here's the instructions:
-        # Remove screen tearing at the cost of a window compositor
-        gsettings set org.mate.Marco.general compositing-manager false 
-
-        dnf install disper
-        # On Lenovo U430, map lcd/external monitor cycling to:
-        # ctrl+alt+mod4+m (mod4=windows key)
-        # Keyboard Shortcuts -> New Shortcut -> Name -> Cycle displays
-        # Command:  disper --clone
-        #
-        # This will find a resolution that both monitors can do. Then unplug
-        # the hdmi display, and do disper -s to select just the internal
-        # display. If you get a black screen, the virtual console is still
-        # available at alt+ctrl+f3. Run: 
-        # export DISPLAY=:0; sleep 3; disper --clone
-        # Then do ctrl-alt-f1 to get back to your black screen desktop and
-        # it should mirror the display to a usable state again.
-</pre> 
-
-### After MATE setup has been verified, continue with the environment setup
-
-    # Edit startup applications, remove:
-    # clipit (use parcellite instead)
-    # dnfdragora
-    # Anything else that appears unecessary
 
     # Basic development environment
     dnf -y install make automake gcc gcc-c++ kernel-devel cmake
     dnf -y install git autossh tmux
     dnf -y install redhat-rpm-config python-devel
     dnf -y install parcellite vim ncdu cmus sox rofi
+    dnf -y install bat ripgrep
     
     start parcellite,
 	Activate the parcellite config interface by pressing ctrl+alt+p
@@ -101,219 +76,230 @@ If it says flatpak failed, run dnf update -y again
 
     Follow the time-wasters.md file for more details on the leechblock and other network-level blocking.
 
-    # MATE Keyboard shortcuts
-    run a terminal  Ctrl+Alt+T
-    Switch to workspace N  Alt-N
-
-### tmux configuration:
-
-    Install xclip to enable copying from the tmux scrollback buffer to
-    the system clipboard:
-    dnf install xclip urlview
-
-    Setup tmux with the instructions from http://tony.github.io/tmux-config/:
-
-    git clone https://github.com/tony/tmux-config.git ~/.tmux
-    ln -s ~/.tmux/.tmux.conf ~/.tmux.conf
-    cd ~/.tmux
-    git submodule init
-    git submodule update
-    cd ~/.tmux/vendor/tmux-mem-cpu-load
-    cmake .
-    sudo make install
-
-    cd ~
-    tmux 
-    ( press control + a then d to exit)
-    tmux source-file ~/.tmux.conf
-
-    # Install tmux plugin manager
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-
-    Copy the custom tmux configuration:
-    cd ~/projects/dotfiles
-    cp custom.tmux.conf ~/.tmux.conf
-    tmux source-file ~/.tmux.conf
-
-    # Start a tmux session:
-    tmux
-
-    # Press control-a shift-I to load plugins
+</pre>
  
 ### Miscellaneous configuration:
 
-    cd ~/projects/dotfiles
-    cp .bashrc ~/
-    
-    git config --global core.editor "vim"
-    git config --global credential.helper "cache --timeout=360000"
+cd ~/projects/dotfiles
+cp .bashrc ~/
 
-    systemctl enable sshd
-    systemctl start sshd
+git config --global core.editor "vim"
+git config --global credential.helper "cache --timeout=360000"
 
-    dnf -y install gimp inkscape graphviz w3m nmap thunar ImageMagick
-    dnf -y install surfraw tig
+systemctl enable sshd
+systemctl start sshd
 
-    mkdir ~/.config/tig/
-    cp tig-colors-neonwolf-256.tigrc  ~/.config/tig/
-    echo "source ~/.config/tig/tig-colors-neonwolf-256.tigrc" \
-        > ~/.config/tig/config
+dnf -y install gimp inkscape graphviz w3m nmap thunar ImageMagick
+dnf -y install surfraw tig darktable
 
-    # Copy .gnupg from backup to ~/
-    # See notes below on 'recovering from backup' for details
-    scp -r (backup-system) ~/.gnupg .
+mkdir ~/.config/tig/
+cp tig-colors-neonwolf-256.tigrc  ~/.config/tig/
+echo "source ~/.config/tig/tig-colors-neonwolf-256.tigrc" \
+    > ~/.config/tig/config
 
-    cp .surfraw.conf ~/
-    
-    # Start w3m, change color of anchor to yellow
+cp .surfraw.conf ~/
 
-    # Install ghi from the curl setup, setup auth
+# Start w3m, change color of anchor to yellow
+
+# Install ghi from the curl setup, setup auth
 
 ### Firefox and Chrome configuration
 
-    #Add streaming video support:
-    #dnf install gstreamer1-libav gstreamer1-plugins-ugly unrar compat-ffmpeg28 ffmpeg-libs
+Add streaming video support:
+dnf install gstreamer1-libav gstreamer1-plugins-ugly unrar compat-ffmpeg28 ffmpeg-libs
 
-    Google Chrome:
-        Install google chrome from the google repo
-        Sign in to chrome to get the settings below, or start a new profile 
+Google Chrome:
+    Install google chrome from google's page.
+    Sign in to chrome to get the settings below, or start a new profile 
 	with the fundamentals:
             Set chrome to "remember where you left off"
             Install ublock origin for chrome
             Install surfingkeys for chrome
 
+
+### tmux configuration:
+
+dnf install xclip urlview
+
+Setup tmux with the instructions from http://tony.github.io/tmux-config/:
+
+git clone https://github.com/tony/tmux-config.git ~/.tmux
+ln -s ~/.tmux/.tmux.conf ~/.tmux.conf
+cd ~/.tmux
+git submodule init
+git submodule update
+cd ~/.tmux/vendor/tmux-mem-cpu-load
+cmake .
+sudo make install
+
+cd ~
+tmux 
+( press control + a then d to exit)
+tmux source-file ~/.tmux.conf
+
+### Tmux auto-session startups
+
+# Install tmux plugin manager
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+Copy the custom tmux configuration:
+cd ~/projects/dotfiles
+cp custom.tmux.conf ~/.tmux.conf
+tmux source-file ~/.tmux.conf
+
+Start a tmux session:
+tmux
+
+Press control-a shift-I to load plugins
+
 ### Launcher setup
 
-   gmrun does bash-style path completion and command history search out
-   of the box.
+ Clone from: https://github.com/rtyler/gmrun or one of the newer forks
+ dnf install libtool gtk2-devel
 
-   Clone from: https://github.com/rtyler/gmrun or one of the newer forks
+ Run autogen.sh, configure, then make, sudo make install
+ 
+ Create mate keyboard shortcut for Alt+F3 with:
+    gmrun
 
-   Run autogen.sh, then make, make install
-   
-   Create mate keyboard shortcut for Alt+F3 with:
-      gmrun
+### Install nomachine
 
+Download nomachine from: https://www.nomachine.com/download/linux&id=1 
 
-### SSH Configuration:
+run:
 
-    To connect with other systems from this new system:
-    ssh-keygen 
-    (accept defaults)
-    cat ~/.ssh/id_rsa.pub | \
-        ssh (other system) "cat >> ~/.ssh/authorized_keys"
+dnf install ./nomachine
 
-    chmod 0700 ~/.ssh
-    chmod 0600 ~/.ssh/{authorized_keys,id_rsa}
+If you get a message about an selinux failure with systemd read from
+nxserver.service as described here: https://www.nomachine.com/TR11N07360
 
-    ssh (other system) # verify passwordless connectivity
+vi /etc/selinux/config
+
+change 'enforcing' to 'permissive'
+
+reinstall nomachine
+
+### Move over previous system files. 
+
+More recent versions of fedora allow you to connect the disk and it will
+ask for a passphrase and mount your old encrypted home directory
+automatically. If that doesn't work or you need access to the root
+partition, try the process at the end of this file.
+
+Copy the auto_backup folder from the old system:
+cp -ra old_system_mount_location/home/nharrington/Documents/auto_backup ~/Documents/auto_backup
+
+Make links from the encrypted folder location to the ~ location:
+cd ~
+ln -s ~/Documents/auto_backup/home.config_files/.ssh
+ln -s ~/Documents/auto_backup/home.config_files/.gnupg
+
+cd ~/.config/
+ln -s ~/Documents/auto_backup/home.config_files/cmus
+(You may have to re-add all the mp3s to the playlist)
+
+cd ~/.config/
+mkdir rclone
+cd rclone
+ln -s ~/Documents/auto_backup/home.config_files/rclone.conf
 
 ### Setup the rclone backup option:
 
-    Download and install rclone according to: http://rclone.org/install/
+Download and install rclone according to: http://rclone.org/install/
 
-    Create the references to the various cloud storage options with:
+Verify rclone config is setup by type rclone config and looking at the remotes.
 
-    rclone config, exit
-    Copy .rclone.conf from backup system
-    mkdir ~/.config/rclone/
-    scp -r (backup-system):.rclone.conf .config/rclone/rclone.conf
-    chown username.username .config/rclone/rclone.conf
+After the .gnupg directory copy as described above, and with a fully verified key
+management and recovery system:
 
-    After the .gnupg directory copy as described above, and with a fully verified key
-    management and recovery system:
+Anything you put in the folder below will be auto-backed up to the
+cloud, with encryption
+mkdir ~/Documents/auto_backup/
 
-    # Anything you put in the folder below will be auto-backed up to the
-    # cloud, with encryption
-    mkdir ~/Documents/auto_backup/
-    
-    Add the following to crontab -e:
-    
-    SCRIPTS=/home/nharrington/projects/dotfiles/backup_scripts
-    BACKUP_PREFIX=nh  (change this to the correct prefix! )
-    13 * * * * $SCRIPTS/encrypt_directory.sh >>$SCRIPTS/backup.log 2>&1
-    44 * * * * $SCRIPTS/rclone_hourly >>$SCRIPTS/backup.log 2>&1
-    
-    # Email a summary of the backup directories for hand verification
-    MAIL_DEST="username@domain.com"  (change this to the correct email!)
-    29 3 * * * $SCRIPTS/mail_summary >>$SCRIPTS/backup.log 2>&1
+Add the following to crontab -e:
+
+# Nightly tar backup build and upload
+SCRIPTS=/home/nharrington/projects/dotfiles/backup_scripts
+BACKUP_PREFIX=nh  (change this to the correct prefix! )
+13 * * * * $SCRIPTS/encrypt_directory.sh >>$SCRIPTS/backup.log 2>&1
+44 * * * * $SCRIPTS/rclone_hourly >>$SCRIPTS/backup.log 2>&1
+
+# Email a summary of the backup directories for hand verification
+MAIL_DEST="username@domain.com"  (change this to the correct email!)
+29 3 * * * $SCRIPTS/mail_summary >>$SCRIPTS/backup.log 2>&1
 
 
 ### rclone backup sends verification emails as well, so configure ssmtp:
 
-    These are based on: http://crashmag.net/setting-up-ssmtp-with-gmail
+These are based on: http://crashmag.net/setting-up-ssmtp-with-gmail
 
-    dnf -y install ssmtp mailx
+dnf -y install ssmtp mailx
 
-    # Update the ssmtp.conf file as shown below, where domain is a
-    "google apps for business" hosted domain, such as mybusiness.com
-     
-    vi /etc/ssmtp/ssmtp.conf
+Update the ssmtp.conf file as shown below, where domain is a
+"google apps for business" hosted domain, such as mybusiness.com
 
-    root=username@domain
-    mailhub=smtp.gmail.com:587
-    RewriteDomain=domain
-    UseTLS=YES
-    UseSTARTTLS=YES
-    AuthUser=username@domain
-    AuthPass=<app password created from google)
+vi /etc/ssmtp/ssmtp.conf
 
-    alternatives --config mta
-    (select sendmail.ssmtp)
+root=username@domain
+mailhub=smtp.gmail.com:587
+RewriteDomain=domain
+UseTLS=YES
+UseSTARTTLS=YES
+AuthUser=username@domain
+AuthPass=<app password created from google)
 
-    # Issue this command as root and primary userid
-    echo "username@domain" > ~/.forward
+alternatives --config mta
+(select sendmail.ssmtp)
 
-    Test mail configuration:
+# Issue this command as root and primary userid
+echo "username@domain" > ~/.forward
 
-    echo "Test mail to root" | mail -s "Test root essmtp" root
-    echo "Test mail to local" | mail -s "Test local" nharrington
-    echo "Test mail to gmail" | mail -s "Test gmail" username@domain
+Test mail configuration:
+
+echo "Test mail to root" | mail -s "Test root essmtp" root
+echo "Test mail to local" | mail -s "Test local" nharrington
+echo "Test mail to gmail" | mail -s "Test gmail" username@domain
+
+Now that the backup script is in place and the email is in place,
+temporarily change the crontab times to verify everything backs up
+correctly.
 
 
 ### Sound specific configurations
     
-    See the notes in sound_control/README.md for details on how to
-    configure a Bose QuietControl 30 headset with bluetooth, and for using
-    cmus.
+See the notes in sound_control/README.md for details on how to
+configure a Bose QuietControl 30 headset with bluetooth, and for using
+cmus.
+       
+### Mate Terminal configuration
+
+Set colorscheme green on black.
+Turn off scrollbar.
+Turn off show menubar by default.
+Palette - choose xterm.
+
+### Vim configuration
+   
+Install SpaceVim!
+Start vim, wait, choose 2 dark powered mode.
+Exit vim, restart vim. Wait for PluginManager to complete.
+Following configuration instructions in: spacevimrc
+
+### Keynav configuration
+
+Clone the repository: https://github.com/NathanHarrington/keynav
+Create a new branch for this OS if required, or use a previous branch.
+Install preqequisits, make.
+Copy the keynav desktop file to autostart:
+cp keynav.desktop ~/.config/autostart/
+
+</pre>
 
 ### Auto-keyboard configurations
 
     See the notes in autokeyboard/*.sh
     for details on commonly used keyboard automation scripts and how
     they should be bound in MATE.
-
-### Install nomachine
-
-    Download nomachine from: https://www.nomachine.com/download/linux&id=1 
-
-    run:
-
-    dnf install ./nomachine
-
-    If you get a message about an selinux failure with systemd read from
-    nxserver.service as describe here: https://www.nomachine.com/TR11N07360
-
-    vi /etc/selinux/config
-
-    change 'enforcing' to 'permissive'
-
-    reinstall nomachine
-        
-### Vim configuration
-   
-    # Install SpaceVim!
-    # Use configuration in: spacevimrc
-
-### Task warrior configuration
-
-    # This configuration assumes that after task warrior is used just for
-    # calendar and calculator convenience, and is not actually used for task
-    # recording.
-
-    dnf install task
-    task
-    (accept defaults)
 
 ### Recovering from backup:
 

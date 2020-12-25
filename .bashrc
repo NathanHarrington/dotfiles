@@ -42,16 +42,12 @@ function pybadge() {
     echo "![pylint Score](https://mperlet.github.io/pybadge/badges/$(pylint ( 2> /dev/null | tail -n2 | awk '{print $7}' | cut -d"/" -f1).svg)"
 }
 
+alias bat='bat --plain'
+
 # Tmux sessions
-alias deimostmux=~/projects/dotfiles/tmux_generators/deimos_tmux 
-alias titantmux=~/projects/dotfiles/tmux_generators/titan_tmux 
-alias llstmux=~/projects/dotfiles/tmux_generators/lls_tmux 
 alias workflowstmux=~/projects/dotfiles/tmux_generators/workflows_tmux
 alias tunnelstmux=~/projects/dotfiles/tmux_generators/tunnels_tmux
 alias w3mtmux=~/projects/dotfiles/tmux_generators/w3m_tmux
 alias nathanharringtoninfotmux=~/projects/dotfiles/tmux_generators/nathanharringtoninfo_tmux
-alias universalcbtmux=~/projects/dotfiles/tmux_generators/universalcb_tmux
-alias mpsyttmux=~/projects/dotfiles/tmux_generators/mpsyt_edit_tmux
-alias mpsyt='conda3; source activate mpsyt_py37; mpsyt'
-alias ucbfirmwaretmux=~/projects/dotfiles/tmux_generators/ucbfirmware_tmux
-alias labdiscoverytmux=~/projects/dotfiles/tmux_generators/labdiscovery_tmux
+alias musictmux=~/projects/dotfiles/tmux_generators/music_tmux
+alias rndban=~/projects/dotfiles/tmux_generators/rndban
