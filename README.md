@@ -55,26 +55,29 @@ Add custom shortcuts for the rest of the workspaces:
 	switch to workspace 9   wmctrl -s 8  alt-9
 
 
-    # Basic development environment
-    dnf -y install make automake gcc gcc-c++ kernel-devel cmake
-    dnf -y install git autossh tmux
-    dnf -y install redhat-rpm-config python-devel
-    dnf -y install parcellite vim ncdu cmus sox rofi
-    dnf -y install bat ripgrep
-    
-    start parcellite,
-	Activate the parcellite config interface by pressing ctrl+alt+p
-	If you can't see the preferences pop up, it may be because you are operating on wayland and not xorg.
+# Basic development environment
+dnf -y install make automake gcc gcc-c++ kernel-devel cmake
+dnf -y install git autossh tmux
+dnf -y install redhat-rpm-config python-devel
+dnf -y install parcellite vim ncdu cmus sox rofi
+dnf -y install bat ripgrep
 
-	In parcellite config: 
-        check "Use Copy" and "Use Primary", then click synchronize clipboards
+start parcellite,
+Activate the parcellite config interface by pressing ctrl+alt+p
+If you can't see the preferences pop up, it may be because you are operating on wayland and not xorg.
 
-    # Enable the timewaster blocks crontab entry as root:
-    su -
-    crontab -e
-    59 * * * * /home/nharrington/projects/dotfiles/hosts_block.sh
+In parcellite config: 
+    check "Use Copy" and "Use Primary", then click synchronize clipboards
 
-    Follow the time-wasters.md file for more details on the leechblock and other network-level blocking.
+# Enable the timewaster blocks crontab entry as root:
+su -
+crontab -e
+59 * * * * /home/nharrington/projects/dotfiles/hosts_block.sh
+
+Follow the time-wasters.md file for more details on the leechblock and other network-level blocking.
+
+## Install pyenv for managing python versions:
+curl https://pyenv.run | bash
 
 </pre>
  
