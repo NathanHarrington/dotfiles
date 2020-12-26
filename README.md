@@ -161,6 +161,7 @@ Press control-a shift-I to load plugins
  
  Create mate keyboard shortcut for Alt+F3 with:
     gmrun
+  cp .gmrunrc ~/.gmrunrc
 
 ### Install nomachine
 
@@ -293,6 +294,23 @@ Install preqequisits, make.
 Copy the keynav desktop file to autostart:
 cp keynav.desktop ~/.config/autostart/
 
+### Pulse mixer
+cd projects/
+git clone https://github.com/GeorgeFilipkin/pulsemixer
+
+### MATE Config
+Right click the top menu bar, add 'select workspace switcher' panel.
+Right click bottom panel, select delete panel, confirm.
+Right click to panel, set to bottom, height 20.
+Right click background, choose that first option that looks like a
+picture but is a gradient, set to solid black color.
+
+Remove everything but folders from desktop:
+dconf-editor
+Click  org -> mate -> caja -> desktop 
+Un-check all trash, volumes icons, etc. on desktop.
+Appearance -> BlackMATE
+      
 </pre>
 
 ### Auto-keyboard configurations
