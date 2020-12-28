@@ -78,6 +78,10 @@ Follow the time-wasters.md file for more details on the leechblock and other net
 
 ## Install pyenv for managing python versions:
 curl https://pyenv.run | bash
+Possibly needed prereqs:
+yum install compat-openssl10-devel --allowerasing
+dnf install zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel xz xz-devel libffi-devel findutils
+
 
 </pre>
  
@@ -105,6 +109,9 @@ cp .surfraw.conf ~/
 # Start w3m, change color of anchor to yellow
 
 # Install ghi from the curl setup, setup auth
+This means run the ghi clone, then copy to PATH. Connect to github,
+create a token with the right access then run:
+git config --global ghi.token token_hex
 
 ### Firefox and Chrome configuration
 
