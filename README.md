@@ -320,6 +320,8 @@ dconf-editor
 Click  org -> mate -> caja -> desktop 
 Un-check all trash, volumes icons, etc. on desktop.
 Appearance -> BlackMATE
+As root, replace the lock screen bitmap with your desired image in:
+/usr/share/backgrounds/default.png
       
 </pre>
 
