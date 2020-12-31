@@ -59,7 +59,7 @@ Add custom shortcuts for the rest of the workspaces:
 dnf -y install make automake gcc gcc-c++ kernel-devel cmake
 dnf -y install git autossh tmux
 dnf -y install redhat-rpm-config python-devel
-dnf -y install parcellite vim ncdu cmus sox rofi
+dnf -y install parcellite vim vim-X11 ncdu cmus sox rofi
 dnf -y install bat ripgrep
 
 start parcellite,

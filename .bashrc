@@ -12,6 +12,7 @@ fi
 
 alias l='ls -la'
 alias vi='vim'
+alias vim='vimx'
 alias gg='sr google'
 
 # visual differentiator for core computer
