@@ -43,7 +43,10 @@ function pybadge() {
     echo "![pylint Score](https://mperlet.github.io/pybadge/badges/$(pylint ( 2> /dev/null | tail -n2 | awk '{print $7}' | cut -d"/" -f1).svg)"
 }
 
-alias bat='bat --plain'
+# Use less for the bat pager with no line wrapping, display colors, case
+# insensitive searches, don't erase the screen, and don't require q to exit
+alias bat='bat --plain --pager "less -SRIXE"'
+
 
 # Tmux sessions
 alias workflowstmux=~/projects/dotfiles/tmux_generators/workflows_tmux
@@ -52,3 +55,9 @@ alias w3mtmux=~/projects/dotfiles/tmux_generators/w3m_tmux
 alias nathanharringtoninfotmux=~/projects/dotfiles/tmux_generators/nathanharringtoninfo_tmux
 alias musictmux=~/projects/dotfiles/tmux_generators/music_tmux
 alias rndban=~/projects/dotfiles/tmux_generators/rndban
+
+# Stack overflow caclculator!
+calc () { local in="$(echo " $*" | sed -e 's/\[/(/g' -e 's/\]/)/g')";
+  gawk -M -v PREC=201 -M 'BEGIN {printf("%.60g\n",'"${in-0}"')}' < /dev/null
+}
+

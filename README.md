@@ -54,6 +54,8 @@ Add custom shortcuts for the rest of the workspaces:
 	switch to workspace 8   wmctrl -s 7  alt-8
 	switch to workspace 9   wmctrl -s 8  alt-9
 
+Control Center -> Keyboard Preferences -> Layout -> Options
+  Set CAPS LOCK as another control
 
 # Basic development environment
 dnf -y install make automake gcc gcc-c++ kernel-devel cmake
