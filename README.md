@@ -324,6 +324,9 @@ Un-check all trash, volumes icons, etc. on desktop.
 Appearance -> BlackMATE
 As root, replace the lock screen bitmap with your desired image in:
 /usr/share/backgrounds/default.png
+
+To apparently prevent lockups when alt-tab switching, go to Control
+Center-> Windows, and check 'Disable thumbnails in alt-tab'
       
 </pre>
 
