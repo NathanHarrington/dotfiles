@@ -12,6 +12,7 @@
 # Change the remote tunnel port to something unique
 # Change the <full_path>/example_private_key to the right file
 # Make sure the permissions on the file are 0600
+# The private key must have been generated with no password set.
 #
 # cp autossh.service /etc/systemd/system/
 # systemctl daemon-reload
@@ -23,8 +24,7 @@
 # Reboot the computer, verify that the tunnel comes back up after login
 #
 [Unit]
-Description=Keeps a tunnel to 'remote.example.com' open, allows
-connections back through the tunnel to this machine
+Description=Keeps a tunnel to 'remote.example.com' open, allows connections back through the tunnel to this machine 
 After=network.target
 
 [Service]
