@@ -46,13 +46,8 @@ Right click the workspace panel in the lower right, make sure there are 9 total 
 
 Control Center -> Keyboard shortcuts, manually set:
 run a terminal  Ctrl+Alt+T
-Switch to workspace N  Alt-N  (for workspaces 1-4)
-Add custom shortcuts for the rest of the workspaces:
-	switch to workspace 5   wmctrl -s 4  alt-5
-	switch to workspace 6   wmctrl -s 5  alt-6
-	switch to workspace 7   wmctrl -s 6  alt-7
-	switch to workspace 8   wmctrl -s 7  alt-8
-	switch to workspace 9   wmctrl -s 8  alt-9
+Switch to workspace N  Alt-N  (for workspaces 1-9)
+Tile N,S,W,E with windows key + up,down,left,right
 
 Control Center -> Keyboard Preferences -> Layout -> Options
   Set CAPS LOCK as another control
@@ -66,8 +61,6 @@ dnf -y install bat ripgrep
 
 start parcellite,
 Activate the parcellite config interface by pressing ctrl+alt+p
-If you can't see the preferences pop up, it may be because you are operating on wayland and not xorg.
-
 In parcellite config: 
     check "Use Copy" and "Use Primary", then click synchronize clipboards
 
@@ -79,18 +72,21 @@ crontab -e
 Follow the time-wasters.md file for more details on the leechblock and other network-level blocking.
 
 ## Install pyenv for managing python versions:
-curl https://pyenv.run | bash
-Possibly needed prereqs:
-yum install compat-openssl10-devel --allowerasing
 dnf install zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel xz xz-devel libffi-devel findutils
+curl https://pyenv.run | bash
+
+</pre>
 
 
+### Thinkpad carbon x1 specific:
+<pre>
+Append pcie_aspm=off to the kernel line in grub, and the screen blinking will stop. It will still say on battery when it's clearly plugged in.
 </pre>
  
 ### Miscellaneous configuration:
 
 cd ~/projects/dotfiles
-cp .bashrc ~/
+cat .bashrc >> ~/.bashrc
 
 git config --global core.editor "vim"
 git config --global credential.helper "cache --timeout=360000"
@@ -109,11 +105,6 @@ echo "source ~/.config/tig/tig-colors-neonwolf-256.tigrc" \
 cp .surfraw.conf ~/
 
 # Start w3m, change color of anchor to yellow
-
-# Install ghi from the curl setup, setup auth
-This means run the ghi clone, then copy to PATH. Connect to github,
-create a token with the right access then run:
-git config --global ghi.token token_hex
 
 ### Firefox and Chrome configuration
 
@@ -148,6 +139,7 @@ cd ~
 tmux 
 ( press control + a then d to exit)
 tmux source-file ~/.tmux.conf
+( Ignore configuration error )
 
 ### Tmux auto-session startups
 
@@ -166,14 +158,14 @@ Press control-a shift-I to load plugins
 
 ### Launcher setup
 
- Clone from: https://github.com/rtyler/gmrun or one of the newer forks
  dnf install libtool gtk2-devel
+ Clone from: https://github.com/wdlkmpx/gmrun
 
- Run autogen.sh, configure, then make, sudo make install
+ ./configure && sudo make install
  
  Create mate keyboard shortcut for Alt+F3 with:
     gmrun
-  cp .gmrunrc ~/.gmrunrc
+  cp dotfiles/.gmrunrc ~/.gmrunrc
 
 ### Install nomachine
 
@@ -228,6 +220,7 @@ management and recovery system:
 Anything you put in the folder below will be auto-backed up to the
 cloud, with encryption
 mkdir ~/Documents/auto_backup/
+mkdir ~/Documents/working_encrypted/
 
 Add the following to crontab -e:
 
@@ -277,6 +270,15 @@ Now that the backup script is in place and the email is in place,
 temporarily change the crontab times to verify everything backs up
 correctly.
 
+### Chrome profile setups:
+google-chrome --profile-directory=Default
+google-chrome --profile-directory=custom_profile_name
+
+If you keep getting login popup/keyring type isues after a few reboots,
+the workaround is to move the keyring popup exec (rename it to
+back.keyring), and run chrome with:
+google-chrome --password-store=basic --profile-directory=Default
+
 
 ### Sound specific configurations
     
@@ -296,21 +298,23 @@ Palette - choose xterm.
 Install SpaceVim!
 Start vim, wait, choose 2 dark powered mode.
 Exit vim, restart vim. Wait for PluginManager to complete.
-Following configuration instructions in: spacevimrc
+Follow the configuration instructions in: spacevimrc
 
 ### Keynav configuration
 
 Clone the repository: https://github.com/NathanHarrington/keynav
-Create a new branch for this OS if required, or use a previous branch.
-Install preqequisits, make.
-Copy the keynav desktop file to autostart:
-cp keynav.desktop ~/.config/autostart/
+git checkout fc31_build
+Install pre-requisities, make.
+Add a keynav desktop file to MATE autostart
 
 ### Pulse mixer
+
 cd projects/
 git clone https://github.com/GeorgeFilipkin/pulsemixer
+(no further install necessary)
 
 ### MATE Config
+
 Right click the top menu bar, add 'select workspace switcher' panel.
 Right click bottom panel, select delete panel, confirm.
 Right click to panel, set to bottom, height 20.
@@ -324,17 +328,14 @@ Un-check all trash, volumes icons, etc. on desktop.
 Appearance -> BlackMATE
 As root, replace the lock screen bitmap with your desired image in:
 /usr/share/backgrounds/default.png
-
-To apparently prevent lockups when alt-tab switching, go to Control
-Center-> Windows, and check 'Disable thumbnails in alt-tab'
       
 </pre>
 
 ### Auto-keyboard configurations
 
-    See the notes in autokeyboard/*.sh
-    for details on commonly used keyboard automation scripts and how
-    they should be bound in MATE.
+  See the notes in autokeyboard/*.sh
+  for details on commonly used keyboard automation scripts and how
+  they should be bound in MATE.
 
 ### Recovering from backup:
 
