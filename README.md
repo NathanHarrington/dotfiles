@@ -78,13 +78,8 @@ curl https://pyenv.run | bash
 </pre>
 
 
-### Thinkpad carbon x1 specific:
-<pre>
-Append pcie_aspm=off to the kernel line in grub, and the screen blinking will stop. It will still say on battery when it's clearly plugged in.
-</pre>
- 
 ### Miscellaneous configuration:
-
+<pre>
 cd ~/projects/dotfiles
 cat .bashrc >> ~/.bashrc
 
@@ -103,6 +98,7 @@ echo "source ~/.config/tig/tig-colors-neonwolf-256.tigrc" \
     > ~/.config/tig/config
 
 cp .surfraw.conf ~/
+</pre>
 
 # Start w3m, change color of anchor to yellow
 
@@ -137,6 +133,7 @@ sudo make install
 
 cd ~
 tmux 
+( Ignore configuration error )
 ( press control + a then d to exit)
 tmux source-file ~/.tmux.conf
 ( Ignore configuration error )
@@ -317,7 +314,10 @@ git clone https://github.com/GeorgeFilipkin/pulsemixer
 
 Right click the top menu bar, add 'select workspace switcher' panel.
 Right click bottom panel, select delete panel, confirm.
-Right click to panel, set to bottom, height 20.
+Right click panel, set to bottom, height 20.
+Right click panel, add compact menu.
+Right click panel, add window list using buttons.
+Remove 'System, Application, etc' panel applet.
 Right click background, choose that first option that looks like a
 picture but is a gradient, set to solid black color.
 
