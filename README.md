@@ -303,6 +303,8 @@ Clone the repository: https://github.com/NathanHarrington/keynav
 git checkout fc31_build
 Install pre-requisities, make.
 Add a keynav desktop file to MATE autostart
+mkdir ~/.config/keynav/
+cp keynavrc ~/.config/keynav
 
 ### Pulse mixer
 
