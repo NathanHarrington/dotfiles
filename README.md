@@ -4,7 +4,7 @@ Nathan Harrington environment configuration resources
 
 ### System configuration instructions
 <pre>
-Based on stock Fedora Core 33 workstation MATE-compiz install.
+Based on stock Fedora Core 35 workstation MATE-compiz install.
   Why MATE? out of the box screen locking and suspend that is
   closest to regular Gnome. 
 
@@ -81,7 +81,7 @@ curl https://pyenv.run | bash
 ### Miscellaneous configuration:
 <pre>
 cd ~/projects/dotfiles
-cat .bashrc >> ~/.bashrc
+cat bashrc_custom >> ~/.bashrc
 
 git config --global core.editor "vim"
 git config --global credential.helper "cache --timeout=360000"
@@ -166,6 +166,8 @@ Press control-a shift-I to load plugins
 
 ### Install nomachine
 
+# As of 2022-01-02 07:14 there is no nomachine build for FC35. These
+# instructions will all fail at installation time.
 Download nomachine from: https://www.nomachine.com/download/linux&id=1 
 
 run:
@@ -215,8 +217,7 @@ After the .gnupg directory copy as described above, and with a fully verified ke
 management and recovery system:
 
 Anything you put in the folder below will be auto-backed up to the
-cloud, with encryption
-mkdir ~/Documents/auto_backup/
+cloud, with encryption from the ~/Documents/auto_backup/ folder. Make sure you create the working encrypted foloder:
 mkdir ~/Documents/working_encrypted/
 
 Add the following to crontab -e:
@@ -304,7 +305,7 @@ git checkout fc31_build
 Install pre-requisities, make.
 Add a keynav desktop file to MATE autostart
 mkdir ~/.config/keynav/
-cp keynavrc ~/.config/keynav
+cp ~/projects/dotfiles/keynavrc ~/.config/keynav
 
 ### Pulse mixer
 

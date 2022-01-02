@@ -1,12 +1,9 @@
 #!/bin/bash
 #
-# WAYLAND: xdotool will not work on wayland. See w3m_xterm_google.sh for
-# an alternative
-#
 # Create a shortcut in gnome mapped to ctrl-shift-g, then make sure the
-# w3m window is focused.
+# w3m terminal window is focused.
 #
-# TODO: Verify that the w3m application has the input
+# TODO: Verify that the w3m termianl application has the input
 #
 INTRA_KEY_DELAY=0.01
 # Open new tab
