@@ -1,24 +1,21 @@
 #!/bin/sh
 #
-# Display the currently playing track name in cmus using xosd
+# Display the currently playing track name in cmus using zenity
 #
-#  Prereqs: dnf install xosd
-#
-# Bind in gnome to ctrl+alt+shift+w
+# Bind in gnome to ctrl+alt+mod+w
 AVAHINAME=127.0.0.1
 PORT=5577
 PASSWORD=cmuscontrolitifyouwant
 
 
-cmus-remote \
+TEXT=`cmus-remote \
     --server $AVAHINAME:$PORT --passwd $PASSWORD -Q \
-    | grep file \
-    | osd_cat --align=center \
-              --font=Variable --offset=450 \
-              --outline=35 &
+    | grep file`
+SONG=$(echo $TEXT | awk -F/ '{print $NF}')
+CMUS_TEXT="<span font='16'>$SONG</span>"
 
-ps -aef | grep mplayer | grep mp3 | awk '{print $9}' \
-    | osd_cat --align=center \
-              --font=Variable --offset=550 \
-              --color=white --outline=35 &
+MPLAYER=$(ps -aef | grep mplayer | grep mp3 | awk '{print $9}')
+MPLAYER_TEXT="\n\n<span font='16' color='red'>$MPLAYER</span>"
+
+zenity --info --width=1000 --text="$CMUS_TEXT $MPLAYER_TEXT"
 

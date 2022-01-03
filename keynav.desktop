@@ -2,9 +2,8 @@
 Type=Application
 Exec=/home/nharrington/projects/keynav/keynav
 Hidden=false
-X-MATE-Autostart-enabled=true
 Name[en_US]=keynav
 Name=keynav
 Comment[en_US]=
 Comment=
-X-MATE-Autostart-Delay=5
+X-MATE-Autostart-Delay=0

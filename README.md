@@ -2,6 +2,16 @@
 Nathan Harrington environment configuration resources
 
 
+### Run this every year at the end of December
+<pre>
+  There is no good time to do this, but when everyone else is on break
+  is probably the best time. 
+
+  Buy a new disk every year and replace it in the laptop. This will
+  prevent manufactured developed bit rot. You'll also get a snapshot
+  non-cloud backup of all your files at that moment.
+</pre>
+
 ### System configuration instructions
 <pre>
 Based on stock Fedora Core 35 workstation MATE-compiz install.
@@ -63,13 +73,6 @@ start parcellite,
 Activate the parcellite config interface by pressing ctrl+alt+p
 In parcellite config: 
     check "Use Copy" and "Use Primary", then click synchronize clipboards
-
-# Enable the timewaster blocks crontab entry as root:
-su -
-crontab -e
-59 * * * * /home/nharrington/projects/dotfiles/hosts_block.sh
-
-Follow the time-wasters.md file for more details on the leechblock and other network-level blocking.
 
 ## Install pyenv for managing python versions:
 dnf install zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel xz xz-devel libffi-devel findutils
@@ -193,6 +196,11 @@ partition, try the process at the end of this file.
 Copy the auto_backup folder from the old system:
 cp -ra old_system_mount_location/home/nharrington/Documents/auto_backup ~/Documents/auto_backup
 
+Important! - after you run the command above, disconnect the external
+original drive. This is because it has the links below which will point
+to your current /home/directory. If you leave the disk plugged in you
+will also be editing the backup files apparently.
+
 Make links from the encrypted folder location to the ~ location:
 cd ~
 ln -s ~/Documents/auto_backup/home.config_files/.ssh
@@ -277,12 +285,6 @@ the workaround is to move the keyring popup exec (rename it to
 back.keyring), and run chrome with:
 google-chrome --password-store=basic --profile-directory=Default
 
-
-### Sound specific configurations
-    
-See the notes in sound_control/README.md for details on how to
-configure a Bose QuietControl 30 headset with bluetooth, and for using
-cmus.
        
 ### Mate Terminal configuration
 
@@ -303,9 +305,9 @@ Follow the configuration instructions in: spacevimrc
 Clone the repository: https://github.com/NathanHarrington/keynav
 git checkout fc31_build
 Install pre-requisities, make.
-Add a keynav desktop file to MATE autostart
 mkdir ~/.config/keynav/
 cp ~/projects/dotfiles/keynavrc ~/.config/keynav
+cp keynav.desktop ~/.config/autostart/
 
 ### Pulse mixer
 
@@ -339,6 +341,12 @@ As root, replace the lock screen bitmap with your desired image in:
   See the notes in autokeyboard/*.sh
   for details on commonly used keyboard automation scripts and how
   they should be bound in MATE.
+
+### Sound specific configurations
+    
+See the notes in sound_control/README.md for details on how to
+configure a Bose QuietControl 30 headset with bluetooth, and for using
+cmus.
 
 ### Recovering from backup:
 

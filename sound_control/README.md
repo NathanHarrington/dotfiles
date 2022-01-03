@@ -1,8 +1,3 @@
-
-For details on Bose QuietControl 30 see the auto_bluetooth.sh file
-
-On the u430, there are no audio-next, previous, or play buttons etc.
-
 Open mate keyboard settings and add custom shortcuts below. Reusing the
 next/play audio shortcuts will not work.
 # ctrl+alt+Mod4+pagedown <full_path>/cmus_remote_control.sh seek_forward
