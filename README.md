@@ -14,7 +14,7 @@ Nathan Harrington environment configuration resources
 
 ### System configuration instructions
 <pre>
-Based on stock Fedora Core 35 workstation MATE-compiz install.
+Based on stock Fedora Core 37 workstation MATE-compiz install.
   Why MATE? out of the box screen locking and suspend that is
   closest to regular Gnome. 
 
@@ -67,7 +67,7 @@ dnf -y install make automake gcc gcc-c++ kernel-devel cmake
 dnf -y install git autossh tmux
 dnf -y install redhat-rpm-config python-devel
 dnf -y install parcellite vim vim-X11 ncdu cmus sox rofi
-dnf -y install bat ripgrep
+dnf -y install bat ripgrep exa
 
 start parcellite,
 Activate the parcellite config interface by pressing ctrl+alt+p
@@ -108,7 +108,7 @@ cp .surfraw.conf ~/
 ### Firefox and Chrome configuration
 
 Add streaming video support:
-dnf install gstreamer1-libav gstreamer1-plugins-ugly unrar compat-ffmpeg28 ffmpeg-libs
+dnf -y install gstreamer1-libav gstreamer1-plugins-ugly unrar compat-ffmpeg4 ffmpeg-libs
 
 Google Chrome:
     Install google chrome from google's page.
@@ -121,18 +121,9 @@ Google Chrome:
 
 ### tmux configuration:
 
-dnf install xclip urlview
+dnf -y install xclip urlview
 
 Setup tmux with the instructions from http://tony.github.io/tmux-config/:
-
-git clone https://github.com/tony/tmux-config.git ~/.tmux
-ln -s ~/.tmux/.tmux.conf ~/.tmux.conf
-cd ~/.tmux
-git submodule init
-git submodule update
-cd ~/.tmux/vendor/tmux-mem-cpu-load
-cmake .
-sudo make install
 
 cd ~
 tmux 
@@ -141,7 +132,6 @@ tmux
 tmux source-file ~/.tmux.conf
 ( Ignore configuration error )
 
-### Tmux auto-session startups
 
 # Install tmux plugin manager
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
@@ -166,25 +156,6 @@ Press control-a shift-I to load plugins
  Create mate keyboard shortcut for Alt+F3 with:
     gmrun
   cp dotfiles/.gmrunrc ~/.gmrunrc
-
-### Install nomachine
-
-# As of 2022-01-02 07:14 there is no nomachine build for FC35. These
-# instructions will all fail at installation time.
-Download nomachine from: https://www.nomachine.com/download/linux&id=1 
-
-run:
-
-dnf install ./nomachine
-
-If you get a message about an selinux failure with systemd read from
-nxserver.service as described here: https://www.nomachine.com/TR11N07360
-
-vi /etc/selinux/config
-
-change 'enforcing' to 'permissive'
-
-reinstall nomachine
 
 ### Move over previous system files. 
 
@@ -219,7 +190,7 @@ ln -s ~/Documents/auto_backup/home.config_files/rclone.conf
 
 Download and install rclone according to: http://rclone.org/install/
 
-Verify rclone config is setup by type rclone config and looking at the remotes.
+Verify rclone config is setup by running: rclone config and looking at the remotes.
 
 After the .gnupg directory copy as described above, and with a fully verified key
 management and recovery system:
@@ -307,7 +278,7 @@ git checkout fc31_build
 Install pre-requisities, make.
 mkdir ~/.config/keynav/
 cp ~/projects/dotfiles/keynavrc ~/.config/keynav
-cp keynav.desktop ~/.config/autostart/
+cp ~/projects/dotfiles/keynav.desktop ~/.config/autostart/
 
 ### Pulse mixer
 
@@ -323,6 +294,8 @@ Right click panel, set to bottom, height 20.
 Right click panel, add compact menu.
 Right click panel, add window list using buttons.
 Remove 'System, Application, etc' panel applet.
+Remove the individual files, firefox etc. icons. 
+Right click and move different panel items
 Right click background, choose that first option that looks like a
 picture but is a gradient, set to solid black color.
 
