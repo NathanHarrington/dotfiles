@@ -78,6 +78,10 @@ In parcellite config:
 dnf install zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel xz xz-devel libffi-devel findutils
 curl https://pyenv.run | bash
 
+# Make sure to install pipenv with pip, not with dnf 
+# as main user: 
+pip install pipenv
+
 </pre>
 
 
