@@ -67,7 +67,7 @@ dnf -y install make automake gcc gcc-c++ kernel-devel cmake
 dnf -y install git autossh tmux
 dnf -y install redhat-rpm-config python-devel
 dnf -y install parcellite vim vim-X11 ncdu cmus sox rofi
-dnf -y install bat ripgrep exa
+dnf -y install bat ripgrep exa shutter
 
 start parcellite,
 Activate the parcellite config interface by pressing ctrl+alt+p
