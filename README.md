@@ -277,7 +277,7 @@ Clone the repository: https://github.com/NathanHarrington/keynav
 git checkout fc31_build
 Install pre-requisities, make.
 mkdir ~/.config/keynav/
-cp ~/projects/dotfiles/keynavrc ~/.config/keynav
+cp ~/projects/dotfiles/keynavrc ~/.config/keynav/
 cp ~/projects/dotfiles/keynav.desktop ~/.config/autostart/
 
 ### Pulse mixer
