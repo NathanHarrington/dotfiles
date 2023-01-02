@@ -22,3 +22,5 @@ set ignorecase
 " set wildmode=longest:full,full
 
 highlight normal guifg=green
+
+let NERDTreeShowHidden=1
