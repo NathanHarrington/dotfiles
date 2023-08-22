@@ -1,5 +1,6 @@
 #!/bin/sh
-#
+# Display a timer expired message on the screen, on top of all windows, on all desktops. 
+# Designed to be run continuously - in gnome mate, bind this script to ctrl-shift-alt-t and when you see timer is up, start a new one. 
 pkill osd_cat
 SECS=330
 echo "sleeping $SECS" | osd_cat --delay 3
