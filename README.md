@@ -8,7 +8,7 @@ Nathan Harrington environment configuration resources
   is probably the best time. 
 
   Buy a new disk every year and replace it in the laptop. This will
-  prevent manufactured developed bit rot. You'll also get a snapshot
+  prevent manufacturer developed bit rot. You'll also get a snapshot
   non-cloud backup of all your files at that moment.
 </pre>
 
@@ -17,6 +17,7 @@ Nathan Harrington environment configuration resources
 Based on stock Fedora Core 37 workstation MATE-compiz install.
   Why MATE? out of the box screen locking and suspend that is
   closest to regular Gnome. 
+  The MATE install is first, then you add in i3wm after the hardware is verified.
 
 The procedure below expects the entire drive to be dedicated to the
 fedora install, with the 'auto' partitioning setup.
@@ -268,13 +269,6 @@ Turn off scrollbar.
 Turn off show menubar by default.
 Palette - choose xterm.
 
-### Vim configuration
-   
-Install SpaceVim!
-Start vim, wait, choose 2 dark powered mode.
-Exit vim, restart vim. Wait for PluginManager to complete.
-Follow the configuration instructions in: spacevimrc
-
 ### Keynav configuration
 
 Clone the repository: https://github.com/NathanHarrington/keynav
@@ -325,6 +319,33 @@ See the notes in sound_control/README.md for details on how to
 configure a Bose QuietControl 30 headset with bluetooth, and for using
 cmus.
 
+### Cordince brancind instructions 
+Clone the CordinceMarketing repo, set the background image. 
+
+Edit the file 
+/usr/share/pixmaps/system-logo-white.png to be transparent 
+
+Create the file if it does not exist:
+/etc/ligthdm/slick-greeter.conf 
+
+With the contents:
+[Greeter]
+background=/usr/share/backgrounds/cordince-backgroung.jpg
+
+test with slick-greeter --test-mode 
+
+Hide fedora logos on boot up with: 
+plymouth-set-default-theme details -R
+
+### i3wm config 
+
+Install i3wm, start it and run through the default wizard. 
+Logout of i3wm, thne copy over the file for your color scheme.
+cp i3wm_config ~/.config/i3/config 
+
+<pre>
+--------------------------------------------------------------
+</pre>
 ### Recovering from backup:
 
     Restoring from old system encrypted home folder:
