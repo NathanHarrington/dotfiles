@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=/usr/bin/parcellite
+Hidden=false
+Name[en_US]=parcellite
+Name=parcellite
+Comment[en_US]=
+Comment=
+X-MATE-Autostart-Delay=0

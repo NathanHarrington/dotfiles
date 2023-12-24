@@ -22,12 +22,6 @@ alias bat='bat --plain --pager "less -SRIX"'
 # Use the awesome exa tool instead of ls
 alias exa='exa -la'
 
-# Example tmux sessions - full list is in the current .bashrc
-alias workflowstmux=~/projects/dotfiles/tmux_generators/workflows_tmux
-alias tunnelstmux=~/projects/dotfiles/tmux_generators/tunnels_tmux
-alias w3mtmux=~/projects/dotfiles/tmux_generators/w3m_tmux
-alias musictmux=~/projects/dotfiles/tmux_generators/music_tmux
-
 # Stack overflow caclculator!
 calc () { local in="$(echo " $*" | sed -e 's/\[/(/g' -e 's/\]/)/g')";
   gawk -M -v PREC=201 -M 'BEGIN {printf("%.60g\n",'"${in-0}"')}' < /dev/null

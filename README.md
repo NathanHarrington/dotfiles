@@ -14,29 +14,21 @@ Nathan Harrington environment configuration resources
 
 ### System configuration instructions
 <pre>
-Based on stock Fedora Core 37 workstation MATE-compiz install.
-  Why MATE? out of the box screen locking and suspend that is
-  closest to regular Gnome. 
-  The MATE install is first, then you add in i3wm after the hardware is verified.
+Based on stock Fedora Core 39 workstation i3 live install.
 
 The procedure below expects the entire drive to be dedicated to the
 fedora install, with the 'auto' partitioning setup.
 
-On MATE-live system boot to the desktop:
+On i3-live system boot to the desktop:
 Start the graphical install.
 System -> Installation Destination
 	Check the 'encrypt my data' box, set a passphrase.
 
-Network -> set the hostname.
+Add a root user -> set password. 
 
 Create User -> set password, and check 'Make administrator'
 
 Accept all defaults, after the install has complete, reboot the system.
-
-Clone this dotfiles repository
-git clone https://github.com/NathanHarrington/dotfiles ~/projects/dotfiles
-
-hostnamectl set-hostname "short computer hostname, like u430"
 
     Install rpmfusion libraries (dnf install command for adding repos)
 
@@ -49,31 +41,43 @@ hostnamectl set-hostname "short computer hostname, like u430"
 
 
 <pre>
-Edit startup applications, remove:
-dnfdragora
-Anything else that appears unecessary
-
-Right click the workspace panel in the lower right, make sure there are 9 total workspaces.
-
-Control Center -> Keyboard shortcuts, manually set:
-run a terminal  Ctrl+Alt+T
-Switch to workspace N  Alt-N  (for workspaces 1-9)
-Tile N,S,W,E with windows key + up,down,left,right
-
-Control Center -> Keyboard Preferences -> Layout -> Options
-  Set CAPS LOCK as another control
-
 # Basic development environment
 dnf -y install make automake gcc gcc-c++ kernel-devel cmake
 dnf -y install git autossh tmux
 dnf -y install redhat-rpm-config python-devel
 dnf -y install parcellite vim vim-X11 ncdu cmus sox rofi
-dnf -y install bat ripgrep exa shutter
+dnf -y install bat ripgrep shutter
 
 start parcellite,
 Activate the parcellite config interface by pressing ctrl+alt+p
 In parcellite config: 
     check "Use Copy" and "Use Primary", then click synchronize clipboards
+
+Clone this dotfiles repository
+git clone https://github.com/NathanHarrington/dotfiles ~/projects/dotfiles
+
+hostnamectl set-hostname "short computer hostname, like u430"
+reboot 
+
+
+### Launcher setup
+
+ dnf install libtool gtk2-devel
+ Clone from: https://github.com/wdlkmpx/gmrun
+
+ ./configure && sudo make install
+ 
+ Create mate keyboard shortcut for Alt+F3 with:
+  cp ~/projects/dotfiles/.gmrunrc ~/.gmrunrc
+
+
+# Copy startup configurations configurations
+cp -ra ~/projects/dotfiles/autostart ~/.config/
+cp -ra ~/projects/dotfiles/i3/config ~/.config/i3/config
+
+
+
+
 
 ## Install pyenv for managing python versions:
 dnf install zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel xz xz-devel libffi-devel findutils
@@ -98,22 +102,11 @@ systemctl enable sshd
 systemctl start sshd
 
 dnf -y install gimp inkscape graphviz w3m nmap thunar ImageMagick
-dnf -y install surfraw tig darktable
+dnf -y install tig darktable xclip urlview
 
-mkdir ~/.config/tig/
-cp tig-colors-neonwolf-256.tigrc  ~/.config/tig/
-echo "source ~/.config/tig/tig-colors-neonwolf-256.tigrc" \
-    > ~/.config/tig/config
-
-cp .surfraw.conf ~/
 </pre>
 
 # Start w3m, change color of anchor to yellow
-
-### Firefox and Chrome configuration
-
-Add streaming video support:
-dnf -y install gstreamer1-libav gstreamer1-plugins-ugly unrar compat-ffmpeg4 ffmpeg-libs
 
 Google Chrome:
     Install google chrome from google's page.
@@ -123,44 +116,6 @@ Google Chrome:
             Install ublock origin for chrome
             Install surfingkeys for chrome
 
-
-### tmux configuration:
-
-dnf -y install xclip urlview
-
-Setup tmux with the instructions from http://tony.github.io/tmux-config/:
-
-cd ~
-tmux 
-( Ignore configuration error )
-( press control + a then d to exit)
-tmux source-file ~/.tmux.conf
-( Ignore configuration error )
-
-
-# Install tmux plugin manager
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-
-Copy the custom tmux configuration:
-cd ~/projects/dotfiles
-cp custom.tmux.conf ~/.tmux.conf
-tmux source-file ~/.tmux.conf
-
-Start a tmux session:
-tmux
-
-Press control-a shift-I to load plugins
-
-### Launcher setup
-
- dnf install libtool gtk2-devel
- Clone from: https://github.com/wdlkmpx/gmrun
-
- ./configure && sudo make install
- 
- Create mate keyboard shortcut for Alt+F3 with:
-    gmrun
-  cp dotfiles/.gmrunrc ~/.gmrunrc
 
 ### Move over previous system files. 
 
@@ -200,8 +155,9 @@ Verify rclone config is setup by running: rclone config and looking at the remot
 After the .gnupg directory copy as described above, and with a fully verified key
 management and recovery system:
 
-Anything you put in the folder below will be auto-backed up to the
-cloud, with encryption from the ~/Documents/auto_backup/ folder. Make sure you create the working encrypted foloder:
+Anything you put in the folder below will be auto-backed up to the cloud, with
+encryption from the ~/Documents/auto_backup/ folder. Make sure you create the
+working encrypted foloder:
 mkdir ~/Documents/working_encrypted/
 
 Add the following to crontab -e:
@@ -223,8 +179,8 @@ These are based on: http://crashmag.net/setting-up-ssmtp-with-gmail
 
 dnf -y install ssmtp mailx
 
-Update the ssmtp.conf file as shown below, where domain is a
-"google apps for business" hosted domain, such as mybusiness.com
+Update the ssmtp.conf file as shown below, where domain is a "google apps for
+business" hosted domain, such as mybusiness.com or just plain ol gmail.com
 
 vi /etc/ssmtp/ssmtp.conf
 
@@ -253,8 +209,9 @@ temporarily change the crontab times to verify everything backs up
 correctly.
 
 ### Chrome profile setups:
-google-chrome --profile-directory=Default
-google-chrome --profile-directory=custom_profile_name
+google-chrome --profile-directory=custom_profile_name@gmail.com
+google-chrome --profile-directory=business.user1@company.com
+google-chrome --profile-directory=business.user2@another_company.com
 
 If you keep getting login popup/keyring type isues after a few reboots,
 the workaround is to move the keyring popup exec (rename it to
@@ -262,12 +219,19 @@ back.keyring), and run chrome with:
 google-chrome --password-store=basic --profile-directory=Default
 
        
-### Mate Terminal configuration
+### Terminal configuration
+Base terminal for i3wm is xfce. Edit -> Preferences
+Scroll bar is dsiabled 
+Scrollback is 999
+Cursor block, blinks
 
 Set colorscheme green on black.
 Turn off scrollbar.
 Turn off show menubar by default.
 Palette - choose xterm.
+
+Uncheck display new menubar, uncheck borders.
+colors -> green on black
 
 ### Keynav configuration
 
@@ -276,37 +240,15 @@ git checkout fc31_build
 Install pre-requisities, make.
 mkdir ~/.config/keynav/
 cp ~/projects/dotfiles/keynavrc ~/.config/keynav/
-cp ~/projects/dotfiles/keynav.desktop ~/.config/autostart/
+# reboot to get keynav crosshairs to appear 
 
 ### Pulse mixer
-
 cd projects/
 git clone https://github.com/GeorgeFilipkin/pulsemixer
 (no further install necessary)
-
-### MATE Config
-
-Right click the top menu bar, add 'select workspace switcher' panel.
-Right click bottom panel, select delete panel, confirm.
-Right click panel, set to bottom, height 20.
-Right click panel, add compact menu.
-Right click panel, add window list using buttons.
-Remove 'System, Application, etc' panel applet.
-Remove the individual files, firefox etc. icons. 
-Right click and move different panel items
-Right click background, choose that first option that looks like a
-picture but is a gradient, set to solid black color.
-
-Remove everything but folders from desktop:
-dconf-editor
-Click  org -> mate -> caja -> desktop 
-Un-check all trash, volumes icons, etc. on desktop.
-Appearance -> BlackMATE
-As root, replace the lock screen bitmap with your desired image in:
-/usr/share/backgrounds/default.png
-      
 </pre>
 
+<pre>
 ### Auto-keyboard configurations
 
   See the notes in autokeyboard/*.sh
@@ -318,32 +260,29 @@ As root, replace the lock screen bitmap with your desired image in:
 See the notes in sound_control/README.md for details on how to
 configure a Bose QuietControl 30 headset with bluetooth, and for using
 cmus.
+<pre>
 
-### Cordince brancind instructions 
-Clone the CordinceMarketing repo, set the background image. 
+### Cordince branding instructions 
+Clone the CordinceMarketing repo
+cp ~/projects/CordinceMarketing/backgrounds/Cordince_Organ_Engineering_Background_1920x1080.png /usr/share/backgrounds/
 
 Edit the file 
-/usr/share/pixmaps/system-logo-white.png to be transparent 
+/usr/share/pixmaps/system-logo-white.png to be just a blank overlay, no logo displayed, just a transparent image.
 
 Create the file if it does not exist:
-/etc/ligthdm/slick-greeter.conf 
+/etc/lightdm/slick-greeter.conf 
 
 With the contents:
 [Greeter]
-background=/usr/share/backgrounds/cordince-backgroung.jpg
+background=/usr/share/backgrounds/Cordince_Organ_Engineering_Background_1920x1080.png
 
-test with slick-greeter --test-mode 
+dnf -y install slick-greeter
+test with: slick-greeter --test-mode 
 
 Hide fedora logos on boot up with: 
 plymouth-set-default-theme details -R
 
-### i3wm config 
-
-Install i3wm, start it and run through the default wizard. 
-Logout of i3wm, thne copy over the file for your color scheme.
-cp i3wm_config ~/.config/i3/config 
-
-<pre>
+</pre>
 --------------------------------------------------------------
 </pre>
 ### Recovering from backup:
