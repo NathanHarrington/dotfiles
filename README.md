@@ -100,7 +100,7 @@ Google Chrome:
 	with the fundamentals:
             Set chrome to "remember where you left off"
             Install ublock origin for chrome
-            Install surfingkeys for chrome
+            Install vimium for chrome
 
 
 ### Move over previous system files. 

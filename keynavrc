@@ -24,7 +24,7 @@
 # Use 'daemonize' to background ourselves.
 #daemonize
 
-ctrl+semicolon start
+ctrl+8 start
 Escape end
 ctrl+bracketleft end
 h cut-left
@@ -48,6 +48,12 @@ semicolon warp,end
 1 click 1
 2 click 2
 3 click 3
+i click 4
+e click 5
+#```
+#or to keep scrolling without having to re-invoke keynav, remove the end command from the bindings, like this:
+#```
+#i click 4
 
 # Zoom to the current window
 w windowzoom
