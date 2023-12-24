@@ -41,7 +41,7 @@ dnf -y install make automake gcc gcc-c++ kernel-devel cmake
 dnf -y install git autossh tmux
 dnf -y install redhat-rpm-config python-devel
 dnf -y install parcellite vim vim-X11 ncdu cmus sox rofi
-dnf -y install bat ripgrep shutter
+dnf -y install bat ripgrep shutter xss-lock
 
 start parcellite,
 Activate the parcellite config interface by pressing ctrl+alt+p
@@ -101,6 +101,9 @@ Google Chrome:
             Set chrome to "remember where you left off"
             Install ublock origin for chrome
             Install vimium for chrome
+
+VS Code: 
+    Install ms code from ms's page. 
 
 
 ### Move over previous system files. 
@@ -193,17 +196,6 @@ echo "Test mail to gmail" | mail -s "Test gmail" username@domain
 Now that the backup script is in place and the email is in place,
 temporarily change the crontab times to verify everything backs up
 correctly.
-
-### Chrome profile setups:
-google-chrome --profile-directory=custom_profile_name@gmail.com
-google-chrome --profile-directory=business.user1@company.com
-google-chrome --profile-directory=business.user2@another_company.com
-
-If you keep getting login popup/keyring type isues after a few reboots,
-the workaround is to move the keyring popup exec (rename it to
-back.keyring), and run chrome with:
-google-chrome --password-store=basic --profile-directory=Default
-
        
 ### Terminal configuration
 Base terminal for i3wm is xfce. Edit -> Preferences
@@ -264,6 +256,8 @@ test with: slick-greeter --test-mode
 
 Hide fedora logos on boot up with: 
 plymouth-set-default-theme details -R
+
+### 
 
 --------------------------------------------------------------
 ### Recovering from backup:
