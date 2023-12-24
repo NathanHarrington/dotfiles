@@ -2,18 +2,17 @@
 Nathan Harrington environment configuration resources
 
 
-### Run this every year at the end of December
 <pre>
+### Run this every year at the end of December
   There is no good time to do this, but when everyone else is on break
   is probably the best time. 
 
   Buy a new disk every year and replace it in the laptop. This will
   prevent manufacturer developed bit rot. You'll also get a snapshot
   non-cloud backup of all your files at that moment.
-</pre>
 
 ### System configuration instructions
-<pre>
+
 Based on stock Fedora Core 39 workstation i3 live install.
 
 The procedure below expects the entire drive to be dedicated to the
@@ -37,10 +36,6 @@ Accept all defaults, after the install has complete, reboot the system.
     (about 20 minutes later...)
     reboot
 
-</pre>
-
-
-<pre>
 # Basic development environment
 dnf -y install make automake gcc gcc-c++ kernel-devel cmake
 dnf -y install git autossh tmux
@@ -75,10 +70,6 @@ reboot
 cp -ra ~/projects/dotfiles/autostart ~/.config/
 cp -ra ~/projects/dotfiles/i3/config ~/.config/i3/config
 
-
-
-
-
 ## Install pyenv for managing python versions:
 dnf install zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel xz xz-devel libffi-devel findutils
 curl https://pyenv.run | bash
@@ -87,11 +78,8 @@ curl https://pyenv.run | bash
 # as main user: 
 pip install pipenv
 
-</pre>
-
 
 ### Miscellaneous configuration:
-<pre>
 cd ~/projects/dotfiles
 cat bashrc_custom >> ~/.bashrc
 
@@ -103,8 +91,6 @@ systemctl start sshd
 
 dnf -y install gimp inkscape graphviz w3m nmap thunar ImageMagick
 dnf -y install tig darktable xclip urlview
-
-</pre>
 
 # Start w3m, change color of anchor to yellow
 
@@ -246,21 +232,18 @@ cp ~/projects/dotfiles/keynavrc ~/.config/keynav/
 cd projects/
 git clone https://github.com/GeorgeFilipkin/pulsemixer
 (no further install necessary)
-</pre>
 
-<pre>
 ### Auto-keyboard configurations
 
   See the notes in autokeyboard/*.sh
   for details on commonly used keyboard automation scripts and how
-  they should be bound in MATE.
+  they should be bound.
 
 ### Sound specific configurations
     
 See the notes in sound_control/README.md for details on how to
 configure a Bose QuietControl 30 headset with bluetooth, and for using
 cmus.
-<pre>
 
 ### Cordince branding instructions 
 Clone the CordinceMarketing repo
@@ -282,9 +265,7 @@ test with: slick-greeter --test-mode
 Hide fedora logos on boot up with: 
 plymouth-set-default-theme details -R
 
-</pre>
 --------------------------------------------------------------
-</pre>
 ### Recovering from backup:
 
     Restoring from old system encrypted home folder:
