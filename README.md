@@ -13,13 +13,15 @@ Nathan Harrington environment configuration resources
 
 ### System configuration instructions
 
-Based on stock Fedora Core 39 workstation i3 live install.
+Based on stock Fedora Core 41 workstation i3 live install.
 
 The procedure below expects the entire drive to be dedicated to the
 fedora install, with the 'auto' partitioning setup.
 
 On i3-live system boot to the desktop:
-Start the graphical install.
+Accept the default i3 config setup. 
+Connect to the wifi.
+Start the graphical install by running: liveinst.
 System -> Installation Destination
 	Check the 'encrypt my data' box, set a passphrase.
 
@@ -41,7 +43,7 @@ dnf -y install make automake gcc gcc-c++ kernel-devel cmake
 dnf -y install git autossh tmux
 dnf -y install redhat-rpm-config python-devel
 dnf -y install parcellite vim vim-X11 ncdu cmus sox rofi
-dnf -y install bat ripgrep shutter xss-lock
+dnf -y install bat exa ripgrep shutter xss-lock
 
 start parcellite,
 Activate the parcellite config interface by pressing ctrl+alt+p
@@ -57,14 +59,10 @@ reboot
 
 ### Launcher setup
 
- dnf install libtool gtk2-devel
- Clone from: https://github.com/wdlkmpx/gmrun
-
- ./configure && sudo make install
- 
- Create mate keyboard shortcut for Alt+F3 with:
-  cp ~/projects/dotfiles/.gmrunrc ~/.gmrunrc
-
+dnf install libtool gtk2-devel xosd
+Clone from: https://github.com/wdlkmpx/gmrun
+./configure && sudo make install
+cp ~/projects/dotfiles/.gmrunrc ~/.gmrunrc
 
 # Copy startup configurations configurations
 cp -ra ~/projects/dotfiles/autostart ~/.config/
@@ -73,11 +71,11 @@ cp -ra ~/projects/dotfiles/i3/config ~/.config/i3/config
 ## Install pyenv for managing python versions:
 dnf install zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel xz xz-devel libffi-devel findutils
 curl https://pyenv.run | bash
+# Ignore the install in bash steps here, you'll do it below in the .bashrc copy
 
 # Make sure to install pipenv with pip, not with dnf 
 # as main user: 
 pip install pipenv
-
 
 ### Miscellaneous configuration:
 cd ~/projects/dotfiles
@@ -125,10 +123,6 @@ Make links from the encrypted folder location to the ~ location:
 cd ~
 ln -s ~/Documents/auto_backup/home.config_files/.ssh
 ln -s ~/Documents/auto_backup/home.config_files/.gnupg
-
-cd ~/.config/
-ln -s ~/Documents/auto_backup/home.config_files/cmus
-(You may have to re-add all the mp3s to the playlist)
 
 cd ~/.config/
 mkdir rclone
@@ -179,7 +173,7 @@ RewriteDomain=domain
 UseTLS=YES
 UseSTARTTLS=YES
 AuthUser=username@domain
-AuthPass=<app password created from google)
+AuthPass=(app password created from google)
 
 alternatives --config mta
 (select sendmail.ssmtp)
@@ -214,6 +208,7 @@ colors -> green on black
 ### Keynav configuration
 
 Clone the repository: https://github.com/NathanHarrington/keynav
+# As of fc41, the fc31 branch is still functional.
 git checkout fc31_build
 Install pre-requisities, make.
 mkdir ~/.config/keynav/
@@ -225,17 +220,88 @@ cd projects/
 git clone https://github.com/GeorgeFilipkin/pulsemixer
 (no further install necessary)
 
-### Auto-keyboard configurations
+### Open office install 
+sudo dnf -y install libreoffice
+Start oocalc, close all popups. 
+Turn off sidebar, status bar, menu bar, turn off formatting bar, standard bar.
 
-  See the notes in autokeyboard/*.sh
-  for details on commonly used keyboard automation scripts and how
-  they should be bound.
+### VSCode configuration 
+The goal here is a from-scratch minimal configuration. Keep as many 
+of the defaults from vs code as possible, just change what you must. 
+Write the steps here so you memorize the concepts, not a brittle 
+settings.json move process. 
+Start VS Code. 
+Install hacker dark pro theme, Dark Green theme.
+Install python extension. 
+Ctrl + , for settings 
+    Menubar, set to none 
+    Status bar workbench, uncheck.
+    Activity bar location -> hidden.
+    Editor -> Line Numbers -> Off
+    Editor -> Word wrap -> on
+    Editor auto save.
+Open a bash command, right click the menu bar set the panel to the right. 
+Right click in the command tab area, hide the tabs. 
+Open a file for text editing, right click the tab bar, select Hide.
+Right click the minimap, uncheck to hide.
 
-### Sound specific configurations
+# Add custom settings to settings.json 
+    "editor.glyphMargin": false, 
+    "editor.folding": false,
+
+# Add custom vs code keybings to keybindings.json: 
+# Copy this text and paste into ~/.config/Code/User/keybindings.json
+# Note that if you are still using Cursor, you'll need to disable these as they 
+# prevent the default ctrl+k from working correctly.
+// Place your key bindings in this file to override the defaultsauto[]
+[
+    {
+        "key": "ctrl+k t",
+        "command": "editor.action.insertSnippet",
+        "when": "editorTextFocus",
+        "args": {
+            "snippet": "$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE $CURRENT_HOUR:$CURRENT_MINUTE "
+        }
+    },
+    {
+            "key": "ctrl+up",
+            "command": "editorScroll",
+            "when": "editorTextFocus",
+            "args":
+            {
+                   "to": "up",
+                    "by": "wrappedLine",
+                    "revealCursor": true
+           }
+    },
+    {
+            "key": "ctrl+down",
+            "command": "editorScroll",
+            "when": "editorTextFocus",
+            "args":
+            {
+                    "to": "down",
+                    "by": "wrappedLine",
+                    "revealCursor": true
+            }
+    },
+    {
+        "key": "ctrl+q",
+        "command": "-workbench.action.quit"
+    },
+    // A tweak to this is to make it focus the last active editor instead of 
+    // the terminal which may be better if you find you don’t hide the terminal very often:
+    { "key": "ctrl+`", "command": "workbench.action.terminal.focus",
+                            "when": "!terminalFocus" },
+    { "key": "ctrl+`", "command": "workbench.action.focusActiveEditorGroup",
+                            "when": "terminalFocus" },
     
-See the notes in sound_control/README.md for details on how to
-configure a Bose QuietControl 30 headset with bluetooth, and for using
-cmus.
+    {
+        "terminal.integrated.commandsToSkipShell": [
+            "workbench.action.quickOpen",
+        ]
+    }                           
+]
 
 ### Cordince branding instructions 
 Clone the CordinceMarketing repo
@@ -257,47 +323,6 @@ test with: slick-greeter --test-mode
 Hide fedora logos on boot up with: 
 plymouth-set-default-theme details -R
 
-### 
-
---------------------------------------------------------------
-### Recovering from backup:
-
-    Restoring from old system encrypted home folder:
-
-    Plug in the old disk run:
-    pvscan
-
-    You should see something like the same volume group names listed below.
-    ACTIVE /dev/fedora/home    <- this is the current operating system
-    inactive /dev/fedora/home  <- this is your old disk
-
-    Run:
-    vgdisplay
-
-    Get the VG UUID of the older disk
-
-    Rename the volume group of the older disk:
-    vgrename OLD_DISK_UUID  oldFedora
-
-    Unplug the disk, replug.
-    Mount by device name:
-
-    mkdir /media/DISK/home
-    mount /dev/oldFedora/home /media/DISK/home
-
-    Now if you do:
-    ls -la /media/DISK/home/nharrington
-    You should see blinking red failures to show you need to load the encryption
-
-    The simple mode for read only access should be the command below. Make sure to run this
-    in a root shell session. It will not work with sudo!
-
-    ecryptfs-recover-private /media/DISK/home/.ecryptfs/nharrington/.Private
-    Recover directory: yes
-    Do you know your login passphrase: yes
-    Enter your fedora gnome login password
-
-    Details here:
-    https://askubuntu.com/questions/238047/how-do-i-mount-an-encrypted-home-directory-on-another-ubuntu-machine
-
+Clone and install the i3lock-svg package and follow the instructions in the readme:
+https://github.com/NathanHarrington/i3lock-svg
 
