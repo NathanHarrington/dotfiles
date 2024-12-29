@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=/home/nharrington/projects/dotfiles/autokeyboard/battery_monitor.sh
+Hidden=false
+Name[en_US]=battery_monitor
+Name=battery_monitor
+Comment[en_US]=
+Comment=
+X-MATE-Autostart-Delay=0
+
