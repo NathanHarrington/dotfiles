@@ -45,6 +45,7 @@ if [ "$mute" = "yes" ]; then
     {
         echo "Volume: Muted"
         echo "[${bar}]"
+        echo "$(date '+%Y-%m-%d %H:%M:%S')"
     } | osd_cat \
         --align=center \
         --pos=bottom \
@@ -53,11 +54,12 @@ if [ "$mute" = "yes" ]; then
         --outline=1 \
         --font='-*-*-bold-*-*-*-36-*-*-*-*-*-*-*' \
         --colour=red \
-        --lines=2
+        --lines=3
 else
     {
         echo "Volume: ${volume}%"
         echo "[${bar}]"
+        echo "$(date '+%Y-%m-%d %H:%M:%S')"
     } | osd_cat \
         --align=center \
         --pos=bottom \
@@ -66,5 +68,5 @@ else
         --outline=1 \
         --font='-*-*-bold-*-*-*-36-*-*-*-*-*-*-*' \
         --colour=green \
-        --lines=2
+        --lines=3
 fi 
