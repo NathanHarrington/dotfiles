@@ -50,12 +50,38 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 
+bindsym Control+Mod1+l exec --no-startup-id /usr/bin/i3lock
+
+# on lenovo carbon x1 5th gen
+# 143 is function key in lower left
+# fn+113 mute speaker F1
+# fn+114 volume up F2
+# fn+115 volume down F3
+# fn+190 mute microphone F4
+# fn+224 is display brightness up F5 
+# fn+225 is display brightness down F6
+
+# Keychron Q3 max TKL 
+# dial is pre-coded to right 115, left 114, mute 113
+# Fn+F1 is 224
+# Fn+F2 is 225
+# Fn+F3 is 125 + 15
+# Fn+F4 is 124 + 18
+# Fn+F5 no effect, keyboard led brightnews down 
+# Fn+F6 no effect, keyboard led brightness up 
+# Fn+F7 165 
+# Fn+F8 164
+# Fn+F9 163
+# Fn+F10 113 mute 
+# Fn+F11 114 volume up 
+# Fn+F12 115 volume down 
+
 # Use pactl to adjust volume in PulseAudio.
-set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status && $HOME/projects/dotfiles/scripts/volume-notify.sh
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status && $HOME/projects/dotfiles/scripts/volume-notify.sh
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status && $HOME/projects/dotfiles/scripts/volume-notify.sh
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
 
 
 # Use Mouse+$mod to drag floating windows to their wanted position
@@ -119,9 +145,10 @@ new_float pixel 0
 # change focus
 bindsym $mod+j focus left
 bindsym $mod+Tab focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
+# Disable these for cursor IDE
+# bindsym $mod+k focus down
+# bindsym $mod+l focus up
+# bindsym $mod+semicolon focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -130,10 +157,12 @@ bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # move focused window
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move up
-bindsym $mod+Shift+semicolon move right
+# Disable these for cursor IDE
+# bindsym $mod+j focus left
+# bindsym $mod+Shift+j move left
+# bindsym $mod+Shift+k move down
+# bindsym $mod+Shift+l move up
+# bindsym $mod+Shift+semicolon move right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -205,9 +234,9 @@ bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
 # reload the configuration file
-bindsym $mod+Shift+c reload
+# bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+r restart
+# bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 

@@ -303,6 +303,17 @@ Right click the minimap, uncheck to hide.
     }                           
 ]
 
+### Cursor code editor specific configuration
+Theme: Hacker Dark Pro 
+Turn off all the status bars, menu bars, etc. 
+To get nearly full screen with no useless bars:
+   have i3 in Tabbed mode
+   Press F11 in cursor. 
+   Press ctrl+alt+p to get cursor console. 
+   Select 'hide custom title bar in full screen'
+   Press $mod+f to get out of full screen in i3, while the cursor window still thinks it's in full screen.
+
+
 ### Cordince branding instructions 
 Clone the CordinceMarketing repo
 cp ~/projects/CordinceMarketing/backgrounds/Cordince_Organ_Engineering_Background_1920x1080.png /usr/share/backgrounds/
