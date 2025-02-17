@@ -5,7 +5,7 @@ while true; do
     BATTERY_LEVEL=$(acpi -b | grep -P -o '[0-9]+(?=%)')
 
     # Check if battery level is below 15%
-    if [ "$BATTERY_LEVEL" -lt 55 ]; then
+    if [ "$BATTERY_LEVEL" -lt 25 ]; then
         # Display warning message using osd_cat
         echo "Battery Low: ${BATTERY_LEVEL}%" | osd_cat --align=center \
             --pos=bottom \

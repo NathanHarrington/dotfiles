@@ -30,9 +30,6 @@ create_bar_graph() {
     echo "$bar"
 }
 
-# Kill any existing volume notification
-pkill osd_cat
-
 # Get the current volume and mute status
 volume=$(get_volume)
 mute=$(get_mute)
@@ -40,7 +37,7 @@ mute=$(get_mute)
 # Create the bar graph
 bar=$(create_bar_graph "$volume")
 
-# Create the notification
+# Create and display the new notification
 if [ "$mute" = "yes" ]; then
     {
         echo "Volume: Muted"
@@ -54,7 +51,7 @@ if [ "$mute" = "yes" ]; then
         --outline=1 \
         --font='-*-*-bold-*-*-*-36-*-*-*-*-*-*-*' \
         --colour=red \
-        --lines=3
+        --lines=3 &
 else
     {
         echo "Volume: ${volume}%"
@@ -68,5 +65,13 @@ else
         --outline=1 \
         --font='-*-*-bold-*-*-*-36-*-*-*-*-*-*-*' \
         --colour=green \
-        --lines=3
+        --lines=3 &
+fi
+
+# Give the new notification a moment to start
+sleep 0.01
+
+# Only kill older notifications if there are multiple osd_cat processes running
+if [ "$(pgrep -c osd_cat)" -gt 1 ]; then
+    pkill -o osd_cat
 fi 
