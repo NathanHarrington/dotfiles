@@ -76,6 +76,10 @@ bindsym Control+Mod1+l exec --no-startup-id /usr/bin/i3lock
 # Fn+F11 114 volume up 
 # Fn+F12 115 volume down 
 
+# Minicomp model m TKL 
+# ScrLk is 78
+bindsym Scroll_Lock exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status && $HOME/projects/dotfiles/scripts/volume-notify.sh
+
 # Use pactl to adjust volume in PulseAudio.
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status && $HOME/projects/dotfiles/scripts/volume-notify.sh
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status && $HOME/projects/dotfiles/scripts/volume-notify.sh
@@ -244,10 +248,10 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
 
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
+        # Pressing left will shrink the window's width.
+        # Pressing right will grow the window's width.
+        # Pressing up will shrink the window's height.
+        # Pressing down will grow the window's height.
         bindsym j resize shrink width 10 px or 10 ppt
         bindsym k resize grow height 10 px or 10 ppt
         bindsym l resize shrink height 10 px or 10 ppt
