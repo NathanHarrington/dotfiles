@@ -225,14 +225,16 @@ sudo dnf -y install libreoffice
 Start oocalc, close all popups. 
 Turn off sidebar, status bar, menu bar, turn off formatting bar, standard bar.
 
-### VSCode configuration 
+### VSCode configuration  - skip to cursor config below 
 The goal here is a from-scratch minimal configuration. Keep as many 
 of the defaults from vs code as possible, just change what you must. 
 Write the steps here so you memorize the concepts, not a brittle 
 settings.json move process. 
 Start VS Code. 
 Install hacker dark pro theme, Dark Green theme.
+    Hacker dark pro theme is the one with green everywhere. 
 Install python extension. 
+
 Ctrl + , for settings 
     Menubar, set to none 
     Status bar workbench, uncheck.
@@ -245,7 +247,7 @@ Right click in the command tab area, hide the tabs.
 Open a file for text editing, right click the tab bar, select Hide.
 Right click the minimap, uncheck to hide.
 
-# Add custom settings to settings.json 
+# Add custom settings to user settings.json 
     "editor.glyphMargin": false, 
     "editor.folding": false,
 
@@ -312,6 +314,42 @@ To get nearly full screen with no useless bars:
    Press ctrl+alt+p to get cursor console. 
    Select 'hide custom title bar in full screen'
    Press $mod+f to get out of full screen in i3, while the cursor window still thinks it's in full screen.
+
+Install python extension. 
+
+Ctrl + , for settings 
+    Menubar, set to none 
+    Status bar workbench, uncheck.
+    Activity bar location -> hidden.
+    Editor -> Line Numbers -> Off
+    Editor -> Word wrap -> on
+    Editor auto save.
+Open a bash command, right click the menu bar set the panel to the right. 
+Right click in the command tab area, hide the tabs. 
+Open a file for text editing, right click the tab bar, select Hide.
+Right click the minimap, uncheck to hide.
+
+# Add custom settings to user settings.json 
+    "editor.glyphMargin": false, 
+    "editor.folding": false,
+
+# Add custom vs code keybings to keybindings.json: 
+# Copy this text and paste into ~/.config/Code/User/keybindings.json
+# Note that if you are still using Cursor, you'll need to disable these as they 
+# prevent the default ctrl+k from working correctly.
+// Place your key bindings in this file to override the defaultsauto[]
+[
+    {
+        "key": "ctrl+alt t",
+        "command": "editor.action.insertSnippet",
+        "when": "editorTextFocus",
+        "args": {
+            "snippet": "$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE $CURRENT_HOUR:$CURRENT_MINUTE "
+        }
+    },
+]
+
+# Probably want to use the same vs code user keybindings from above as well.
 
 
 ### Cordince branding instructions 
