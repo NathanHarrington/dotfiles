@@ -4,9 +4,12 @@
 # Should you change your keyboard layout some time, delete
 # this file and re-run i3-config-wizard(1).
 #
+# i3 config file (v4)
+#
+# Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
 # class                 border  bground text    indicator child_border
-client.focused          #509900 #1D771E #FFFFFF #2E9EF4   #285577
+client.focused          #509900 #1D771E #FFFFFF #509900   #509900
 client.focused_inactive #333333 #2D3133 #1AFF1D #484E50   #5F676A
 client.unfocused        #333333 #222222 #888888 #292D2E   #222222
 client.urgent           #2F343A #900000 #FFFFFF #900000   #900000
@@ -14,33 +17,20 @@ client.placeholder      #000000 #0C0C0C #FFFFFF #000000   #0C0C0C
 
 client.background       #FFFFFF
 
-# i3 config file (v4)
-#
-# Please see https://i3wm.org/docs/userguide.html for a complete reference!
-# Mod1 = alt 
-# Mod4 = Win
-set $mod mod4
+# Ultra thin green borders
+new_window pixel 1
+new_float pixel 1
 
-# title_align bottom
+set $mod Mod4
+set $term alacritty
+
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:monospace 10
-# Essetnially hide the status bar and workspace bar
-font pango:DejaVu Sans Mono 0
-
-# # Extremely short title bars
-# font pango:DejaVu Sans Mono 4
-
-# This font is widely installed, provides lots of unicode glyphs, right-to-left
-# text rendering and scalability on retina/hidpi displays (thanks to pango).
-#font pango:DejaVu Sans Mono 8
+font pango:IBM Plex Mono 4
 
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex-autostart --autostart --environment i3
-
-# The combination of xss-lock, nm-applet and pactl is a popular choice, so
-# they are included here as an example. Modify as you see fit.
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
@@ -51,108 +41,28 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 exec --no-startup-id nm-applet
 
 bindsym Control+Mod1+l exec --no-startup-id /usr/bin/i3lock
-
-# on lenovo carbon x1 5th gen
-# 143 is function key in lower left
-# fn+113 mute speaker F1
-# fn+114 volume up F2
-# fn+115 volume down F3
-# fn+190 mute microphone F4
-# fn+224 is display brightness up F5 
-# fn+225 is display brightness down F6
-
-# Keychron Q3 max TKL 
-# dial is pre-coded to right 115, left 114, mute 113
-# Fn+F1 is 224
-# Fn+F2 is 225
-# Fn+F3 is 125 + 15
-# Fn+F4 is 124 + 18
-# Fn+F5 no effect, keyboard led brightnews down 
-# Fn+F6 no effect, keyboard led brightness up 
-# Fn+F7 165 
-# Fn+F8 164
-# Fn+F9 163
-# Fn+F10 113 mute 
-# Fn+F11 114 volume up 
-# Fn+F12 115 volume down 
-
-# Minicomp model m TKL 
-# ScrLk is 78
-bindsym Scroll_Lock exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status && $HOME/projects/dotfiles/scripts/volume-notify.sh
-
-# Use pactl to adjust volume in PulseAudio.
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status && $HOME/projects/dotfiles/scripts/volume-notify.sh
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status && $HOME/projects/dotfiles/scripts/volume-notify.sh
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status && $HOME/projects/dotfiles/scripts/volume-notify.sh
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
-
-
-
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-# move tiling windows via drag & drop by left-clicking into the title bar,
+# Move tiling windows via drag & drop by left-clicking into the title bar,
 # or left-clicking anywhere into the window while holding the floating modifier.
 tiling_drag modifier titlebar
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec $term
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
 bindsym $mod+d exec --no-startup-id dmenu_run
-
-# nharrington custom 
 bindsym $mod+F3 exec --no-startup-id gmrun
-# Make the brightness buttons work on fedora core 37 on a lenovo carbon x1 5th gen
-bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set 5%+
-bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
-bindsym $mod+Shift+t exec --no-startup-id /home/nharrington/projects/dotfiles/autokeyboard/timer.sh
-## Screenshots
-# These are slow to generate.
-bindsym Print exec --no-startup-id shutter --full
-bindsym $mod+Print exec --no-startup-id shutter --window 
-# bindsym $+Print exec --no-startup-id shutter --select 
-
-# Screenshots
-# bindsym Print exec --no-startup-id maim "/home/$USER/Pictures/$(date).png" && eom "/home/$USER/Pictures/$(date).png"
-# bindsym $mod+Print exec --no-startup-id maim --window $(xdotool getactivewindow) "/home/$USER/Pictures/$(date)"
-# bindsym Shift+Print exec --no-startup-id maim --select "/home/$USER/Pictures/$(date)"
-
-# ## Clipboard Screenshots
-# bindsym Ctrl+Print exec --no-startup-id maim | xclip -selection clipboard -t image/png
-# bindsym Ctrl+$mod+Print exec --no-startup-id maim --window $(xdotool getactivewindow) | xclip -selection clipboard -t image/png
-# bindsym Ctrl+Shift+Print exec --no-startup-id maim --select | xclip -selection clipboard -t image/png
-
-exec_always --no-startup-id feh --bg-scale /home/nharrington/projects/CordinceMarketing/backgrounds/Cordince_Organ_Engineering_Background_1920x1080.png
-
-
-
-
-# Disable edge border around all windows
-new_window pixel 0 
-new_float pixel 0
-
-
-
-
-
-
-# A more modern dmenu replacement is rofi:
-# bindcode $mod+40 exec "rofi -modi drun,run -show drun"
-# There also is i3-dmenu-desktop which only displays applications shipping a
-# .desktop file. It is a wrapper around dmenu, so you need that installed.
-# bindcode $mod+40 exec --no-startup-id i3-dmenu-desktop
 
 # change focus
 bindsym $mod+j focus left
-bindsym $mod+Tab focus left
-# Disable these for cursor IDE
-# bindsym $mod+k focus down
-# bindsym $mod+l focus up
-# bindsym $mod+semicolon focus right
+bindsym $mod+k focus down
+bindsym $mod+l focus up
+bindsym $mod+semicolon focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -161,12 +71,10 @@ bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # move focused window
-# Disable these for cursor IDE
-# bindsym $mod+j focus left
-# bindsym $mod+Shift+j move left
-# bindsym $mod+Shift+k move down
-# bindsym $mod+Shift+l move up
-# bindsym $mod+Shift+semicolon move right
+bindsym $mod+Shift+j move left
+bindsym $mod+Shift+k move down
+bindsym $mod+Shift+l move up
+bindsym $mod+Shift+semicolon move right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -238,9 +146,9 @@ bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
 # reload the configuration file
-# bindsym $mod+Shift+c reload
+bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-# bindsym $mod+Shift+r restart
+bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
@@ -271,9 +179,16 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-# bar {
-        # status_command i3status
-        ##status_command py3status
-# }
+exec --no-startup-id parcellite --no-daemon --use-tray
+
+# Use pactl to adjust volume in PulseAudio.
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status && $HOME/projects/dotfiles/scripts/volume-notify.sh
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status && $HOME/projects/dotfiles/scripts/volume-notify.sh
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status && $HOME/projects/dotfiles/scripts/volume-notify.sh
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
+
+bindsym $mod+Shift+t exec --no-startup-id /home/nharrington/projects/dotfiles/autokeyboard/timer.sh
+# These are slow to generate.
+bindsym Print exec --no-startup-id shutter --full
+bindsym $mod+Print exec --no-startup-id shutter --window 

@@ -13,7 +13,7 @@ Nathan Harrington environment configuration resources
 
 ### System configuration instructions
 
-Based on stock Fedora Core 41 workstation i3 live install.
+Based on stock Fedora Core 43 workstation i3 live install.
 
 The procedure below expects the entire drive to be dedicated to the
 fedora install, with the 'auto' partitioning setup.
@@ -40,12 +40,16 @@ Accept all defaults, after the install has complete, reboot the system.
 
 # Basic development environment
 dnf -y install make automake gcc gcc-c++ kernel-devel cmake
-dnf -y install git autossh tmux
+dnf -y install git autossh tmux alacritty
 dnf -y install redhat-rpm-config python-devel
-dnf -y install parcellite vim vim-X11 ncdu cmus sox rofi
-dnf -y install bat exa ripgrep shutter xss-lock
+dnf -y install parcellite vim vim-X11 ncdu sox 
+dnf -y install bat ripgrep shutter xss-lock
 
-start parcellite,
+# Install eza: 
+sudo dnf install cargo
+cargo install eza
+
+# start parcellite,
 Activate the parcellite config interface by pressing ctrl+alt+p
 In parcellite config: 
     check "Use Copy" and "Use Primary", then click synchronize clipboards
@@ -69,7 +73,8 @@ cp -ra ~/projects/dotfiles/autostart ~/.config/
 cp -ra ~/projects/dotfiles/i3/config ~/.config/i3/config
 
 ## Install pyenv for managing python versions:
-dnf install zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel xz xz-devel libffi-devel findutils
+dnf install zlib-devel bzip2 bzip2-devel readline-devel 
+dnf install sqlite sqlite-devel xz xz-devel libffi-devel findutils
 curl https://pyenv.run | bash
 # Ignore the install in bash steps here, you'll do it below in the .bashrc copy
 
@@ -77,9 +82,14 @@ curl https://pyenv.run | bash
 # as main user: 
 pip install pipenv
 
+# Install starship from the guide:
+dnf copr enable atim/starship 
+dnf install starship
+
 ### Miscellaneous configuration:
 cd ~/projects/dotfiles
-cat bashrc_custom >> ~/.bashrc
+cp starship.toml ~/.config/
+cp bashrc_custom ~/.bashrc
 
 git config --global core.editor "vim"
 git config --global credential.helper "cache --timeout=360000"
@@ -92,16 +102,30 @@ dnf -y install tig darktable xclip urlview
 
 # Start w3m, change color of anchor to yellow
 
-Google Chrome:
+Start firefox, create new profiles with the following fundamentals:
+    1. Open previous windows and tabs.
+    2. Turn off: Use AI to suggest tags 
+                 Recommend extensions as you browse 
+                 Recommend features as you browse
+                 Enable link previews
+    3. Home -> New windows and tabs all start blank page. 
+               Uncheck all firefox home content. 
+    4. Search -> Uncheck show search terms in the address bar
+                 Uncheck show trending search suggetssions
+                 Uncheck show search suggestions ahead
+                 Uncheck show trending
+                 Under firefox suggest, uncheck suggest search engines, quick actions, suggestions from firefox
+    5. Privacy and security 
+          Uncheck send technical data, usage ping
+    Install ublock origin, vimium
+
+Google Chrome for compatibility with various meeting tools:
     Install google chrome from google's page.
     Sign in to chrome to get the settings below, or start a new profile 
 	with the fundamentals:
             Set chrome to "remember where you left off"
             Install ublock origin for chrome
             Install vimium for chrome
-
-VS Code: 
-    Install ms code from ms's page. 
 
 
 ### Move over previous system files. 
@@ -224,133 +248,6 @@ git clone https://github.com/GeorgeFilipkin/pulsemixer
 sudo dnf -y install libreoffice
 Start oocalc, close all popups. 
 Turn off sidebar, status bar, menu bar, turn off formatting bar, standard bar.
-
-### VSCode configuration  - skip to cursor config below 
-The goal here is a from-scratch minimal configuration. Keep as many 
-of the defaults from vs code as possible, just change what you must. 
-Write the steps here so you memorize the concepts, not a brittle 
-settings.json move process. 
-Start VS Code. 
-Install hacker dark pro theme, Dark Green theme.
-    Hacker dark pro theme is the one with green everywhere. 
-Install python extension. 
-
-Ctrl + , for settings 
-    Menubar, set to none 
-    Status bar workbench, uncheck.
-    Activity bar location -> hidden.
-    Editor -> Line Numbers -> Off
-    Editor -> Word wrap -> on
-    Editor auto save.
-Open a bash command, right click the menu bar set the panel to the right. 
-Right click in the command tab area, hide the tabs. 
-Open a file for text editing, right click the tab bar, select Hide.
-Right click the minimap, uncheck to hide.
-
-# Add custom settings to user settings.json 
-    "editor.glyphMargin": false, 
-    "editor.folding": false,
-
-# Add custom vs code keybings to keybindings.json: 
-# Copy this text and paste into ~/.config/Code/User/keybindings.json
-# Note that if you are still using Cursor, you'll need to disable these as they 
-# prevent the default ctrl+k from working correctly.
-// Place your key bindings in this file to override the defaultsauto[]
-[
-    {
-        "key": "ctrl+k t",
-        "command": "editor.action.insertSnippet",
-        "when": "editorTextFocus",
-        "args": {
-            "snippet": "$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE $CURRENT_HOUR:$CURRENT_MINUTE "
-        }
-    },
-    {
-            "key": "ctrl+up",
-            "command": "editorScroll",
-            "when": "editorTextFocus",
-            "args":
-            {
-                   "to": "up",
-                    "by": "wrappedLine",
-                    "revealCursor": true
-           }
-    },
-    {
-            "key": "ctrl+down",
-            "command": "editorScroll",
-            "when": "editorTextFocus",
-            "args":
-            {
-                    "to": "down",
-                    "by": "wrappedLine",
-                    "revealCursor": true
-            }
-    },
-    {
-        "key": "ctrl+q",
-        "command": "-workbench.action.quit"
-    },
-    // A tweak to this is to make it focus the last active editor instead of 
-    // the terminal which may be better if you find you don’t hide the terminal very often:
-    { "key": "ctrl+`", "command": "workbench.action.terminal.focus",
-                            "when": "!terminalFocus" },
-    { "key": "ctrl+`", "command": "workbench.action.focusActiveEditorGroup",
-                            "when": "terminalFocus" },
-    
-    {
-        "terminal.integrated.commandsToSkipShell": [
-            "workbench.action.quickOpen",
-        ]
-    }                           
-]
-
-### Cursor code editor specific configuration
-Theme: Hacker Dark Pro 
-Turn off all the status bars, menu bars, etc. 
-To get nearly full screen with no useless bars:
-   have i3 in Tabbed mode
-   Press F11 in cursor. 
-   Press ctrl+alt+p to get cursor console. 
-   Select 'hide custom title bar in full screen'
-   Press $mod+f to get out of full screen in i3, while the cursor window still thinks it's in full screen.
-
-Install python extension. 
-
-Ctrl + , for settings 
-    Menubar, set to none 
-    Status bar workbench, uncheck.
-    Activity bar location -> hidden.
-    Editor -> Line Numbers -> Off
-    Editor -> Word wrap -> on
-    Editor auto save.
-Open a bash command, right click the menu bar set the panel to the right. 
-Right click in the command tab area, hide the tabs. 
-Open a file for text editing, right click the tab bar, select Hide.
-Right click the minimap, uncheck to hide.
-
-# Add custom settings to user settings.json 
-    "editor.glyphMargin": false, 
-    "editor.folding": false,
-
-# Add custom vs code keybings to keybindings.json: 
-# Copy this text and paste into ~/.config/Code/User/keybindings.json
-# Note that if you are still using Cursor, you'll need to disable these as they 
-# prevent the default ctrl+k from working correctly.
-// Place your key bindings in this file to override the defaultsauto[]
-[
-    {
-        "key": "ctrl+alt t",
-        "command": "editor.action.insertSnippet",
-        "when": "editorTextFocus",
-        "args": {
-            "snippet": "$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE $CURRENT_HOUR:$CURRENT_MINUTE "
-        }
-    },
-]
-
-# Probably want to use the same vs code user keybindings from above as well.
-
 
 ### Cordince branding instructions 
 Clone the CordinceMarketing repo
