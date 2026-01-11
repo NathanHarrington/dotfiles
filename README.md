@@ -49,6 +49,9 @@ dnf -y install bat ripgrep shutter xss-lock
 sudo dnf install cargo
 cargo install eza
 
+# Install the ibm plex mono fonts  - also available in .fonts
+dnf install ibm-plex-mono-fonts
+
 # start parcellite,
 Activate the parcellite config interface by pressing ctrl+alt+p
 In parcellite config: 
@@ -117,6 +120,7 @@ Start firefox, create new profiles with the following fundamentals:
                  Under firefox suggest, uncheck suggest search engines, quick actions, suggestions from firefox
     5. Privacy and security 
           Uncheck send technical data, usage ping
+          Check 'tell websites not to...'
     Install ublock origin, vimium
 
 Google Chrome for compatibility with various meeting tools:
@@ -124,16 +128,13 @@ Google Chrome for compatibility with various meeting tools:
     Sign in to chrome to get the settings below, or start a new profile 
 	with the fundamentals:
             Set chrome to "remember where you left off"
-            Install ublock origin for chrome
             Install vimium for chrome
+            Don't use chrome for anything on the web as it will be overwhelmed with ads.
 
 
 ### Move over previous system files. 
-
-More recent versions of fedora allow you to connect the disk and it will
-ask for a passphrase and mount your old encrypted home directory
-automatically. If that doesn't work or you need access to the root
-partition, try the process at the end of this file.
+With the previous years m.2 sssd, plug it into the adapter, start thunar, 
+click the drive ane enter the passphrase.
 
 Copy the auto_backup folder from the old system:
 cp -ra old_system_mount_location/home/nharrington/Documents/auto_backup ~/Documents/auto_backup
@@ -216,18 +217,8 @@ temporarily change the crontab times to verify everything backs up
 correctly.
        
 ### Terminal configuration
-Base terminal for i3wm is xfce. Edit -> Preferences
-Scroll bar is dsiabled 
-Scrollback is 999
-Cursor block, blinks
-
-Set colorscheme green on black.
-Turn off scrollbar.
-Turn off show menubar by default.
-Palette - choose xterm.
-
-Uncheck display new menubar, uncheck borders.
-colors -> green on black
+Base terminal for i3wm is xfce, leave that untouched. 
+Use alacritty already configured above.
 
 ### Keynav configuration
 
@@ -239,13 +230,8 @@ mkdir ~/.config/keynav/
 cp ~/projects/dotfiles/keynavrc ~/.config/keynav/
 # reboot to get keynav crosshairs to appear 
 
-### Pulse mixer
-cd projects/
-git clone https://github.com/GeorgeFilipkin/pulsemixer
-(no further install necessary)
-
 ### Open office install 
-sudo dnf -y install libreoffice
+dnf -y install libreoffice
 Start oocalc, close all popups. 
 Turn off sidebar, status bar, menu bar, turn off formatting bar, standard bar.
 
