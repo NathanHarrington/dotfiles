@@ -40,10 +40,10 @@ Accept all defaults, after the install has complete, reboot the system.
 
 # Basic development environment
 dnf -y install make automake gcc gcc-c++ kernel-devel cmake
-dnf -y install git autossh tmux alacritty
+dnf -y install git autossh tmux alacritty patch
 dnf -y install redhat-rpm-config python-devel
 dnf -y install parcellite vim vim-X11 ncdu sox 
-dnf -y install bat ripgrep shutter xss-lock
+dnf -y install bat ripgrep shutter xss-lock trash-cli
 
 # Install eza: 
 sudo dnf install cargo
@@ -65,7 +65,6 @@ reboot
 
 
 ### Launcher setup
-
 dnf install libtool gtk2-devel xosd
 Clone from: https://github.com/wdlkmpx/gmrun
 ./configure && sudo make install
@@ -92,7 +91,8 @@ dnf install starship
 ### Miscellaneous configuration:
 cd ~/projects/dotfiles
 cp starship.toml ~/.config/
-cp bashrc_custom ~/.bashrc
+cp .bashrc ~/.bashrc
+cp .vimrc ~/.vimrc
 
 git config --global core.editor "vim"
 git config --global credential.helper "cache --timeout=360000"
@@ -101,6 +101,7 @@ systemctl enable sshd
 systemctl start sshd
 
 dnf -y install gimp inkscape graphviz w3m nmap thunar ImageMagick
+dnf -y install gwenview feh
 dnf -y install tig darktable xclip urlview
 
 # Start w3m, change color of anchor to yellow
@@ -121,6 +122,7 @@ Start firefox, create new profiles with the following fundamentals:
     5. Privacy and security 
           Uncheck send technical data, usage ping
           Check 'tell websites not to...'
+    6. Settings, search 'location', check 'block websites from asking'
     Install ublock origin, vimium
 
 Google Chrome for compatibility with various meeting tools:
@@ -133,8 +135,8 @@ Google Chrome for compatibility with various meeting tools:
 
 
 ### Move over previous system files. 
-With the previous years m.2 sssd, plug it into the adapter, start thunar, 
-click the drive ane enter the passphrase.
+With the previous years m.2 ssd, plug it into the adapter, start thunar, 
+click the drive and enter the passphrase.
 
 Copy the auto_backup folder from the old system:
 cp -ra old_system_mount_location/home/nharrington/Documents/auto_backup ~/Documents/auto_backup
@@ -221,7 +223,6 @@ Base terminal for i3wm is xfce, leave that untouched.
 Use alacritty already configured above.
 
 ### Keynav configuration
-
 Clone the repository: https://github.com/NathanHarrington/keynav
 # As of fc41, the fc31 branch is still functional.
 git checkout fc31_build
@@ -252,9 +253,6 @@ background=/usr/share/backgrounds/Cordince_Organ_Engineering_Background_1920x108
 dnf -y install slick-greeter
 test with: slick-greeter --test-mode 
 
-Hide fedora logos on boot up with: 
-plymouth-set-default-theme details -R
-
 Clone and install the i3lock-svg package and follow the instructions in the readme:
-https://github.com/NathanHarrington/i3lock-svg
+https://github.com/Cordince/i3lock-svg-nh
 
