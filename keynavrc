@@ -46,14 +46,16 @@ shift+n move-right,move-down
 space warp,click 1,end
 semicolon warp,end
 1 click 1
-2 click 2
-3 click 3
+2 warp,click 2, end
+3 warp,click 3, end
 i click 4
 e click 5
 #```
 #or to keep scrolling without having to re-invoke keynav, remove the end command from the bindings, like this:
 #```
-#i click 4
+# i click 4
+#i click 4,end
+#e click 5,end
 
 # Zoom to the current window
 w windowzoom
@@ -90,8 +92,8 @@ ctrl+shift+Up move-up
 ctrl+shift+Right move-right
 
 # Record keynav actions
-q record
-shift+at playback
+#q record
+#shift+at playback
 
 ### Example using the 'sh' command.
 # Make firefox the active window
@@ -111,6 +113,10 @@ v sh "xdotool key shift+Insert"
 #ctrl+q drag 1 ctrl
 #shift+q drag 1 shift
 #shift+ctrl+q drag 1 shift+ctrl
+# d warp,drag 1 
+# Reset region to full screen so you can drag anywhere
+d warp,drag 1,windowzoom 
+r drag,end 
 
 ### History
 a history-back
@@ -150,3 +156,6 @@ a history-back
 # Custom configuration 
 # Middle click where the mouse is
 m warp,click 2,end
+
+# Hover just move mouse 
+o warp,end
