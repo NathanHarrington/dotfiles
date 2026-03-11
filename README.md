@@ -93,6 +93,7 @@ cd ~/projects/dotfiles
 cp starship.toml ~/.config/
 cp .bashrc ~/.bashrc
 cp .vimrc ~/.vimrc
+cp .tmux.conf ~/.tmux.conf
 
 git config --global core.editor "vim"
 git config --global credential.helper "cache --timeout=360000"
