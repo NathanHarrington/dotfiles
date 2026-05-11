@@ -4,7 +4,8 @@
 pkill osd_cat
 #SECS=90 # 1.5 
 #SECS=330 # 5.5 
-SECS=450 # 7.5
+#SECS=450 # 7.5
+SECS=3600 # 60
 echo "sleeping $SECS" | osd_cat --delay 3
 sleep $SECS
 echo "timer is up " | osd_cat  --align=center  --font="-*-*-bold-*-*-*-36-*-*-*-*-*-*-*" --delay=100000000 --shadowcolour=white --pos=middle 

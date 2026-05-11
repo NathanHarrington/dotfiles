@@ -1,3 +1,5 @@
 backup_scripts/backup.log
 tmux_generators/
 *swp*
+.codex
+__pycache__
