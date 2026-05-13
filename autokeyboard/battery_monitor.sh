@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-LOW_BATTERY_THRESHOLD="${LOW_BATTERY_THRESHOLD:-25}"
-CHECK_INTERVAL_SECONDS="${CHECK_INTERVAL_SECONDS:-60}"
+LOW_BATTERY_THRESHOLD="${LOW_BATTERY_THRESHOLD:-50}"
+CRITICAL_BATTERY_THRESHOLD="${CRITICAL_BATTERY_THRESHOLD:-25}"
+CHECK_INTERVAL_SECONDS="${CHECK_INTERVAL_SECONDS:-15}"
 OSD_DELAY_SECONDS="${OSD_DELAY_SECONDS:-5}"
 OSD_FONT="${OSD_FONT:--*-*-bold-*-*-*-36-*-*-*-*-*-*-*}"
 
@@ -11,8 +12,14 @@ elif (( LOW_BATTERY_THRESHOLD > 100 )); then
     LOW_BATTERY_THRESHOLD=100
 fi
 
+if [[ ! "$CRITICAL_BATTERY_THRESHOLD" =~ ^[0-9]+$ ]]; then
+    CRITICAL_BATTERY_THRESHOLD=25
+elif (( CRITICAL_BATTERY_THRESHOLD > 100 )); then
+    CRITICAL_BATTERY_THRESHOLD=100
+fi
+
 if [[ ! "$CHECK_INTERVAL_SECONDS" =~ ^[1-9][0-9]*$ ]]; then
-    CHECK_INTERVAL_SECONDS=60
+    CHECK_INTERVAL_SECONDS=15
 fi
 
 if [[ ! "$OSD_DELAY_SECONDS" =~ ^[1-9][0-9]*$ ]]; then
@@ -32,6 +39,15 @@ if command -v flock >/dev/null 2>&1; then
         exit 0
     fi
 fi
+
+log_event() {
+    local message="$1"
+
+    if command -v logger >/dev/null 2>&1 && logger -t battery_monitor -- "$message" 2>/dev/null; then
+        return 0
+    fi
+    printf 'battery_monitor: %s\n' "$message" >&2
+}
 
 read_sysfs_battery() {
     local supply=""
@@ -117,6 +133,10 @@ show_low_battery_warning() {
     local name="$3"
     local message="Battery low: ${level}%"
 
+    if (( level <= CRITICAL_BATTERY_THRESHOLD )); then
+        message="Battery critical: ${level}%"
+    fi
+
     if [[ -n "$status" && "$status" != "Unknown" ]]; then
         message+=" (${status})"
     fi
@@ -129,24 +149,37 @@ show_low_battery_warning() {
         return 1
     fi
 
-    printf '%s\n' "$message" | osd_cat \
+    if printf '%s\n' "$message" | osd_cat \
         --align=center \
         --pos=bottom \
         --color=red \
         --delay="$OSD_DELAY_SECONDS" \
         --outline=2 \
-        --font="$OSD_FONT"
+        --font="$OSD_FONT"; then
+        log_event "displayed warning: $message"
+    else
+        log_event "osd_cat failed for warning: $message"
+        return 1
+    fi
 }
+
+log_event "started display=${DISPLAY:-unset} threshold=${LOW_BATTERY_THRESHOLD} critical=${CRITICAL_BATTERY_THRESHOLD} interval=${CHECK_INTERVAL_SECONDS}s"
+last_logged_sample=""
 
 while true; do
     battery_info=""
     if battery_info="$(read_battery)"; then
         IFS=$'\t' read -r battery_level battery_status battery_name <<<"$battery_info"
+        battery_sample="level=${battery_level} status=${battery_status:-Unknown} name=${battery_name:-unknown}"
+        if [[ "$battery_sample" != "$last_logged_sample" ]]; then
+            log_event "$battery_sample"
+            last_logged_sample="$battery_sample"
+        fi
         if (( battery_level <= LOW_BATTERY_THRESHOLD )); then
             show_low_battery_warning "$battery_level" "$battery_status" "$battery_name"
         fi
     else
-        printf 'battery_monitor: no battery data found\n' >&2
+        log_event "no battery data found"
     fi
 
     sleep "$CHECK_INTERVAL_SECONDS"
