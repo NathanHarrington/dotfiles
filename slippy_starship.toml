@@ -27,9 +27,16 @@ style = "blue"
 disabled = true
 symbol = ""
 
+# Show active Pipenv environment name inside `pipenv shell`
+[custom.pipenv]
+when = 'test -n "$PIPENV_ACTIVE" && test -n "$VIRTUAL_ENV"'
+command = 'basename "$VIRTUAL_ENV"'
+format = "(pipenv:[$output]($style)) [#](bold green) "
+style = "bold cyan"
+
 # Show project dir name when a venv is active (VIRTUAL_ENV is set)
 [custom.python_project]
-when = 'test -n "$VIRTUAL_ENV"'
+when = 'test -n "$VIRTUAL_ENV" && test -z "$PIPENV_ACTIVE"'
 command = 'basename "$(dirname "$VIRTUAL_ENV")"'
 format = "([$output]($style)) [#](bold green) "
 style = "bold green"
