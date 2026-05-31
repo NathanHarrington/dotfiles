@@ -58,12 +58,18 @@ export PATH="$HOME/.cargo/bin:$PATH"
 # No more .pyc files cluttering the directory.
 export PYTHONDONTWRITEBYTECODE=1
 export EDITOR=vim
+alias vi='vimx'
+alias vim='vimx'
+eval "$(starship init bash)"
+export PIPENV_VERBOSITY=-1
 
-# Set console colors: green text on black background ( for framebuffer console)
+# Set console colors: bright green text on black background (for framebuffer console)
 if [ "$TERM" = "linux" ] || [ -t 0 ] && [ -z "$DISPLAY" ]; then
-    # Set green foreground, black background using console escape sequences
+    # Set bright green foreground, black background using console escape sequences
     printf '\033]P0000000'  # Black background
-    printf '\033]P7008000'  # Green text
+    printf ']P200ff00'  # Bright green palette slot
+    printf ']P700ff00'  # Bright green default foreground
+    printf ']PA00ff00'  # Bright green alternate slot
     # Alternative: use setterm if available
     if command -v setterm >/dev/null 2>&1; then
         setterm --foreground green --background black 2>/dev/null || true
@@ -73,6 +79,34 @@ fi
 # Force blinking block cursor at each prompt
 PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }printf \"\\e[1 q\""
 
-alias vi='vimx'
-alias vim='vimx'
-eval "$(starship init bash)"
+export PATH="$HOME/.npm-global/bin:$PATH"
+
+
+
+if [[ $- == *i* ]]; then
+    TEMPO_LOGINDISPLAY="/home/nharrington/projects/Tempo/src/tempo/logindisplay.py"
+    if [[ -x "$TEMPO_LOGINDISPLAY" ]]; then
+        "$TEMPO_LOGINDISPLAY" --message "WELCOME MR. HARRINGTON" --green
+    fi
+fi
+
+# Create or attach to a tmux session, defaulting to a tmux-safe name based on the current directory.
+th() {
+    local raw_name session_name
+    if [[ -n "$1" ]]; then
+        raw_name="$1"
+    else
+        raw_name="${PWD##*/}"
+        [[ -n "$raw_name" && "$raw_name" != "/" ]] || raw_name="main"
+    fi
+
+    session_name="${raw_name//[^[:alnum:]_-]/-}"
+    while [[ "$session_name" == *--* ]]; do
+        session_name="${session_name//--/-}"
+    done
+    session_name="${session_name#-}"
+    session_name="${session_name%-}"
+    [[ -n "$session_name" ]] || session_name="main"
+
+    tmux new-session -A -s "$session_name"
+}
