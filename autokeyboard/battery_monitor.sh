@@ -52,6 +52,8 @@ log_event() {
 read_sysfs_battery() {
     local supply=""
     local supply_type=""
+    local supply_scope=""
+    local supply_uevent=""
     local present=""
     local capacity=""
     local status=""
@@ -66,6 +68,16 @@ read_sysfs_battery() {
 
         supply_type="$(<"$supply/type")"
         [[ "$supply_type" == "Battery" ]] || continue
+
+        if [[ -r "$supply/scope" ]]; then
+            supply_scope="$(<"$supply/scope")"
+            [[ "$supply_scope" == "System" ]] || continue
+        fi
+
+        if [[ -r "$supply/device/uevent" ]]; then
+            supply_uevent="$(<"$supply/device/uevent")"
+            [[ "$supply_uevent" != *"HID_ID="* ]] || continue
+        fi
 
         if [[ -r "$supply/present" ]]; then
             present="$(<"$supply/present")"
@@ -124,7 +136,12 @@ read_acpi_battery() {
 }
 
 read_battery() {
-    read_sysfs_battery || read_acpi_battery
+    if [[ -d /sys/class/power_supply ]]; then
+        read_sysfs_battery
+        return
+    fi
+
+    read_acpi_battery
 }
 
 show_low_battery_warning() {
