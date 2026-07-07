@@ -40,7 +40,7 @@ Accept all defaults, after the install has complete, reboot the system.
 
 # Basic development environment
 dnf -y install make automake gcc gcc-c++ kernel-devel cmake
-dnf -y install git autossh tmux alacritty patch
+dnf -y install git autossh tmux alacritty patch unzip
 dnf -y install redhat-rpm-config python-devel
 dnf -y install parcellite vim vim-X11 ncdu sox 
 dnf -y install bat ripgrep shutter xss-lock trash-cli
@@ -51,6 +51,14 @@ cargo install eza
 
 # Install the ibm plex mono fonts  - also available in .fonts
 dnf install ibm-plex-mono-fonts
+
+# Install Symbols Nerd Font as fallback for Starship prompt icons.
+mkdir -p ~/.local/share/fonts/NerdFonts/SymbolsOnly ~/.config/fontconfig/conf.d
+curl -fL -o /tmp/NerdFontsSymbolsOnly.zip https://github.com/ryanoasis/nerd-fonts/releases/latest/download/NerdFontsSymbolsOnly.zip
+unzip -o /tmp/NerdFontsSymbolsOnly.zip -d ~/.local/share/fonts/NerdFonts/SymbolsOnly
+cp ~/.local/share/fonts/NerdFonts/SymbolsOnly/10-nerd-font-symbols.conf ~/.config/fontconfig/conf.d/
+fc-cache -fv ~/.local/share/fonts
+# Restart alacritty after changing fonts.
 
 # start parcellite,
 Activate the parcellite config interface by pressing ctrl+alt+p
@@ -94,7 +102,9 @@ dnf install starship
 
 ### Miscellaneous configuration:
 cd ~/projects/dotfiles
-cp starship.toml ~/.config/
+cp starship.toml ~/.config/starship.toml
+# On hotel-compute, use the host-specific prompt instead:
+# cp hotel-compute_starship.toml ~/.config/starship.toml
 cp .bashrc ~/.bashrc
 cp .vimrc ~/.vimrc
 cp .tmux.conf ~/.tmux.conf

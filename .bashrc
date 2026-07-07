@@ -108,5 +108,5 @@ th() {
     session_name="${session_name%-}"
     [[ -n "$session_name" ]] || session_name="main"
 
-    tmux new-session -A -s "$session_name"
+    tmux -u new-session -A -s "$session_name"
 }
