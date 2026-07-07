@@ -74,6 +74,10 @@ cp ~/projects/dotfiles/.gmrunrc ~/.gmrunrc
 cp -ra ~/projects/dotfiles/autostart ~/.config/
 cp -ra ~/projects/dotfiles/i3/config ~/.config/i3/config
 
+### Alacritty configuration
+mkdir -p ~/.config/alacritty
+cp ~/projects/dotfiles/alacritty.toml ~/.config/alacritty/alacritty.toml
+
 ## Install pyenv for managing python versions:
 dnf install zlib-devel bzip2 bzip2-devel readline-devel 
 dnf install sqlite sqlite-devel xz xz-devel libffi-devel findutils
@@ -256,4 +260,3 @@ test with: slick-greeter --test-mode
 
 Clone and install the i3lock-svg package and follow the instructions in the readme:
 https://github.com/Cordince/i3lock-svg-nh
-
