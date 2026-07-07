@@ -1,6 +1,6 @@
 # Minimal overrides: keep defaults but remove icons and extra words.
 add_newline = true
-format = "$directory$git_branch$git_status\n[󰻀](fg:#00ff00)  $hostname$character$python$custom"
+format = "$directory$git_branch$git_status\n[󰻀](fg:#ffff00)  $hostname$character$python$custom"
 
 [character]
 success_symbol = "[#](fg:#00ff00)"
@@ -20,7 +20,7 @@ style = "fg:#00ff00"
 [hostname]
 ssh_only = false
 format = "[$hostname]($style) "
-style = "red"
+style = "fg:#ff6347"
 
 # Disable the built-in python venv display (it shows ".venv")
 [python]
