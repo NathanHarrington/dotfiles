@@ -28,6 +28,9 @@ set $term alacritty
 # is used in the bar {} block below.
 font pango:IBM Plex Mono 4
 
+# Restore laptop brightness keysyms when X leaves those keycodes unmapped.
+exec_always --no-startup-id xmodmap $HOME/.Xmodmap
+
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex-autostart --autostart --environment i3
