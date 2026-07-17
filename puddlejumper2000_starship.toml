@@ -1,0 +1,35 @@
+# Minimal overrides: keep defaults but remove icons and extra words.
+add_newline = true
+format = "$directory$git_branch$git_status\n[󰼂](fg:#ffff00)  $hostname$character$python$custom"
+
+[character]
+success_symbol = "[#](fg:#00ff00)"
+error_symbol = "[#](bold red)"
+
+[directory]
+style = "yellow"
+truncate_to_repo = false
+truncation_length = 0
+truncation_symbol = ""
+
+[git_branch]
+format = "[$branch]($style) "
+symbol = ""
+style = "fg:#00ff00"
+
+[hostname]
+ssh_only = false
+format = "[$hostname]($style) "
+style = "fg:#00aaff"
+
+# Disable the built-in python venv display (it shows ".venv")
+[python]
+disabled = true
+symbol = ""
+
+# Show project dir name when a venv is active (VIRTUAL_ENV is set)
+[custom.python_project]
+when = 'test -n "$VIRTUAL_ENV"'
+command = 'basename "$(dirname "$VIRTUAL_ENV")"'
+format = "([$output]($style)) [#](fg:#00ff00) "
+style = "bold green"

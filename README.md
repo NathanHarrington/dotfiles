@@ -251,22 +251,39 @@ dnf -y install libreoffice
 Start oocalc, close all popups. 
 Turn off sidebar, status bar, menu bar, turn off formatting bar, standard bar.
 
-### Cordince branding instructions 
-Clone the CordinceMarketing repo
-cp ~/projects/CordinceMarketing/backgrounds/Cordince_Organ_Engineering_Background_1920x1080.png /usr/share/backgrounds/
+### Early LUKS Remote Unlock
 
-Edit the file 
-/usr/share/pixmaps/system-logo-white.png to be just a blank overlay, no logo displayed, just a transparent image.
+Pre-requisites: known working wifi connections on all networks you want to work with. Generally speaking you want to bring this machine to the different networks, connect them to wifi at home, work and with the hotspot. Add a calendar reminder a week out to then do this process:
 
-Create the file if it does not exist:
-/etc/lightdm/slick-greeter.conf 
+1. Install the initramfs pieces:
+   sudo dnf install dracut-sshd dracut-network NetworkManager-wifi wpa_supplicant
 
-With the contents:
-[Greeter]
-background=/usr/share/backgrounds/Cordince_Organ_Engineering_Background_1920x1080.png
+2. Add the SSH public key allowed for early unlock:
+   sudo install -d -m 700 /etc/dracut-sshd
+   sudoedit /etc/dracut-sshd/authorized_keys
+   # Paste in the desired public key here
 
-dnf -y install slick-greeter
-test with: slick-greeter --test-mode 
+3. Create initramfs-only NetworkManager Wi-Fi profiles by cloning existing system profiles, run both commands separate, one for each existing ssid profile you want to use. For example MyHomeNework initrd-myhomenetwork, then two more commands for AtWorkNetowrk initrd-atworknetwork
+   sudo nmcli connection clone "ExistingSSIDProfile" initrd-home
+   sudo nmcli connection modify initrd-home connection.autoconnect yes connection.permissions '' wifi.cloned-mac-address permanent
 
-Clone and install the i3lock-svg package and follow the instructions in the readme:
-https://github.com/Cordince/i3lock-svg-nh
+4. Add a small dracut module that starts wpa_supplicant before nm-initrd.service, then include it from:
+   /etc/dracut.conf.d/91-early-ssh-wifi.conf
+
+   Required dracut config:
+   add_dracutmodules+=" network network-manager wpa-supplicant-initrd "
+   force_drivers+=" <wifi-driver-modules> "
+   install_items+=" /usr/bin/wpa_supplicant /usr/sbin/wpa_supplicant /etc/wpa_supplicant/wpa_supplicant.conf /etc/dbus-1/system.d/wpa_supplicant.conf /usr/share/dbus-1/system-services/fi.w1.wpa_supplicant1.service /usr/lib/systemd/system/wpa_supplicant.service /etc/NetworkManager/system-connections/initrd-home.nmconnection "
+
+5. Enable early networking and rebuild initramfs:
+   sudo grubby --update-kernel=ALL --args="rd.neednet=1 cfg80211.ieee80211_regdom=US"
+   sudo dracut -f --regenerate-all
+
+6. Reboot, wait for Wi-Fi/DHCP, then unlock:
+   ssh -i <private-key> root@<early-boot-lan-ip>
+   systemd-tty-ask-password-agent
+
+Notes:
+- This does not work over Tailscale until after root is unlocked.
+- The Wi-Fi PSKs and early SSH material are embedded in /boot/initramfs-*.
+- Early boot may get a different DHCP lease if its Wi-Fi MAC differs from the normal userspace profile.
