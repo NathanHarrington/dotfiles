@@ -253,7 +253,7 @@ Turn off sidebar, status bar, menu bar, turn off formatting bar, standard bar.
 
 ### Early LUKS Remote Unlock
 
-Pre-requisites: known working wifi connections on all networks you want to work with. Generally speaking you want to bring this machine to the different networks, connect them to wifi at home, work and with the hotspot. Add a calendar reminder a week out to then do this process:
+Pre-requisites: known working wifi connections on all networks you want to work with. Generally speaking you want to bring this machine to the different networks, connect them to wifi at home, work and with the hotspot. Use the machine for normal activities for a week or so before doing the following to make sure there are no gotchas with the network configs. Add a calendar reminder a week out to then do this process:
 
 1. Install the initramfs pieces:
    sudo dnf install dracut-sshd dracut-network NetworkManager-wifi wpa_supplicant
@@ -265,15 +265,19 @@ Pre-requisites: known working wifi connections on all networks you want to work 
 
 3. Create initramfs-only NetworkManager Wi-Fi profiles by cloning existing system profiles, run both commands separate, one for each existing ssid profile you want to use. For example MyHomeNework initrd-myhomenetwork, then two more commands for AtWorkNetowrk initrd-atworknetwork
    sudo nmcli connection clone "ExistingSSIDProfile" initrd-home
-   sudo nmcli connection modify initrd-home connection.autoconnect yes connection.permissions '' wifi.cloned-mac-address permanent
+   sudo nmcli connection modify initrd-home connection.autoconnect yes connection.permissions '' connection.interface-name '' wifi.cloned-mac-address permanent
+   sudo restorecon -Rv /etc/NetworkManager/system-connections
+   sudo nmcli connection reload
+
+   If retrying this step, delete old initrd-* connections by UUID first. Duplicate connection names make nmcli ambiguous, and stale files can keep the wrong SELinux context.
 
 4. Add a small dracut module that starts wpa_supplicant before nm-initrd.service, then include it from:
    /etc/dracut.conf.d/91-early-ssh-wifi.conf
 
-   Required dracut config:
-   add_dracutmodules+=" network network-manager wpa-supplicant-initrd "
-   force_drivers+=" <wifi-driver-modules> "
-   install_items+=" /usr/bin/wpa_supplicant /usr/sbin/wpa_supplicant /etc/wpa_supplicant/wpa_supplicant.conf /etc/dbus-1/system.d/wpa_supplicant.conf /usr/share/dbus-1/system-services/fi.w1.wpa_supplicant1.service /usr/lib/systemd/system/wpa_supplicant.service /etc/NetworkManager/system-connections/initrd-home.nmconnection "
+   Install the custom dracut module and generate the dracut config with the current Wi-Fi driver modules and all initrd-only NetworkManager profiles:
+   cd ~/projects/dotfiles
+   sudo scripts/install-early-luks-wifi-dracut.sh
+   cat /etc/dracut.conf.d/91-early-ssh-wifi.conf
 
 5. Enable early networking and rebuild initramfs:
    sudo grubby --update-kernel=ALL --args="rd.neednet=1 cfg80211.ieee80211_regdom=US"
@@ -286,4 +290,5 @@ Pre-requisites: known working wifi connections on all networks you want to work 
 Notes:
 - This does not work over Tailscale until after root is unlocked.
 - The Wi-Fi PSKs and early SSH material are embedded in /boot/initramfs-*.
-- Early boot may get a different DHCP lease if its Wi-Fi MAC differs from the normal userspace profile.
+- Early boot may get a different DHCP lease than the fully booted system.
+- Multiple initrd-* profiles are tried in filename order; unavailable networks can add about 25-30 seconds each before an available profile connects.
