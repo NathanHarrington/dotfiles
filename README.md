@@ -292,3 +292,105 @@ Notes:
 - The Wi-Fi PSKs and early SSH material are embedded in /boot/initramfs-*.
 - Early boot may get a different DHCP lease than the fully booted system.
 - Multiple initrd-* profiles are tried in filename order; unavailable networks can add about 25-30 seconds each before an available profile connects.
+
+### ThinkPad X1 Carbon unattended power-outage recovery
+
+Goal: leave the laptop plugged in with the battery installed. If utility power
+fails, the machine runs on battery, locks/blanks after 5 minutes, hibernates
+after 10 minutes, then boots again when AC power returns. Because the disk is
+LUKS encrypted, it will stop at early remote unlock; unlock from another
+machine on the LAN, then the hibernated system image resumes and normal
+services such as Tailscale come back.
+
+1. Enable firmware boot on AC attach.
+
+   Reboot into the ThinkPad BIOS/UEFI setup and enable the power option named
+   something like "Power On with AC Attach", "Wake on AC", or "AC Power
+   Recovery".
+
+   Test it before continuing:
+
+   sudo poweroff
+
+   After the machine powers off, unplug AC, wait a few seconds, then plug AC
+   back in. The laptop should boot without pressing the power button.
+
+2. Configure early LUKS remote unlock.
+
+   Complete the "Early LUKS Remote Unlock" section above first. This is what
+   makes the machine reachable on the LAN before the root filesystem is
+   unlocked. Tailscale is not available until after LUKS unlock and resume.
+
+3. Add disk-backed swap for hibernate.
+
+   Fedora's default zram swap cannot be used for hibernate. On the encrypted
+   Btrfs root filesystem, create a real swapfile:
+
+   sudo btrfs filesystem mkswapfile --size 24g /swapfile
+   sudo swapon /swapfile
+   echo '/swapfile none swap defaults,pri=10 0 0' | sudo tee -a /etc/fstab
+
+   The 24g size is intentionally larger than the 16g RAM in the X1 Carbon
+   setup. Adjust upward if the machine has more RAM.
+
+4. Teach the kernel and initramfs where to resume from.
+
+   ROOTDEV="$(findmnt -no SOURCE / | sed 's/\[.*\]//')"
+   RESUME_UUID="$(sudo blkid -s UUID -o value "$ROOTDEV")"
+   RESUME_OFFSET="$(sudo btrfs inspect-internal map-swapfile -r /swapfile)"
+
+   sudo grubby --update-kernel=ALL --args="resume=UUID=$RESUME_UUID resume_offset=$RESUME_OFFSET"
+   echo 'add_dracutmodules+=" resume "' | sudo tee /etc/dracut.conf.d/resume.conf
+   sudo dracut -f --regenerate-all
+   sudo reboot
+
+5. Verify manual hibernate.
+
+   After reboot:
+
+   swapon --show
+   sudo systemctl hibernate
+
+   The machine should power down. Press the power button or attach AC power,
+   unlock LUKS through early SSH, and confirm the previous session resumes.
+
+6. Make lid close hibernate instead of suspend.
+
+   If the desired behavior is "closing the lid always hibernates", configure
+   systemd-logind:
+
+   sudo mkdir -p /etc/systemd/logind.conf.d
+   printf '%s\n' '[Login]' 'HandleLidSwitch=hibernate' 'HandleLidSwitchExternalPower=hibernate' 'HandleLidSwitchDocked=hibernate' | sudo tee /etc/systemd/logind.conf.d/hibernate-on-lid.conf >/dev/null
+   sudo systemctl reload systemd-logind.service
+
+   For headless outage-recovery use, leaving the lid open is simplest. If the
+   machine must stay online with the lid closed while AC is connected, use
+   HandleLidSwitchExternalPower=ignore instead.
+
+7. Install the i3 idle helper from this repository.
+
+   Copy the i3 config as described earlier:
+
+   cp -ra ~/projects/dotfiles/i3/config ~/.config/i3/config
+
+   The config starts:
+
+   ~/projects/dotfiles/scripts/suspend-on-battery-idle.sh
+
+   The helper defaults to:
+   - on battery only
+   - screen off / lock after 5 minutes
+   - hibernate after 10 minutes
+   - skip hibernate while fullscreen or while audio is playing
+
+   To verify what it will do:
+
+   ~/projects/dotfiles/scripts/suspend-on-battery-idle.sh --settings
+   ~/projects/dotfiles/scripts/list-power-settings.sh
+
+8. Full outage dry-run.
+
+   Leave the laptop plugged in, then pull AC power. Wait for the helper to
+   hibernate after 10 minutes. Restore AC power. The BIOS should boot the
+   laptop, early LUKS remote unlock should come up on the LAN, and after
+   unlocking the previous hibernated session should resume.

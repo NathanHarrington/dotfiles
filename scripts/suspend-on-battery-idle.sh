@@ -3,6 +3,7 @@ set -u
 
 SCREEN_OFF_SECONDS="${SUSPEND_ON_BATTERY_SCREEN_OFF_SECONDS:-300}"
 SUSPEND_SECONDS="${SUSPEND_ON_BATTERY_IDLE_SECONDS:-600}"
+SLEEP_ACTION="${SUSPEND_ON_BATTERY_SLEEP_ACTION:-hibernate}"
 DEBUG="${SUSPEND_ON_BATTERY_DEBUG:-0}"
 XIDLEHOOK="${XIDLEHOOK:-xidlehook}"
 XAUTOLOCK="${XAUTOLOCK:-xautolock}"
@@ -125,25 +126,34 @@ dpms_manager() {
 suspend_if_on_battery() {
     local status
 
+    case "$SLEEP_ACTION" in
+        suspend|hibernate|hybrid-sleep|suspend-then-hibernate)
+            ;;
+        *)
+            log "unsupported sleep action: $SLEEP_ACTION"
+            return 2
+            ;;
+    esac
+
     if ! on_battery_power; then
-        log "idle threshold reached, but external power is connected or no battery was found; not suspending"
+        log "idle threshold reached, but external power is connected or no battery was found; not running $SLEEP_ACTION"
         return 0
     fi
 
     if fullscreen_active; then
-        log "idle threshold reached on battery power, but a fullscreen window is active; not suspending"
+        log "idle threshold reached on battery power, but a fullscreen window is active; not running $SLEEP_ACTION"
         return 0
     fi
 
     if audio_playing; then
-        log "idle threshold reached on battery power, but audio is playing; not suspending"
+        log "idle threshold reached on battery power, but audio is playing; not running $SLEEP_ACTION"
         return 0
     fi
 
-    log "idle threshold reached on battery power; suspending"
-    "$SYSTEMCTL" suspend
+    log "idle threshold reached on battery power; running $SLEEP_ACTION"
+    "$SYSTEMCTL" "$SLEEP_ACTION"
     status=$?
-    log "suspend command exited with status $status"
+    log "$SLEEP_ACTION command exited with status $status"
     return "$status"
 }
 
@@ -208,7 +218,7 @@ watch_idle() {
         remaining_seconds=$((SUSPEND_SECONDS - SCREEN_OFF_SECONDS))
         [ "$remaining_seconds" -lt 1 ] && remaining_seconds=1
 
-        log "starting $XIDLEHOOK: screen off/lock after ${SCREEN_OFF_SECONDS}s, suspend after ${SUSPEND_SECONDS}s"
+        log "starting $XIDLEHOOK: screen off/lock after ${SCREEN_OFF_SECONDS}s, $SLEEP_ACTION after ${SUSPEND_SECONDS}s"
         exec "$XIDLEHOOK" \
             --detect-sleep \
             --not-when-fullscreen \
@@ -239,7 +249,7 @@ watch_idle() {
         trap cleanup EXIT TERM INT
 
         log "started screen-off/lock manager pid=$DPMS_PID: screen off/lock after ${SCREEN_OFF_SECONDS}s on battery"
-        log "starting $XAUTOLOCK: screen off/lock after ${SCREEN_OFF_SECONDS}s, suspend after ${SUSPEND_SECONDS}s"
+        log "starting $XAUTOLOCK: screen off/lock after ${SCREEN_OFF_SECONDS}s, $SLEEP_ACTION after ${SUSPEND_SECONDS}s"
         "$XAUTOLOCK" "${xautolock_args[@]}"
         xautolock_status=$?
         log "$XAUTOLOCK exited with status $xautolock_status"
@@ -258,6 +268,7 @@ case "${1:---watch}" in
         cat <<EOF
 screen_off_seconds=$SCREEN_OFF_SECONDS
 suspend_seconds=$SUSPEND_SECONDS
+sleep_action=$SLEEP_ACTION
 debug=$DEBUG
 dpms_poll_seconds=$DPMS_POLL_SECONDS
 xidlehook=$XIDLEHOOK
@@ -286,15 +297,16 @@ Usage: $0 [--watch|--settings|--screen-off-if-on-battery|--suspend-if-on-battery
 
 Starts xidlehook when available, otherwise xautolock. By default it activates
 the X screensaver and turns the screen off after ${SCREEN_OFF_SECONDS} seconds
-of X idle time, and suspends after ${SUSPEND_SECONDS} seconds, only when a
+of X idle time, and runs ${SLEEP_ACTION} after ${SUSPEND_SECONDS} seconds, only when a
 battery is present and no external power supply is online.
 
-xautolock uses whole-minute suspend timers, so this script rounds
+xautolock uses whole-minute sleep-action timers, so this script rounds
 ${SUSPEND_SECONDS} seconds up to the nearest minute when using xautolock.
 
 Environment overrides:
   SUSPEND_ON_BATTERY_SCREEN_OFF_SECONDS=${SCREEN_OFF_SECONDS}
   SUSPEND_ON_BATTERY_IDLE_SECONDS=${SUSPEND_SECONDS}
+  SUSPEND_ON_BATTERY_SLEEP_ACTION=${SLEEP_ACTION}
   SUSPEND_ON_BATTERY_DEBUG=${DEBUG}
   SUSPEND_ON_BATTERY_DPMS_POLL_SECONDS=${DPMS_POLL_SECONDS}
   SUSPEND_ON_BATTERY_IDLE_LOCK=${LOCK_FILE}

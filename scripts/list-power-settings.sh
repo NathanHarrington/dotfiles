@@ -373,28 +373,30 @@ idle_watcher_name() {
 }
 
 i3_battery_idle_policy() {
-    local screen_off_seconds suspend_seconds
+    local screen_off_seconds suspend_seconds sleep_action
 
     screen_off_seconds=$(i3_idle_setting screen_off_seconds 2>/dev/null || true)
     suspend_seconds=$(i3_idle_setting suspend_seconds 2>/dev/null || true)
+    sleep_action=$(i3_idle_setting sleep_action 2>/dev/null || printf 'suspend')
 
     if [ -z "$screen_off_seconds" ] && [ -z "$suspend_seconds" ]; then
         return 1
     fi
 
     if [ -n "$screen_off_seconds" ] && [ -n "$suspend_seconds" ]; then
-        printf 'screen off/lock after %s, suspend after %s' \
+        printf 'screen off/lock after %s, %s after %s' \
             "$(format_duration "$screen_off_seconds")" \
+            "$sleep_action" \
             "$(format_duration "$suspend_seconds")"
     elif [ -n "$screen_off_seconds" ]; then
         printf 'screen off/lock after %s' "$(format_duration "$screen_off_seconds")"
     else
-        printf 'suspend after %s' "$(format_duration "$suspend_seconds")"
+        printf '%s after %s' "$sleep_action" "$(format_duration "$suspend_seconds")"
     fi
 }
 
 print_i3_idle_power() {
-    local helper screen_off_seconds suspend_seconds watcher status configured
+    local helper screen_off_seconds suspend_seconds sleep_action watcher status configured
 
     section "i3 Battery Idle Helper"
 
@@ -406,6 +408,7 @@ print_i3_idle_power() {
 
     screen_off_seconds=$(i3_idle_setting screen_off_seconds 2>/dev/null || true)
     suspend_seconds=$(i3_idle_setting suspend_seconds 2>/dev/null || true)
+    sleep_action=$(i3_idle_setting sleep_action 2>/dev/null || printf 'suspend')
     watcher=$(idle_watcher_name)
 
     if i3_idle_helper_configured; then
@@ -426,8 +429,8 @@ print_i3_idle_power() {
     kv "Watcher process" "$status"
     kv "Plugged in idle action" "no action from this helper"
     [ -n "$screen_off_seconds" ] && kv "Battery screen off/lock" "after $(format_duration "$screen_off_seconds")"
-    [ -n "$suspend_seconds" ] && kv "Battery suspend" "after $(format_duration "$suspend_seconds")"
-    kv "Suspend guards" "battery only; skips fullscreen and audio"
+    [ -n "$suspend_seconds" ] && kv "Battery sleep action" "$sleep_action after $(format_duration "$suspend_seconds")"
+    kv "Sleep action guards" "battery only; skips fullscreen and audio"
     kv "Screen-off/lock guards" "battery only; skips fullscreen; locks via xss-lock/X screensaver"
 }
 
