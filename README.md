@@ -43,7 +43,7 @@ dnf -y install make automake gcc gcc-c++ kernel-devel cmake
 dnf -y install git autossh tmux alacritty patch unzip
 dnf -y install redhat-rpm-config python-devel
 dnf -y install parcellite vim vim-X11 ncdu sox 
-dnf -y install bat ripgrep shutter xss-lock trash-cli
+dnf -y install bat ripgrep shutter xss-lock xautolock trash-cli
 
 # Install eza: 
 sudo dnf install cargo
@@ -102,9 +102,10 @@ dnf install starship
 
 ### Miscellaneous configuration:
 cd ~/projects/dotfiles
-cp starship.toml ~/.config/starship.toml
-# On hotel-compute, use the host-specific prompt instead:
-# cp hotel-compute_starship.toml ~/.config/starship.toml
+cp starship_prompts/starship.toml ~/.config/starship.toml
+# Or use a host-specific prompt:
+# cp starship_prompts/hotel-compute_starship.toml ~/.config/starship.toml
+# cp starship_prompts/kilo_starship.toml ~/.config/starship.toml
 cp .bashrc ~/.bashrc
 cp .vimrc ~/.vimrc
 cp .tmux.conf ~/.tmux.conf
@@ -118,6 +119,8 @@ systemctl start sshd
 dnf -y install gimp inkscape graphviz w3m nmap thunar ImageMagick
 dnf -y install gwenview feh
 dnf -y install tig darktable xclip urlview
+
+
 
 # Start w3m, change color of anchor to yellow
 
@@ -148,6 +151,7 @@ Google Chrome for compatibility with various meeting tools:
             Install vimium for chrome
             Don't use chrome for anything on the web as it will be overwhelmed with ads.
 
+# Install tailscale from tailscale.com instructions
 
 ### Move over previous system files. 
 With the previous years m.2 ssd, plug it into the adapter, start thunar, 
@@ -171,6 +175,7 @@ mkdir rclone
 cd rclone
 ln -s ~/Documents/auto_backup/home.config_files/rclone.conf
 
+
 ### Setup the rclone backup option:
 
 Download and install rclone according to: http://rclone.org/install/
@@ -187,11 +192,14 @@ mkdir ~/Documents/working_encrypted/
 
 Add the following to crontab -e:
 
-# Nightly tar backup build and upload
+# Choose hourly or nightly tar backup build and upload. 
+# The hourly backup is designed to trigger whenever the machine is online
+# opportunistically, and may be better suited than a simple always-on 
+# nightly backup
 SCRIPTS=/home/nharrington/projects/dotfiles/backup_scripts
 BACKUP_PREFIX=nh  (change this to the correct prefix! )
-13 * * * * $SCRIPTS/encrypt_directory.sh >>$SCRIPTS/backup.log 2>&1
-44 * * * * $SCRIPTS/rclone_hourly >>$SCRIPTS/backup.log 2>&1
+13 2 * * * $SCRIPTS/encrypt_directory.sh >>$SCRIPTS/backup.log 2>&1
+44 2 * * * $SCRIPTS/rclone_hourly >>$SCRIPTS/backup.log 2>&1
 
 # Email a summary of the backup directories for hand verification
 MAIL_DEST="username@domain.com"  (change this to the correct email!)
@@ -369,6 +377,11 @@ services such as Tailscale come back.
 
 7. Install the i3 idle helper from this repository.
 
+   Install the required idle watcher so the 10-minute battery hibernate action
+   can trigger:
+
+   dnf install xautolock
+
    Copy the i3 config as described earlier:
 
    cp -ra ~/projects/dotfiles/i3/config ~/.config/i3/config
@@ -387,6 +400,10 @@ services such as Tailscale come back.
 
    ~/projects/dotfiles/scripts/suspend-on-battery-idle.sh --settings
    ~/projects/dotfiles/scripts/list-power-settings.sh
+
+
+    # You may have to power off and restart the machine to have these settings take effect
+
 
 8. Full outage dry-run.
 
