@@ -42,12 +42,8 @@ Accept all defaults, after the install has complete, reboot the system.
 dnf -y install make automake gcc gcc-c++ kernel-devel cmake
 dnf -y install git autossh tmux alacritty patch unzip
 dnf -y install redhat-rpm-config python-devel
-dnf -y install parcellite vim vim-X11 ncdu sox 
+dnf -y install parcellite vim vim-X11 ncdu sox eza
 dnf -y install bat ripgrep shutter xss-lock xautolock trash-cli
-
-# Install eza: 
-sudo dnf install cargo
-cargo install eza
 
 # Install the ibm plex mono fonts  - also available in .fonts
 dnf install ibm-plex-mono-fonts
@@ -126,7 +122,7 @@ dnf -y install tig darktable xclip urlview
 
 Start firefox, create new profiles with the following fundamentals:
     1. Open previous windows and tabs.
-    2. Turn off: Use AI to suggest tags 
+    2. Turn off: Use AI to suggest tabs 
                  Recommend extensions as you browse 
                  Recommend features as you browse
                  Enable link previews
