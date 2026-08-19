@@ -41,8 +41,8 @@ Accept all defaults, after the install has complete, reboot the system.
 # Basic development environment
 dnf -y install make automake gcc gcc-c++ kernel-devel cmake
 dnf -y install git autossh tmux alacritty patch unzip
-dnf -y install redhat-rpm-config python-devel
-dnf -y install parcellite vim vim-X11 ncdu sox 
+dnf -y install redhat-rpm-config python-devel xsetroot
+dnf -y install parcellite vim vim-X11 ncdu sox xautolock xset
 dnf -y install bat ripgrep shutter xss-lock trash-cli
 
 # Install eza: 
@@ -271,10 +271,7 @@ Pre-requisites: known working wifi connections on all networks you want to work 
 
    If retrying this step, delete old initrd-* connections by UUID first. Duplicate connection names make nmcli ambiguous, and stale files can keep the wrong SELinux context.
 
-4. Add a small dracut module that starts wpa_supplicant before nm-initrd.service, then include it from:
-   /etc/dracut.conf.d/91-early-ssh-wifi.conf
-
-   Install the custom dracut module and generate the dracut config with the current Wi-Fi driver modules and all initrd-only NetworkManager profiles:
+4. Install the custom dracut module and generate the dracut config with the current Wi-Fi driver modules and all initrd-only NetworkManager profiles:
    cd ~/projects/dotfiles
    sudo scripts/install-early-luks-wifi-dracut.sh
    cat /etc/dracut.conf.d/91-early-ssh-wifi.conf
