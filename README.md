@@ -148,6 +148,10 @@ Google Chrome for compatibility with various meeting tools:
             Don't use chrome for anything on the web as it will be overwhelmed with ads.
 
 # Install tailscale from tailscale.com instructions
+# Then run the following to have keyless logins 'just work' from any machine on the tailscale network
+tailscale status
+tailscale ip -4
+sudo tailscale set --ssh=true
 
 ### Move over previous system files. 
 With the previous years m.2 ssd, plug it into the adapter, start thunar, 
@@ -339,14 +343,14 @@ services such as Tailscale come back.
 
 4. Teach the kernel and initramfs where to resume from.
 
-   ROOTDEV="$(findmnt -no SOURCE / | sed 's/\[.*\]//')"
-   RESUME_UUID="$(sudo blkid -s UUID -o value "$ROOTDEV")"
-   RESUME_OFFSET="$(sudo btrfs inspect-internal map-swapfile -r /swapfile)"
+ROOTDEV="$(findmnt -no SOURCE / | sed 's/\[.*\]//')"
+RESUME_UUID="$(sudo blkid -s UUID -o value "$ROOTDEV")"
+RESUME_OFFSET="$(sudo btrfs inspect-internal map-swapfile -r /swapfile)"
 
-   sudo grubby --update-kernel=ALL --args="resume=UUID=$RESUME_UUID resume_offset=$RESUME_OFFSET"
-   echo 'add_dracutmodules+=" resume "' | sudo tee /etc/dracut.conf.d/resume.conf
-   sudo dracut -f --regenerate-all
-   sudo reboot
+sudo grubby --update-kernel=ALL --args="resume=UUID=$RESUME_UUID resume_offset=$RESUME_OFFSET"
+echo 'add_dracutmodules+=" resume "' | sudo tee /etc/dracut.conf.d/resume.conf
+sudo dracut -f --regenerate-all
+sudo reboot
 
 5. Verify manual hibernate.
 
