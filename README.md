@@ -41,9 +41,9 @@ Accept all defaults, after the install has complete, reboot the system.
 # Basic development environment
 dnf -y install make automake gcc gcc-c++ kernel-devel cmake
 dnf -y install git autossh tmux alacritty patch unzip
-dnf -y install redhat-rpm-config python-devel
-dnf -y install parcellite vim vim-X11 ncdu sox eza
-dnf -y install bat ripgrep shutter xss-lock xautolock trash-cli
+dnf -y install redhat-rpm-config python-devel xsetroot
+dnf -y install parcellite vim vim-X11 ncdu sox eza xautolock xset
+dnf -y install bat ripgrep shutter xss-lock trash-cli
 
 # Install the ibm plex mono fonts  - also available in .fonts
 dnf install ibm-plex-mono-fonts
@@ -279,10 +279,7 @@ Pre-requisites: known working wifi connections on all networks you want to work 
 
    If retrying this step, delete old initrd-* connections by UUID first. Duplicate connection names make nmcli ambiguous, and stale files can keep the wrong SELinux context.
 
-4. Add a small dracut module that starts wpa_supplicant before nm-initrd.service, then include it from:
-   /etc/dracut.conf.d/91-early-ssh-wifi.conf
-
-   Install the custom dracut module and generate the dracut config with the current Wi-Fi driver modules and all initrd-only NetworkManager profiles:
+4. Install the custom dracut module and generate the dracut config with the current Wi-Fi driver modules and all initrd-only NetworkManager profiles:
    cd ~/projects/dotfiles
    sudo scripts/install-early-luks-wifi-dracut.sh
    cat /etc/dracut.conf.d/91-early-ssh-wifi.conf
@@ -303,9 +300,10 @@ Notes:
 
 ### ThinkPad X1 Carbon unattended power-outage recovery
 
-Goal: leave the laptop plugged in with the battery installed. If utility power
-fails, the machine runs on battery, locks/blanks after 5 minutes, hibernates
-after 10 minutes, then boots again when AC power returns. Because the disk is
+Goal: leave the laptop plugged in with the battery installed. The desktop
+locks/blanks after 5 minutes of idle time. If utility power fails, the machine
+runs on battery, hibernates after 10 minutes, then boots again when AC power
+returns. Because the disk is
 LUKS encrypted, it will stop at early remote unlock; unlock from another
 machine on the LAN, then the hibernated system image resumes and normal
 services such as Tailscale come back.
@@ -391,9 +389,8 @@ sudo reboot
    ~/projects/dotfiles/scripts/suspend-on-battery-idle.sh
 
    The helper defaults to:
-   - on battery only
-   - screen off / lock after 5 minutes
-   - hibernate after 10 minutes
+   - screen off / lock after 5 minutes on AC and battery
+   - hibernate after 10 minutes on battery only
    - skip hibernate while fullscreen or while audio is playing
 
    To verify what it will do:

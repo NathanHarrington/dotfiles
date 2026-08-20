@@ -15,7 +15,7 @@ client.unfocused        #333333 #222222 #888888 #292D2E   #222222
 client.urgent           #2F343A #900000 #FFFFFF #900000   #900000
 client.placeholder      #000000 #0C0C0C #FFFFFF #000000   #0C0C0C
 
-client.background       #FFFFFF
+client.background       #000000
 
 # Ultra thin green borders
 new_window pixel 1
@@ -39,7 +39,7 @@ exec --no-startup-id dex-autostart --autostart --environment i3
 # screen before suspend. Use loginctl lock-session to lock your screen.
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
-# On battery, lock and turn the screen off after 5 minutes idle and hibernate after 10.
+# Lock and turn the screen off after 5 minutes idle; hibernate after 10 on battery.
 # The helper uses xidlehook if available, otherwise Fedora's xautolock.
 exec_always --no-startup-id $HOME/projects/dotfiles/scripts/suspend-on-battery-idle.sh
 
@@ -208,3 +208,6 @@ bindsym $mod+Shift+t exec --no-startup-id /home/nharrington/projects/dotfiles/au
 # These are slow to generate.
 bindsym Print exec --no-startup-id shutter --full
 bindsym $mod+Print exec --no-startup-id shutter --window 
+
+# Black background by default
+exec_always --no-startup-id xsetroot -solid "#000000"
