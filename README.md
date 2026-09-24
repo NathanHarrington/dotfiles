@@ -82,6 +82,17 @@ cp -ra ~/projects/dotfiles/i3/config ~/.config/i3/config
 mkdir -p ~/.config/alacritty
 cp ~/projects/dotfiles/alacritty.toml ~/.config/alacritty/alacritty.toml
 
+### Bat theme
+The Phosphor Green theme uses bright green body text on black, with softer
+green headings and restrained colors for links and code. Install it with:
+
+```bash
+mkdir -p ~/.config/bat/themes
+cp ~/projects/dotfiles/bat/config ~/.config/bat/config
+cp ~/projects/dotfiles/bat/themes/'Phosphor Green.tmTheme' ~/.config/bat/themes/
+bat cache --build
+```
+
 ## Install pyenv for managing python versions:
 dnf install zlib-devel bzip2 bzip2-devel readline-devel 
 dnf install sqlite sqlite-devel xz xz-devel libffi-devel findutils
