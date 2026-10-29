@@ -29,17 +29,20 @@ autocmd ColorScheme * highlight TabLineFill ctermfg=black ctermbg=black guifg=#0
 inoremap <C-S-k> <C-R>=strftime("%Y-%m-%d %H:%M")<CR> 
 nnoremap <C-S-k> i<C-R>=strftime("%Y-%m-%d %H:%M")<CR> <Esc>
 
-function! s:YankToTmux() abort
-  if v:event.operator ==# 'y' && !empty($TMUX)
-    let text = join(v:event.regcontents, "\n")
-    if v:event.regtype ==# 'V'
-      let text .= "\n"
-    endif
-    call system('tmux load-buffer -w -', text)
-  endif
-endfunction
-
-augroup TmuxClipboard
-  autocmd!
-  autocmd TextYankPost * call s:YankToTmux()
-augroup END
+" Yank to tmux is only necessary if the X11 clipboard is not shared. 
+" current ideal behavior is ssh -Y using non-tailscale client and all the
+" clipboards seem to instantly work
+" function! s:YankToTmux() abort
+"  if v:event.operator ==# 'y' && !empty($TMUX)
+"    let text = join(v:event.regcontents, "\n")
+"    if v:event.regtype ==# 'V'
+"      let text .= "\n"
+"    endif
+"    call system('tmux load-buffer -w -', text)
+"  endif
+"endfunction
+"
+"augroup TmuxClipboard
+"  autocmd!
+"  autocmd TextYankPost * call s:YankToTmux()
+"augroup END
