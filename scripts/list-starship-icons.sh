@@ -66,7 +66,7 @@ print_icon_header() {
     printf 'Each preview uses the prompt shape: icon  hostname #\n'
     printf 'This list favors Nerd Font private glyphs because standard emoji animals\n'
     printf 'do not render reliably in this alacritty/font fallback path.\n'
-    printf 'Copy the chosen glyph into hotel-compute_starship.toml:\n'
+    printf 'Copy the chosen glyph into a host prompt under starship_prompts/:\n'
     printf '  format = "$directory$git_branch$git_status\\n[GLYPH](bold green)  $hostname$character$python$custom"\n\n'
 }
 
@@ -144,7 +144,7 @@ ansi_for_starship_style() {
 
 print_color_header() {
     printf 'Hostname color candidates use the same prompt shape: icon  hostname #\n'
-    printf 'Copy the chosen style value into hotel-compute_starship.toml:\n'
+    printf 'Copy the chosen style value into a host prompt under starship_prompts/:\n'
     printf '  [hostname]\n'
     printf '  style = "STYLE_VALUE"\n\n'
     printf 'If red and bright-red look identical, prefer one of the fg:# truecolor rows.\n\n'

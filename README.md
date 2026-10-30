@@ -41,13 +41,9 @@ Accept all defaults, after the install has complete, reboot the system.
 # Basic development environment
 dnf -y install make automake gcc gcc-c++ kernel-devel cmake
 dnf -y install git autossh tmux alacritty patch unzip
-dnf -y install redhat-rpm-config python-devel
-dnf -y install parcellite vim vim-X11 ncdu sox 
+dnf -y install redhat-rpm-config python-devel xsetroot
+dnf -y install parcellite vim vim-X11 ncdu sox eza xautolock xset
 dnf -y install bat ripgrep shutter xss-lock trash-cli
-
-# Install eza: 
-sudo dnf install cargo
-cargo install eza
 
 # Install the ibm plex mono fonts  - also available in .fonts
 dnf install ibm-plex-mono-fonts
@@ -86,6 +82,17 @@ cp -ra ~/projects/dotfiles/i3/config ~/.config/i3/config
 mkdir -p ~/.config/alacritty
 cp ~/projects/dotfiles/alacritty.toml ~/.config/alacritty/alacritty.toml
 
+### Bat theme
+The Phosphor Green theme uses bright green body text on black, with softer
+green headings and restrained colors for links and code. Install it with:
+
+```bash
+mkdir -p ~/.config/bat/themes
+cp ~/projects/dotfiles/bat/config ~/.config/bat/config
+cp ~/projects/dotfiles/bat/themes/'Phosphor Green.tmTheme' ~/.config/bat/themes/
+bat cache --build
+```
+
 ## Install pyenv for managing python versions:
 dnf install zlib-devel bzip2 bzip2-devel readline-devel 
 dnf install sqlite sqlite-devel xz xz-devel libffi-devel findutils
@@ -102,9 +109,10 @@ dnf install starship
 
 ### Miscellaneous configuration:
 cd ~/projects/dotfiles
-cp starship.toml ~/.config/starship.toml
-# On hotel-compute, use the host-specific prompt instead:
-# cp hotel-compute_starship.toml ~/.config/starship.toml
+cp starship_prompts/starship.toml ~/.config/starship.toml
+# Or use a host-specific prompt:
+# cp starship_prompts/hotel-compute_starship.toml ~/.config/starship.toml
+# cp starship_prompts/kilo_starship.toml ~/.config/starship.toml
 cp .bashrc ~/.bashrc
 cp .vimrc ~/.vimrc
 cp .tmux.conf ~/.tmux.conf
@@ -119,11 +127,13 @@ dnf -y install gimp inkscape graphviz w3m nmap thunar ImageMagick
 dnf -y install gwenview feh
 dnf -y install tig darktable xclip urlview
 
+
+
 # Start w3m, change color of anchor to yellow
 
 Start firefox, create new profiles with the following fundamentals:
     1. Open previous windows and tabs.
-    2. Turn off: Use AI to suggest tags 
+    2. Turn off: Use AI to suggest tabs
                  Recommend extensions as you browse 
                  Recommend features as you browse
                  Enable link previews
@@ -148,6 +158,11 @@ Google Chrome for compatibility with various meeting tools:
             Install vimium for chrome
             Don't use chrome for anything on the web as it will be overwhelmed with ads.
 
+# Install tailscale from tailscale.com instructions
+# Then run the following to have keyless logins 'just work' from any machine on the tailscale network
+tailscale status
+tailscale ip -4
+sudo tailscale set --ssh=true
 
 ### Move over previous system files. 
 With the previous years m.2 ssd, plug it into the adapter, start thunar, 
@@ -171,6 +186,7 @@ mkdir rclone
 cd rclone
 ln -s ~/Documents/auto_backup/home.config_files/rclone.conf
 
+
 ### Setup the rclone backup option:
 
 Download and install rclone according to: http://rclone.org/install/
@@ -187,11 +203,14 @@ mkdir ~/Documents/working_encrypted/
 
 Add the following to crontab -e:
 
-# Nightly tar backup build and upload
+# Choose hourly or nightly tar backup build and upload.
+# The hourly backup is designed to trigger whenever the machine is online
+# opportunistically, and may be better suited than a simple always-on
+# nightly backup
 SCRIPTS=/home/nharrington/projects/dotfiles/backup_scripts
 BACKUP_PREFIX=nh  (change this to the correct prefix! )
-13 * * * * $SCRIPTS/encrypt_directory.sh >>$SCRIPTS/backup.log 2>&1
-44 * * * * $SCRIPTS/rclone_hourly >>$SCRIPTS/backup.log 2>&1
+13 2 * * * $SCRIPTS/encrypt_directory.sh >>$SCRIPTS/backup.log 2>&1
+44 2 * * * $SCRIPTS/rclone_hourly >>$SCRIPTS/backup.log 2>&1
 
 # Email a summary of the backup directories for hand verification
 MAIL_DEST="username@domain.com"  (change this to the correct email!)
@@ -271,10 +290,7 @@ Pre-requisites: known working wifi connections on all networks you want to work 
 
    If retrying this step, delete old initrd-* connections by UUID first. Duplicate connection names make nmcli ambiguous, and stale files can keep the wrong SELinux context.
 
-4. Add a small dracut module that starts wpa_supplicant before nm-initrd.service, then include it from:
-   /etc/dracut.conf.d/91-early-ssh-wifi.conf
-
-   Install the custom dracut module and generate the dracut config with the current Wi-Fi driver modules and all initrd-only NetworkManager profiles:
+4. Install the custom dracut module and generate the dracut config with the current Wi-Fi driver modules and all initrd-only NetworkManager profiles:
    cd ~/projects/dotfiles
    sudo scripts/install-early-luks-wifi-dracut.sh
    cat /etc/dracut.conf.d/91-early-ssh-wifi.conf
@@ -296,8 +312,9 @@ Notes:
 ### ThinkPad X1 Carbon unattended power-outage recovery
 
 Goal: leave the laptop plugged in with the battery installed. While plugged in,
-the machine locks/blanks after 5 minutes but never automatically suspends. If
-utility power fails, the machine runs on battery, locks/blanks after 5 minutes,
+the machine locks/blanks after 5 minutes of idle time unless a fullscreen window
+is active, but never automatically suspends. If utility power fails, the machine
+runs on battery, locks/blanks after 5 minutes unless fullscreen is active,
 hibernates after 10 minutes, then boots again when AC power returns. Because
 the disk is LUKS encrypted, it will stop at early remote unlock; unlock from
 another machine on the LAN, then the hibernated system image resumes and
@@ -336,14 +353,14 @@ normal services such as Tailscale come back.
 
 4. Teach the kernel and initramfs where to resume from.
 
-   ROOTDEV="$(findmnt -no SOURCE / | sed 's/\[.*\]//')"
-   RESUME_UUID="$(sudo blkid -s UUID -o value "$ROOTDEV")"
-   RESUME_OFFSET="$(sudo btrfs inspect-internal map-swapfile -r /swapfile)"
+ROOTDEV="$(findmnt -no SOURCE / | sed 's/\[.*\]//')"
+RESUME_UUID="$(sudo blkid -s UUID -o value "$ROOTDEV")"
+RESUME_OFFSET="$(sudo btrfs inspect-internal map-swapfile -r /swapfile)"
 
-   sudo grubby --update-kernel=ALL --args="resume=UUID=$RESUME_UUID resume_offset=$RESUME_OFFSET"
-   echo 'add_dracutmodules+=" resume "' | sudo tee /etc/dracut.conf.d/resume.conf
-   sudo dracut -f --regenerate-all
-   sudo reboot
+sudo grubby --update-kernel=ALL --args="resume=UUID=$RESUME_UUID resume_offset=$RESUME_OFFSET"
+echo 'add_dracutmodules+=" resume "' | sudo tee /etc/dracut.conf.d/resume.conf
+sudo dracut -f --regenerate-all
+sudo reboot
 
 5. Verify manual hibernate.
 
@@ -370,6 +387,11 @@ normal services such as Tailscale come back.
 
 7. Install the i3 idle helper from this repository.
 
+   Install the required idle watcher so the 10-minute battery hibernate action
+   can trigger:
+
+   dnf install xautolock
+
    Copy the i3 config as described earlier:
 
    cp -ra ~/projects/dotfiles/i3/config ~/.config/i3/config
@@ -379,7 +401,7 @@ normal services such as Tailscale come back.
    ~/projects/dotfiles/scripts/suspend-on-battery-idle.sh
 
    The helper defaults to:
-   - screen off / lock after 5 minutes on AC or battery
+   - screen off / lock after 5 minutes on AC or battery, except during fullscreen
    - never automatically suspend on AC
    - hibernate after 10 minutes on battery
    - fullscreen windows and audio playback do not block battery hibernate
@@ -388,6 +410,10 @@ normal services such as Tailscale come back.
 
    ~/projects/dotfiles/scripts/suspend-on-battery-idle.sh --settings
    ~/projects/dotfiles/scripts/list-power-settings.sh
+
+
+    # You may have to power off and restart the machine to have these settings take effect
+
 
 8. Full outage dry-run.
 

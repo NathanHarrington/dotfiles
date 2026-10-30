@@ -4,20 +4,29 @@ set -u
 SCREEN_OFF_SECONDS="${SUSPEND_ON_BATTERY_SCREEN_OFF_SECONDS:-300}"
 SUSPEND_SECONDS="${SUSPEND_ON_BATTERY_IDLE_SECONDS:-600}"
 SLEEP_ACTION="${SUSPEND_ON_BATTERY_SLEEP_ACTION:-hibernate}"
+SCREEN_OFF_ON_AC="${SUSPEND_ON_BATTERY_SCREEN_OFF_ON_AC:-1}"
 DEBUG="${SUSPEND_ON_BATTERY_DEBUG:-0}"
 XIDLEHOOK="${XIDLEHOOK:-xidlehook}"
 XAUTOLOCK="${XAUTOLOCK:-xautolock}"
 XSET="${XSET:-xset}"
+XSS_LOCK="${XSS_LOCK:-xss-lock}"
+I3LOCK="${I3LOCK:-i3lock}"
 SYSTEMCTL="${SYSTEMCTL:-systemctl}"
 LOCK_FILE="${SUSPEND_ON_BATTERY_IDLE_LOCK:-${XDG_RUNTIME_DIR:-/tmp}/suspend-on-battery-idle.lock}"
 DPMS_POLL_SECONDS="${SUSPEND_ON_BATTERY_DPMS_POLL_SECONDS:-15}"
+XSS_LOCK_POLL_SECONDS="${SUSPEND_ON_BATTERY_XSS_LOCK_POLL_SECONDS:-30}"
 DPMS_PID=
+XSS_LOCK_MANAGER_PID=
 
 log() {
     if command -v logger >/dev/null 2>&1; then
         logger -t suspend-on-battery-idle -- "$*" 2>/dev/null || true
     fi
     printf '%s\n' "$*" >&2
+}
+
+close_lock_fd() {
+    { exec 9>&-; } 2>/dev/null || true
 }
 
 read_first_line() {
@@ -54,7 +63,37 @@ on_battery_power() {
     [ "$battery_found" -eq 1 ] && [ "$external_power_online" -eq 0 ]
 }
 
-screen_off() {
+truthy() {
+    case "$1" in
+        1|true|TRUE|yes|YES|on|ON)
+            return 0
+            ;;
+    esac
+
+    return 1
+}
+
+screen_off_allowed() {
+    if truthy "$SCREEN_OFF_ON_AC"; then
+        return 0
+    fi
+
+    on_battery_power
+}
+
+screen_off_scope() {
+    if truthy "$SCREEN_OFF_ON_AC"; then
+        printf 'all power states'
+    else
+        printf 'battery only'
+    fi
+}
+
+screen_off_if_allowed() {
+    if ! screen_off_allowed; then
+        return 0
+    fi
+
     if fullscreen_active; then
         log "screen-off threshold reached, but a fullscreen window is active; not turning screen off"
         return 0
@@ -89,13 +128,15 @@ dpms_manager() {
     local applied=unknown
     local wanted
 
+    close_lock_fd
+
     if ! command -v "$XSET" >/dev/null 2>&1; then
         log "xset not found; cannot manage screen-off timeout"
         return 1
     fi
 
     while true; do
-        if ! fullscreen_active; then
+        if screen_off_allowed && ! fullscreen_active; then
             wanted=enabled
         else
             wanted=disabled
@@ -104,7 +145,7 @@ dpms_manager() {
         if [ "$wanted" != "$applied" ]; then
             case "$wanted" in
                 enabled)
-                    log "setting screen-off/lock timeout to ${SCREEN_OFF_SECONDS}s"
+                    log "setting screen-off/lock timeout to ${SCREEN_OFF_SECONDS}s ($(screen_off_scope))"
                     set_screen_off_timeout "$SCREEN_OFF_SECONDS" || true
                     ;;
                 disabled)
@@ -116,6 +157,43 @@ dpms_manager() {
         fi
 
         sleep "$DPMS_POLL_SECONDS"
+    done
+}
+
+start_xss_lock_once() {
+    local user_id xss_lock_name
+
+    if ! command -v "$XSS_LOCK" >/dev/null 2>&1; then
+        log "xss-lock not found; automatic i3lock will not run"
+        return 1
+    fi
+
+    if ! command -v "$I3LOCK" >/dev/null 2>&1; then
+        log "i3lock not found; automatic screen locking will not run"
+        return 1
+    fi
+
+    xss_lock_name=${XSS_LOCK##*/}
+    if command -v pgrep >/dev/null 2>&1; then
+        user_id=$(id -u 2>/dev/null || true)
+        if [ -n "$user_id" ] && pgrep -xu "$user_id" "$xss_lock_name" >/dev/null 2>&1; then
+            return 0
+        fi
+        if [ -z "$user_id" ] && pgrep -x "$xss_lock_name" >/dev/null 2>&1; then
+            return 0
+        fi
+    fi
+
+    log "starting $XSS_LOCK for automatic i3lock"
+    (close_lock_fd; exec "$XSS_LOCK" --transfer-sleep-lock -- "$I3LOCK" --nofork) &
+}
+
+xss_lock_manager() {
+    close_lock_fd
+
+    while true; do
+        start_xss_lock_once || true
+        sleep "$XSS_LOCK_POLL_SECONDS"
     done
 }
 
@@ -176,13 +254,23 @@ take_lock() {
 cleanup() {
     if [ -n "${DPMS_PID:-}" ]; then
         kill "$DPMS_PID" 2>/dev/null || true
+        wait "$DPMS_PID" 2>/dev/null || true
     fi
-    disable_screen_off_timeout >/dev/null 2>&1 || true
+
+    if [ -n "${XSS_LOCK_MANAGER_PID:-}" ]; then
+        kill "$XSS_LOCK_MANAGER_PID" 2>/dev/null || true
+        wait "$XSS_LOCK_MANAGER_PID" 2>/dev/null || true
+    fi
+}
+
+terminate() {
+    cleanup
+    exit 0
 }
 
 watch_idle() {
     local script_path=$0
-    local remaining_seconds suspend_minutes xautolock_status
+    local remaining_seconds suspend_minutes xidlehook_status xautolock_status
     local xautolock_args
 
     take_lock
@@ -195,19 +283,29 @@ watch_idle() {
             ;;
     esac
 
+    xss_lock_manager &
+    XSS_LOCK_MANAGER_PID=$!
+    trap cleanup EXIT
+    trap terminate TERM INT
+
     if command -v "$XIDLEHOOK" >/dev/null 2>&1; then
         remaining_seconds=$((SUSPEND_SECONDS - SCREEN_OFF_SECONDS))
         [ "$remaining_seconds" -lt 1 ] && remaining_seconds=1
 
         log "starting $XIDLEHOOK: screen off/lock after ${SCREEN_OFF_SECONDS}s, $SLEEP_ACTION after ${SUSPEND_SECONDS}s"
-        exec "$XIDLEHOOK" \
-            --detect-sleep \
-            --timer normal "$SCREEN_OFF_SECONDS" \
-                "$script_path --screen-off" \
-                '' \
-            --timer normal "$remaining_seconds" \
-                "$script_path --suspend-if-on-battery" \
-                ''
+        while true; do
+            (close_lock_fd; exec "$XIDLEHOOK" \
+                --detect-sleep \
+                --timer normal "$SCREEN_OFF_SECONDS" \
+                    "$script_path --screen-off-if-allowed" \
+                    '' \
+                --timer normal "$remaining_seconds" \
+                    "$script_path --suspend-if-on-battery" \
+                    '')
+            xidlehook_status=$?
+            log "$XIDLEHOOK exited with status $xidlehook_status; restarting"
+            sleep 5
+        done
     fi
 
     if command -v "$XAUTOLOCK" >/dev/null 2>&1; then
@@ -226,14 +324,15 @@ watch_idle() {
 
         dpms_manager &
         DPMS_PID=$!
-        trap cleanup EXIT TERM INT
 
-        log "started screen-off/lock manager pid=$DPMS_PID: screen off/lock after ${SCREEN_OFF_SECONDS}s"
-        log "starting $XAUTOLOCK: screen off/lock after ${SCREEN_OFF_SECONDS}s, $SLEEP_ACTION after ${SUSPEND_SECONDS}s"
-        "$XAUTOLOCK" "${xautolock_args[@]}"
-        xautolock_status=$?
-        log "$XAUTOLOCK exited with status $xautolock_status"
-        return "$xautolock_status"
+        log "started screen-off/lock manager pid=$DPMS_PID: screen off/lock after ${SCREEN_OFF_SECONDS}s ($(screen_off_scope))"
+        while true; do
+            log "starting $XAUTOLOCK: screen off/lock after ${SCREEN_OFF_SECONDS}s, $SLEEP_ACTION after ${SUSPEND_SECONDS}s"
+            (close_lock_fd; exec "$XAUTOLOCK" "${xautolock_args[@]}")
+            xautolock_status=$?
+            log "$XAUTOLOCK exited with status $xautolock_status; restarting"
+            sleep 5
+        done
     fi
 
     log "no idle watcher found; install xautolock with: sudo dnf install xautolock"
@@ -249,17 +348,22 @@ case "${1:---watch}" in
 screen_off_seconds=$SCREEN_OFF_SECONDS
 suspend_seconds=$SUSPEND_SECONDS
 sleep_action=$SLEEP_ACTION
+screen_off_on_ac=$SCREEN_OFF_ON_AC
+screen_off_scope=$(screen_off_scope)
 debug=$DEBUG
 dpms_poll_seconds=$DPMS_POLL_SECONDS
+xss_lock_poll_seconds=$XSS_LOCK_POLL_SECONDS
 xidlehook=$XIDLEHOOK
 xautolock=$XAUTOLOCK
 xset=$XSET
+xss_lock=$XSS_LOCK
+i3lock=$I3LOCK
 systemctl=$SYSTEMCTL
 lock_file=$LOCK_FILE
 EOF
         ;;
-    --screen-off|--screen-off-if-on-battery)
-        screen_off
+    --screen-off|--screen-off-if-allowed|--screen-off-if-on-battery)
+        screen_off_if_allowed
         ;;
     --suspend-if-on-battery)
         suspend_if_on_battery
@@ -280,7 +384,8 @@ the X screensaver and turns the screen off after ${SCREEN_OFF_SECONDS} seconds
 of X idle time on either AC or battery power. It runs ${SLEEP_ACTION} after
 ${SUSPEND_SECONDS} seconds only when a battery is present and no external power
 supply is online. Fullscreen windows and audio playback do not block the sleep
-action after the idle timer fires.
+action after the idle timer fires. A fullscreen window does block screen off.
+Set SUSPEND_ON_BATTERY_SCREEN_OFF_ON_AC=0 to limit screen off to battery power.
 
 xautolock uses whole-minute sleep-action timers, so this script rounds
 ${SUSPEND_SECONDS} seconds up to the nearest minute when using xautolock.
@@ -289,12 +394,16 @@ Environment overrides:
   SUSPEND_ON_BATTERY_SCREEN_OFF_SECONDS=${SCREEN_OFF_SECONDS}
   SUSPEND_ON_BATTERY_IDLE_SECONDS=${SUSPEND_SECONDS}
   SUSPEND_ON_BATTERY_SLEEP_ACTION=${SLEEP_ACTION}
+  SUSPEND_ON_BATTERY_SCREEN_OFF_ON_AC=${SCREEN_OFF_ON_AC}
   SUSPEND_ON_BATTERY_DEBUG=${DEBUG}
   SUSPEND_ON_BATTERY_DPMS_POLL_SECONDS=${DPMS_POLL_SECONDS}
+  SUSPEND_ON_BATTERY_XSS_LOCK_POLL_SECONDS=${XSS_LOCK_POLL_SECONDS}
   SUSPEND_ON_BATTERY_IDLE_LOCK=${LOCK_FILE}
   XIDLEHOOK=${XIDLEHOOK}
   XAUTOLOCK=${XAUTOLOCK}
   XSET=${XSET}
+  XSS_LOCK=${XSS_LOCK}
+  I3LOCK=${I3LOCK}
   SYSTEMCTL=${SYSTEMCTL}
 EOF
         ;;

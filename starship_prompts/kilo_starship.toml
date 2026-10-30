@@ -1,13 +1,13 @@
-# Minimal overrides: keep defaults but remove icons and extra words.
+# Minimal overrides for the kilo machine.
 add_newline = true
-format = "$directory$git_branch$git_status\n[󰻀](fg:#ffff00)  $hostname$character$python$custom"
+format = "$directory$git_branch$git_status\n[](fg:#6a9955)  $hostname$character$python$custom"
 
 [character]
-success_symbol = "[#](fg:#00ff00)"
-error_symbol = "[#](bold red)"
+success_symbol = "[#](fg:#6a9955)"
+error_symbol = "[#](fg:#6a9955)"
 
 [directory]
-style = "yellow"
+style = "fg:#e5e7eb"
 truncate_to_repo = false
 truncation_length = 0
 truncation_symbol = ""
@@ -15,12 +15,12 @@ truncation_symbol = ""
 [git_branch]
 format = "[$branch]($style) "
 symbol = ""
-style = "fg:#00ff00"
+style = "fg:#22c55e"
 
 [hostname]
 ssh_only = false
 format = "[$hostname]($style) "
-style = "fg:#ff6347"
+style = "fg:#f59e0b"
 
 # Disable the built-in python venv display (it shows ".venv")
 [python]
@@ -31,5 +31,5 @@ symbol = ""
 [custom.python_project]
 when = 'test -n "$VIRTUAL_ENV"'
 command = 'basename "$(dirname "$VIRTUAL_ENV")"'
-format = "([$output]($style)) [#](fg:#00ff00) "
-style = "bold green"
+format = "([$output]($style)) [#](fg:#6a9955) "
+style = "fg:#a7f3d0"
