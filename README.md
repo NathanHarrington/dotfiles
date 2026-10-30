@@ -133,7 +133,7 @@ dnf -y install tig darktable xclip urlview
 
 Start firefox, create new profiles with the following fundamentals:
     1. Open previous windows and tabs.
-    2. Turn off: Use AI to suggest tabs 
+    2. Turn off: Use AI to suggest tabs
                  Recommend extensions as you browse 
                  Recommend features as you browse
                  Enable link previews
@@ -203,9 +203,9 @@ mkdir ~/Documents/working_encrypted/
 
 Add the following to crontab -e:
 
-# Choose hourly or nightly tar backup build and upload. 
+# Choose hourly or nightly tar backup build and upload.
 # The hourly backup is designed to trigger whenever the machine is online
-# opportunistically, and may be better suited than a simple always-on 
+# opportunistically, and may be better suited than a simple always-on
 # nightly backup
 SCRIPTS=/home/nharrington/projects/dotfiles/backup_scripts
 BACKUP_PREFIX=nh  (change this to the correct prefix! )
@@ -311,13 +311,14 @@ Notes:
 
 ### ThinkPad X1 Carbon unattended power-outage recovery
 
-Goal: leave the laptop plugged in with the battery installed. The desktop
-locks/blanks after 5 minutes of idle time. If utility power fails, the machine
-runs on battery, hibernates after 10 minutes, then boots again when AC power
-returns. Because the disk is
-LUKS encrypted, it will stop at early remote unlock; unlock from another
-machine on the LAN, then the hibernated system image resumes and normal
-services such as Tailscale come back.
+Goal: leave the laptop plugged in with the battery installed. While plugged in,
+the machine locks/blanks after 5 minutes of idle time unless a fullscreen window
+is active, but never automatically suspends. If utility power fails, the machine
+runs on battery, locks/blanks after 5 minutes unless fullscreen is active,
+hibernates after 10 minutes, then boots again when AC power returns. Because
+the disk is LUKS encrypted, it will stop at early remote unlock; unlock from
+another machine on the LAN, then the hibernated system image resumes and
+normal services such as Tailscale come back.
 
 1. Enable firmware boot on AC attach.
 
@@ -400,9 +401,10 @@ sudo reboot
    ~/projects/dotfiles/scripts/suspend-on-battery-idle.sh
 
    The helper defaults to:
-   - screen off / lock after 5 minutes on AC and battery
-   - hibernate after 10 minutes on battery only
-   - skip hibernate while fullscreen or while audio is playing
+   - screen off / lock after 5 minutes on AC or battery, except during fullscreen
+   - never automatically suspend on AC
+   - hibernate after 10 minutes on battery
+   - fullscreen windows and audio playback do not block battery hibernate
 
    To verify what it will do:
 

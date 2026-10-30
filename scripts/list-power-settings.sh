@@ -452,7 +452,7 @@ print_i3_idle_power() {
     fi
     [ -n "$screen_off_seconds" ] && kv "Screen off/lock" "after $(format_duration "$screen_off_seconds") ($screen_off_scope)"
     [ -n "$suspend_seconds" ] && kv "Battery sleep action" "$sleep_action after $(format_duration "$suspend_seconds")"
-    kv "Sleep action guards" "battery only; skips fullscreen and audio"
+    kv "Sleep action guards" "battery only; fullscreen/audio do not block"
     kv "Screen-off/lock guards" "$screen_off_scope; skips fullscreen; locks via xss-lock/X screensaver"
 }
 
