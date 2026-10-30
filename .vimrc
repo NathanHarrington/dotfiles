@@ -28,3 +28,18 @@ highlight TabLineSel ctermfg=green ctermbg=black guifg=#00ff00 guibg=#000000
 autocmd ColorScheme * highlight TabLineFill ctermfg=black ctermbg=black guifg=#000000 guibg=#000000 | highlight TabLine ctermfg=34 ctermbg=black guifg=#008800 guibg=#000000 | highlight TabLineSel ctermfg=green ctermbg=black guifg=#00ff00 guibg=#000000
 inoremap <C-S-k> <C-R>=strftime("%Y-%m-%d %H:%M")<CR> 
 nnoremap <C-S-k> i<C-R>=strftime("%Y-%m-%d %H:%M")<CR> <Esc>
+
+function! s:YankToTmux() abort
+ if v:event.operator ==# 'y' && !empty($TMUX)
+    let text = join(v:event.regcontents, "\n")
+    if v:event.regtype ==# 'V'
+      let text .= "\n"
+    endif
+    call system('tmux load-buffer -w -', text)
+  endif
+endfunction
+
+augroup TmuxClipboard
+  autocmd!
+  autocmd TextYankPost * call s:YankToTmux()
+augroup END

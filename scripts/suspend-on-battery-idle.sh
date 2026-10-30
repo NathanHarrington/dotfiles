@@ -54,13 +54,9 @@ on_battery_power() {
     [ "$battery_found" -eq 1 ] && [ "$external_power_online" -eq 0 ]
 }
 
-screen_off_if_on_battery() {
-    if ! on_battery_power; then
-        return 0
-    fi
-
+screen_off() {
     if fullscreen_active; then
-        log "screen-off threshold reached on battery power, but a fullscreen window is active; not turning screen off"
+        log "screen-off threshold reached, but a fullscreen window is active; not turning screen off"
         return 0
     fi
 
@@ -69,7 +65,7 @@ screen_off_if_on_battery() {
         return 1
     fi
 
-    log "screen-off threshold reached on battery power; activating screensaver and turning screen off"
+    log "screen-off threshold reached; activating screensaver and turning screen off"
     "$XSET" s activate
     "$XSET" dpms force off
 }
@@ -99,16 +95,16 @@ dpms_manager() {
     fi
 
     while true; do
-        if on_battery_power && ! fullscreen_active; then
-            wanted=battery
+        if ! fullscreen_active; then
+            wanted=enabled
         else
             wanted=disabled
         fi
 
         if [ "$wanted" != "$applied" ]; then
             case "$wanted" in
-                battery)
-                    log "setting battery screen-off/lock timeout to ${SCREEN_OFF_SECONDS}s"
+                enabled)
+                    log "setting screen-off/lock timeout to ${SCREEN_OFF_SECONDS}s"
                     set_screen_off_timeout "$SCREEN_OFF_SECONDS" || true
                     ;;
                 disabled)
@@ -140,16 +136,6 @@ suspend_if_on_battery() {
         return 0
     fi
 
-    if fullscreen_active; then
-        log "idle threshold reached on battery power, but a fullscreen window is active; not running $SLEEP_ACTION"
-        return 0
-    fi
-
-    if audio_playing; then
-        log "idle threshold reached on battery power, but audio is playing; not running $SLEEP_ACTION"
-        return 0
-    fi
-
     log "idle threshold reached on battery power; running $SLEEP_ACTION"
     "$SYSTEMCTL" "$SLEEP_ACTION"
     status=$?
@@ -163,11 +149,6 @@ fullscreen_active() {
 
     i3-msg -t get_tree 2>/dev/null |
         jq -e '.. | objects | select((.window? // null) != null and (.fullscreen_mode? // 0) > 0)' >/dev/null
-}
-
-audio_playing() {
-    command -v pactl >/dev/null 2>&1 || return 1
-    pactl list sink-inputs 2>/dev/null | grep -q 'State: RUNNING'
 }
 
 take_lock() {
@@ -221,9 +202,8 @@ watch_idle() {
         log "starting $XIDLEHOOK: screen off/lock after ${SCREEN_OFF_SECONDS}s, $SLEEP_ACTION after ${SUSPEND_SECONDS}s"
         exec "$XIDLEHOOK" \
             --detect-sleep \
-            --not-when-fullscreen \
             --timer normal "$SCREEN_OFF_SECONDS" \
-                "$script_path --screen-off-if-on-battery" \
+                "$script_path --screen-off" \
                 '' \
             --timer normal "$remaining_seconds" \
                 "$script_path --suspend-if-on-battery" \
@@ -248,7 +228,7 @@ watch_idle() {
         DPMS_PID=$!
         trap cleanup EXIT TERM INT
 
-        log "started screen-off/lock manager pid=$DPMS_PID: screen off/lock after ${SCREEN_OFF_SECONDS}s on battery"
+        log "started screen-off/lock manager pid=$DPMS_PID: screen off/lock after ${SCREEN_OFF_SECONDS}s"
         log "starting $XAUTOLOCK: screen off/lock after ${SCREEN_OFF_SECONDS}s, $SLEEP_ACTION after ${SUSPEND_SECONDS}s"
         "$XAUTOLOCK" "${xautolock_args[@]}"
         xautolock_status=$?
@@ -278,8 +258,8 @@ systemctl=$SYSTEMCTL
 lock_file=$LOCK_FILE
 EOF
         ;;
-    --screen-off-if-on-battery)
-        screen_off_if_on_battery
+    --screen-off|--screen-off-if-on-battery)
+        screen_off
         ;;
     --suspend-if-on-battery)
         suspend_if_on_battery
@@ -293,12 +273,14 @@ EOF
         ;;
     -h|--help)
         cat <<EOF
-Usage: $0 [--watch|--settings|--screen-off-if-on-battery|--suspend-if-on-battery|--check]
+Usage: $0 [--watch|--settings|--screen-off|--suspend-if-on-battery|--check]
 
 Starts xidlehook when available, otherwise xautolock. By default it activates
 the X screensaver and turns the screen off after ${SCREEN_OFF_SECONDS} seconds
-of X idle time, and runs ${SLEEP_ACTION} after ${SUSPEND_SECONDS} seconds, only when a
-battery is present and no external power supply is online.
+of X idle time on either AC or battery power. It runs ${SLEEP_ACTION} after
+${SUSPEND_SECONDS} seconds only when a battery is present and no external power
+supply is online. Fullscreen windows and audio playback do not block the sleep
+action after the idle timer fires.
 
 xautolock uses whole-minute sleep-action timers, so this script rounds
 ${SUSPEND_SECONDS} seconds up to the nearest minute when using xautolock.

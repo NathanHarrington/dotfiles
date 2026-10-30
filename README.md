@@ -295,12 +295,13 @@ Notes:
 
 ### ThinkPad X1 Carbon unattended power-outage recovery
 
-Goal: leave the laptop plugged in with the battery installed. If utility power
-fails, the machine runs on battery, locks/blanks after 5 minutes, hibernates
-after 10 minutes, then boots again when AC power returns. Because the disk is
-LUKS encrypted, it will stop at early remote unlock; unlock from another
-machine on the LAN, then the hibernated system image resumes and normal
-services such as Tailscale come back.
+Goal: leave the laptop plugged in with the battery installed. While plugged in,
+the machine locks/blanks after 5 minutes but never automatically suspends. If
+utility power fails, the machine runs on battery, locks/blanks after 5 minutes,
+hibernates after 10 minutes, then boots again when AC power returns. Because
+the disk is LUKS encrypted, it will stop at early remote unlock; unlock from
+another machine on the LAN, then the hibernated system image resumes and
+normal services such as Tailscale come back.
 
 1. Enable firmware boot on AC attach.
 
@@ -378,10 +379,10 @@ services such as Tailscale come back.
    ~/projects/dotfiles/scripts/suspend-on-battery-idle.sh
 
    The helper defaults to:
-   - on battery only
-   - screen off / lock after 5 minutes
-   - hibernate after 10 minutes
-   - skip hibernate while fullscreen or while audio is playing
+   - screen off / lock after 5 minutes on AC or battery
+   - never automatically suspend on AC
+   - hibernate after 10 minutes on battery
+   - fullscreen windows and audio playback do not block battery hibernate
 
    To verify what it will do:
 

@@ -395,6 +395,16 @@ i3_battery_idle_policy() {
     fi
 }
 
+i3_ac_idle_policy() {
+    local screen_off_seconds
+
+    screen_off_seconds=$(i3_idle_setting screen_off_seconds 2>/dev/null || true)
+    [ -n "$screen_off_seconds" ] || return 1
+
+    printf 'screen off/lock after %s, never suspend' \
+        "$(format_duration "$screen_off_seconds")"
+}
+
 print_i3_idle_power() {
     local helper screen_off_seconds suspend_seconds sleep_action watcher status configured
 
@@ -427,11 +437,12 @@ print_i3_idle_power() {
     kv "Started from i3" "$configured"
     kv "Idle watcher" "$watcher"
     kv "Watcher process" "$status"
-    kv "Plugged in idle action" "no action from this helper"
+    [ -n "$screen_off_seconds" ] && kv "AC screen off/lock" "after $(format_duration "$screen_off_seconds")"
+    kv "AC sleep action" "never suspend"
     [ -n "$screen_off_seconds" ] && kv "Battery screen off/lock" "after $(format_duration "$screen_off_seconds")"
     [ -n "$suspend_seconds" ] && kv "Battery sleep action" "$sleep_action after $(format_duration "$suspend_seconds")"
-    kv "Sleep action guards" "battery only; skips fullscreen and audio"
-    kv "Screen-off/lock guards" "battery only; skips fullscreen; locks via xss-lock/X screensaver"
+    kv "Sleep action guards" "battery only; fullscreen/audio do not block"
+    kv "Screen-off/lock guards" "AC and battery; skips fullscreen; locks via xss-lock/X screensaver"
 }
 
 summary_action() {
@@ -489,8 +500,7 @@ idle_policy_for_power_source() {
 
     case "$source" in
         ac)
-            if i3_idle_helper_settings >/dev/null 2>&1; then
-                printf 'never suspend'
+            if i3_ac_idle_policy; then
                 return
             fi
             ;;
