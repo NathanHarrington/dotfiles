@@ -212,7 +212,7 @@ bindsym $mod+Print exec --no-startup-id shutter --window
 # Black background by default
 exec_always --no-startup-id xsetroot -solid "#000000"
 
-bindsym Ctrl+XF86AudioRaiseVolume exec --no-startup-id $HOME/projects/DoABarrellRoll/ kilo_volume.sh up 
-bindsym Ctrl+XF86AudioLowerVolume exec --no-startup-id $HOME/projects/DoABarrellRoll/ kilo_volume.sh down
-bindsym Ctrl+XF86AudioMute exec --no-startup-id $HOME/projects/DoABarrellRoll/ kilo_volume.sh mute
+bindsym Ctrl+XF86AudioRaiseVolume exec --no-startup-id $HOME/projects/DoABarrellRoll/kilo_volume.sh up
+bindsym Ctrl+XF86AudioLowerVolume exec --no-startup-id $HOME/projects/DoABarrellRoll/kilo_volume.sh down
+bindsym Ctrl+XF86AudioMute exec --no-startup-id $HOME/projects/DoABarrellRoll/kilo_volume.sh mute
 
