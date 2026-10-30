@@ -216,3 +216,6 @@ bindsym Ctrl+XF86AudioRaiseVolume exec --no-startup-id $HOME/projects/DoABarrell
 bindsym Ctrl+XF86AudioLowerVolume exec --no-startup-id $HOME/projects/DoABarrellRoll/kilo_volume.sh down
 bindsym Ctrl+XF86AudioMute exec --no-startup-id $HOME/projects/DoABarrellRoll/kilo_volume.sh mute
 
+# Remote kilo bass; Keychron Fn+Home/End also send Home/End.
+bindsym Ctrl+Mod1+Home exec --no-startup-id $HOME/projects/DoABarrellRoll/kilo_bass.sh up
+bindsym Ctrl+Mod1+End exec --no-startup-id $HOME/projects/DoABarrellRoll/kilo_bass.sh down
