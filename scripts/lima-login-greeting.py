@@ -9,7 +9,7 @@ import textwrap
 import time
 
 MESSAGE = "WELCOME MR. HARRINGTON"
-BLOCK_MESSAGE = "\nWELCOME MR. HARRINGTON"
+BLOCK_MESSAGE = "WELCOME MR. HARRINGTON"
 BLOCK_FADE_SECONDS = 1.0
 BLOCK_FADE_FRAMES = 50
 # Embedded terminus_dots render from Tempo's logindisplay.py; no figlet needed.
@@ -115,6 +115,10 @@ def colored_lines(style, lines, brightness=1.0):
 
 
 def write_lines(lines):
+    if os.environ.get("TERM", "dumb") != "dumb":
+        # Reset the background and clear the entire row, including the unused
+        # columns to the right, before drawing each animation frame.
+        lines = ["\r" + RESET + "\x1b[2K" + line + RESET for line in lines]
     sys.stdout.write("\r\n".join(lines) + "\r\n")
     sys.stdout.flush()
 
