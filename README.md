@@ -119,20 +119,20 @@ cp .vimrc ~/.vimrc
 cp .tmux.conf ~/.tmux.conf
 
 Lima's prompt uses cyan and gray with a purple hostname. Its interactive shells
-also show a purple "WELCOME MR. HARRINGTON" text reveal, using the bundled
+also show purple "WELCOME MR. HARRINGTON" block lettering, using the bundled
 scripts/lima-login-greeting.py (Python 3 only; no Tempo checkout needed).
 Keep this repository at ~/projects/dotfiles and install .bashrc and
 starship_prompts/lima_starship.toml as above. Reconnect or run `exec bash` to see
 the greeting. Preview it without animation with:
 
-    python3 ~/projects/dotfiles/scripts/lima-login-greeting.py --once
+    python3 ~/projects/dotfiles/scripts/lima-login-greeting.py --style blocks --once
 
 Compare the current greeting and two alternatives locally (no installation):
 
     python3 scripts/lima-login-greeting.py --preview
 
 The styles are dots (original sweep), typewriter (compact purple panel), and
-blocks (the entire "WELCOME MR HARRINGTON" in one row of violet block letters,
+blocks (the entire "WELCOME MR. HARRINGTON" in one row of violet block letters,
 with a 1-second fade). Blocks automatically use smaller quadrant letters to
 fit narrower panes, and plain single-line text in very small panes. Preview
 just one with:
@@ -140,7 +140,7 @@ just one with:
     python3 scripts/lima-login-greeting.py --style typewriter
     python3 scripts/lima-login-greeting.py --style blocks
 
-Add --once to print a static version. The default login style is still dots.
+Add --once to print a static version. Lima's login uses blocks.
 
 git config --global core.editor "vim"
 git config --global credential.helper "cache --timeout=360000"

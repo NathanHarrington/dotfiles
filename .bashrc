@@ -87,7 +87,7 @@ if [[ $- == *i* ]]; then
     if [[ ${HOSTNAME%%.*} == lima ]]; then
         LIMA_LOGINGREETING="$HOME/projects/dotfiles/scripts/lima-login-greeting.py"
         if [[ -t 1 && ${TERM:-dumb} != dumb && -r "$LIMA_LOGINGREETING" ]]; then
-            python3 "$LIMA_LOGINGREETING"
+            python3 "$LIMA_LOGINGREETING" --style blocks
         fi
         unset LIMA_LOGINGREETING
     else

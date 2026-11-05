@@ -9,7 +9,7 @@ import textwrap
 import time
 
 MESSAGE = "WELCOME MR. HARRINGTON"
-BLOCK_MESSAGE = "WELCOME MR HARRINGTON"
+BLOCK_MESSAGE = "\nWELCOME MR. HARRINGTON"
 BLOCK_FADE_SECONDS = 1.0
 BLOCK_FADE_FRAMES = 50
 # Embedded terminus_dots render from Tempo's logindisplay.py; no figlet needed.
@@ -25,7 +25,7 @@ RESET = "\x1b[0m"
 STYLES = {
     "dots": "Original dotted lettering with a white and purple sweep",
     "typewriter": "Compact purple panel with text typed into place",
-    "blocks": "WELCOME MR HARRINGTON in one row of blocks, with a violet fade",
+    "blocks": "WELCOME MR. HARRINGTON in one row of blocks, with a violet fade",
 }
 BLOCK_FONT = {
     "W": ("█   █", "█   █", "█ █ █", "██ ██", "█   █"),
@@ -41,6 +41,7 @@ BLOCK_FONT = {
     "N": ("█   █", "██  █", "█ █ █", "█  ██", "█   █"),
     "G": (" ████", "█    ", "█ ███", "█   █", " ███ "),
     "T": ("█████", "  █  ", "  █  ", "  █  ", "  █  "),
+    ".": (" ", " ", " ", " ", "█"),
 }
 BLOCK_COLORS = ((216, 180, 254), (208, 164, 253), (192, 132, 252),
                 (180, 110, 250), (168, 85, 247))
@@ -162,6 +163,7 @@ def show_greeting(style, width, plain_terminal, once, height=24):
     lines = greeting_lines(style, width, plain_terminal, height)
     if not lines:
         return
+    write_lines([""])
     if os.environ.get("TERM", "dumb") == "dumb":
         write_lines(lines)
         return
