@@ -113,6 +113,7 @@ cp starship_prompts/starship.toml ~/.config/starship.toml
 # Or use a host-specific prompt:
 # cp starship_prompts/hotel-compute_starship.toml ~/.config/starship.toml
 # cp starship_prompts/kilo_starship.toml ~/.config/starship.toml
+# cp starship_prompts/lima_starship.toml ~/.config/starship.toml
 cp .bashrc ~/.bashrc
 cp .vimrc ~/.vimrc
 cp .tmux.conf ~/.tmux.conf
@@ -326,6 +327,9 @@ normal services such as Tailscale come back.
    something like "Power On with AC Attach", "Wake on AC", or "AC Power
    Recovery".
 
+   # this allows hibernate
+   Set Security → Secure Boot → Disabled
+
    Test it before continuing:
 
    sudo poweroff
@@ -367,6 +371,9 @@ sudo reboot
    After reboot:
 
    swapon --show
+   sudo semanage fcontext -a -t swapfile_t '/swapfile'
+   sudo restorecon -v /swapfile
+   ls -Z /swapfile
    sudo systemctl hibernate
 
    The machine should power down. Press the power button or attach AC power,

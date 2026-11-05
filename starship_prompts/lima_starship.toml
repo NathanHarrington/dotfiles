@@ -1,0 +1,35 @@
+# Lima: cyan and magenta, with a diamond that needs no Nerd Font.
+add_newline = true
+format = "$directory$git_branch$git_status\n[◆](bold fg:#22d3ee)  $hostname$character$python$custom"
+
+[character]
+success_symbol = "[#](bold fg:#22d3ee)"
+error_symbol = "[#](bold fg:#f87171)"
+
+[directory]
+style = "fg:#a5f3fc"
+truncate_to_repo = false
+truncation_length = 0
+truncation_symbol = ""
+
+[git_branch]
+format = "[$branch]($style) "
+symbol = ""
+style = "fg:#c084fc"
+
+[hostname]
+ssh_only = false
+format = "[$hostname]($style) "
+style = "bold fg:#e879f9"
+
+# Disable the built-in python venv display (it shows ".venv")
+[python]
+disabled = true
+symbol = ""
+
+# Show project dir name when a venv is active (VIRTUAL_ENV is set)
+[custom.python_project]
+when = 'test -n "$VIRTUAL_ENV"'
+command = 'basename "$(dirname "$VIRTUAL_ENV")"'
+format = "([$output]($style)) [#](bold fg:#22d3ee) "
+style = "fg:#a5f3fc"
