@@ -1,4 +1,4 @@
-# Lima: cyan and magenta, with a diamond that needs no Nerd Font.
+# Lima: cyan and gray, with purple reserved for the hostname.
 add_newline = true
 format = "$directory$git_branch$git_status\n[◆](bold fg:#22d3ee)  $hostname$character$python$custom"
 
@@ -15,12 +15,12 @@ truncation_symbol = ""
 [git_branch]
 format = "[$branch]($style) "
 symbol = ""
-style = "fg:#c084fc"
+style = "fg:#9ca3af"
 
 [hostname]
 ssh_only = false
 format = "[$hostname]($style) "
-style = "bold fg:#e879f9"
+style = "bold fg:#c084fc"
 
 # Disable the built-in python venv display (it shows ".venv")
 [python]

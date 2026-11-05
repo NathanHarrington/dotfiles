@@ -84,9 +84,17 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 
 
 if [[ $- == *i* ]]; then
-    TEMPO_LOGINDISPLAY="/home/nharrington/projects/Tempo/src/tempo/logindisplay.py"
-    if [[ -x "$TEMPO_LOGINDISPLAY" ]]; then
-        "$TEMPO_LOGINDISPLAY" --message "WELCOME MR. HARRINGTON" --green
+    if [[ ${HOSTNAME%%.*} == lima ]]; then
+        LIMA_LOGINGREETING="$HOME/projects/dotfiles/scripts/lima-login-greeting.py"
+        if [[ -t 1 && ${TERM:-dumb} != dumb && -r "$LIMA_LOGINGREETING" ]]; then
+            python3 "$LIMA_LOGINGREETING"
+        fi
+        unset LIMA_LOGINGREETING
+    else
+        TEMPO_LOGINDISPLAY="/home/nharrington/projects/Tempo/src/tempo/logindisplay.py"
+        if [[ -x "$TEMPO_LOGINDISPLAY" ]]; then
+            "$TEMPO_LOGINDISPLAY" --message "WELCOME MR. HARRINGTON" --green
+        fi
     fi
 fi
 
