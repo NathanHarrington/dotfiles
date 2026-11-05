@@ -215,10 +215,10 @@ bindsym $mod+Print exec --no-startup-id shutter --window --exit_after_capture
 # Black background by default
 exec_always --no-startup-id xsetroot -solid "#000000"
 
-bindsym Ctrl+XF86AudioRaiseVolume exec --no-startup-id $HOME/projects/DoABarrellRoll/kilo_volume.sh up
-bindsym Ctrl+XF86AudioLowerVolume exec --no-startup-id $HOME/projects/DoABarrellRoll/kilo_volume.sh down
-bindsym Ctrl+XF86AudioMute exec --no-startup-id $HOME/projects/DoABarrellRoll/kilo_volume.sh mute
+bindsym Ctrl+XF86AudioRaiseVolume exec --no-startup-id $HOME/projects/DoABarrellRoll/remote_volume.sh up
+bindsym Ctrl+XF86AudioLowerVolume exec --no-startup-id $HOME/projects/DoABarrellRoll/remote_volume.sh down
+bindsym Ctrl+XF86AudioMute exec --no-startup-id $HOME/projects/DoABarrellRoll/remote_volume.sh mute
 
-# Remote kilo bass; Keychron Fn+Home/End also send Home/End.
-bindsym Ctrl+Mod1+Home exec --no-startup-id $HOME/projects/DoABarrellRoll/kilo_bass.sh up
-bindsym Ctrl+Mod1+End exec --no-startup-id $HOME/projects/DoABarrellRoll/kilo_bass.sh down
+# Remote bass; Keychron Fn+Home/End also send Home/End.
+bindsym Ctrl+Mod1+Home exec --no-startup-id $HOME/projects/DoABarrellRoll/remote_bass.sh up
+bindsym Ctrl+Mod1+End exec --no-startup-id $HOME/projects/DoABarrellRoll/remote_bass.sh down
