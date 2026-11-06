@@ -83,20 +83,25 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 
 
 
-if [[ $- == *i* ]]; then
-    if [[ ${HOSTNAME%%.*} == lima ]]; then
-        LIMA_LOGINGREETING="$HOME/projects/dotfiles/scripts/lima-login-greeting.py"
-        if [[ -t 1 && ${TERM:-dumb} != dumb && -r "$LIMA_LOGINGREETING" ]]; then
-            python3 "$LIMA_LOGINGREETING" --style blocks
-        fi
-        unset LIMA_LOGINGREETING
-    else
-        TEMPO_LOGINDISPLAY="/home/nharrington/projects/Tempo/src/tempo/logindisplay.py"
-        if [[ -x "$TEMPO_LOGINDISPLAY" ]]; then
-            "$TEMPO_LOGINDISPLAY" --message "WELCOME MR. HARRINGTON" --green
-        fi
+# >>> login-greeting >>>
+case $- in
+  *i*)
+    # Edit these choices here: a design name, random, random:arrival, or off.
+    case ${HOSTNAME%%.*} in
+      lima) LOGIN_GREETING="lima-purple" ;;
+      *) LOGIN_GREETING="cordince-green" ;;
+    esac
+    if [ -t 1 ] && command -v python3 >/dev/null 2>&1; then
+      if [ -r "$HOME/.local/bin/login-greeting" ]; then
+        python3 "$HOME/.local/bin/login-greeting" "$LOGIN_GREETING" --login
+      elif [ -r "$HOME/projects/dotfiles/scripts/login-greeting.py" ]; then
+        python3 "$HOME/projects/dotfiles/scripts/login-greeting.py" "$LOGIN_GREETING" --login
+      fi
     fi
-fi
+    unset LOGIN_GREETING
+    ;;
+esac
+# <<< login-greeting <<<
 
 # Create or attach to a tmux session, defaulting to a tmux-safe name based on the current directory.
 th() {

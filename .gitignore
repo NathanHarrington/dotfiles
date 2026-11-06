@@ -3,3 +3,4 @@ tmux_generators/
 *swp*
 .codex
 __pycache__
+/.tmp/

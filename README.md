@@ -118,29 +118,41 @@ cp .bashrc ~/.bashrc
 cp .vimrc ~/.vimrc
 cp .tmux.conf ~/.tmux.conf
 
-Lima's prompt uses cyan and gray with a purple hostname. Its interactive shells
-also show purple "WELCOME MR. HARRINGTON" block lettering, using the bundled
-scripts/lima-login-greeting.py (Python 3 only; no Tempo checkout needed).
-Keep this repository at ~/projects/dotfiles and install .bashrc and
-starship_prompts/lima_starship.toml as above. Reconnect or run `exec bash` to see
-the greeting. Preview it without animation with:
+### Login greetings
 
-    python3 ~/projects/dotfiles/scripts/lima-login-greeting.py --style blocks --once
+scripts/login-greeting.py is a standalone Python 3.9+ script containing all
+70 greetings, including the CORDINCE logo and purple Lima lettering. Copy it
+to each system; no fonts, image tools or other Python packages are needed:
 
-Compare the current greeting and two alternatives locally (no installation):
+    mkdir -p ~/.local/bin
+    install -m 755 scripts/login-greeting.py ~/.local/bin/login-greeting
 
-    python3 scripts/lima-login-greeting.py --preview
+Choose the greeting directly in .bashrc. The repository .bashrc already has a
+guarded hook: edit its LOGIN_GREETING entries for Lima and other hosts. Valid
+choices include lima-purple, cordince-green, random, random:arrival,
+random:krypton and random:compact. Use off to disable the greeting.
 
-The styles are dots (original sweep), typewriter (compact purple panel), and
-blocks (the entire "WELCOME MR. HARRINGTON" in one row of violet block letters,
-with a 1-second fade). Blocks automatically use smaller quadrant letters to
-fit narrower panes, and plain single-line text in very small panes. Preview
-just one with:
+For a .bashrc without the repository hook, add:
 
-    python3 scripts/lima-login-greeting.py --style typewriter
-    python3 scripts/lima-login-greeting.py --style blocks
+    if [[ $- == *i* && -t 1 ]]; then
+        python3 "$HOME/.local/bin/login-greeting" random:arrival --login
+    fi
 
-Add --once to print a static version. Lima's login uses blocks.
+The selection and timing come only from command arguments. Browse and preview:
+
+    ~/.local/bin/login-greeting --list
+    ~/.local/bin/login-greeting --groups
+    ~/.local/bin/login-greeting --group compact --gallery
+    ~/.local/bin/login-greeting --group arrival --demo
+    ~/.local/bin/login-greeting lima-purple
+    ~/.local/bin/login-greeting random:arrival --duration 1
+
+--once skips animation; --sources shows design references. --login keeps
+noninteractive commands silent. To update, copy the new file over the installed
+one. Maintain designs and their catalog directly in scripts/login-greeting.py;
+all drawing code and logo frames are embedded. Run tests with:
+
+    python3 -m unittest discover -s tests -v
 
 git config --global core.editor "vim"
 git config --global credential.helper "cache --timeout=360000"
