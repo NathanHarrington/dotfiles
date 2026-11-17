@@ -346,6 +346,12 @@ Notes:
 - Early boot may get a different DHCP lease than the fully booted system.
 - Multiple initrd-* profiles are tried in filename order; unavailable networks can add about 25-30 seconds each before an available profile connects.
 
+### Retry Wi-Fi automatically when it asks for the saved password
+This is for the times when the machine is running, everything seems fine, but it has that 'enter password for wifi' dialog box up. The password is pre-filled, has not changed, and you click connect and nothing happens. This wifi saved password recovery script is designed to fix that.
+
+sudo python3 scripts/wifi_saved_password_recovery.py install 
+sudo python3 scripts/wifi_saved_password_recovery.py status
+
 ### ThinkPad X1 Carbon unattended power-outage recovery
 
 Goal: leave the laptop plugged in with the battery installed. While plugged in,
