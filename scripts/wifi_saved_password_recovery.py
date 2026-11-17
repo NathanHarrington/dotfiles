@@ -6,8 +6,11 @@ Inspect:   sudo python3 wifi_saved_password_recovery.py status
 Remove:    sudo python3 wifi_saved_password_recovery.py uninstall
 
 Python standard library only. Requires NetworkManager, systemd and journalctl.
-Installation discovers this machine's working Wi-Fi and existing profiles.
-The installed copy embeds only interface/UUID/SSID metadata, never passwords.
+Installation discovers this machine's Wi-Fi interface. Saved Wi-Fi profiles are
+discovered dynamically, including networks added after installation. Any SSID
+is supported; no network list or per-network reinstallation is needed.
+Credentials remain with NetworkManager and the existing desktop secret agent.
+Hotel login pages, locked keyrings and new credentials still require user input.
 No profile edits, package changes, service restarts, radio resets or reboots.
 """
 
@@ -27,14 +30,13 @@ import time
 import uuid as uuid_module
 
 
-VERSION = "2.0"
+VERSION = "3.0"
 MARKER = "Managed by wifi_saved_password_recovery.py"
 NAME = "wifi-saved-password-recovery"
 SCRIPT = Path("/usr/local/libexec") / (NAME + ".py")
 UNIT_DIR = Path("/etc/systemd/system")
 RUNTIME = Path("/run") / NAME
 STATE_FILE = RUNTIME / "state.json"
-TRUSTED_SSIDS = {"MisplacedNoodle", "Thrive Members"}
 STALL_SECONDS = 120
 COOLDOWN_SECONDS = 300
 JOURNAL_BATCH = 2000
@@ -113,11 +115,10 @@ class NetworkManager:
         options = [NMCLI, "--colors", "no", "--terse", "--escape", "no"]
         if secret:
             options.append("--show-secrets")
-        # Remove the record terminator, preserving empty trailing field values.
-        return self.runner.run(options + list(args), timeout).stdout.removesuffix("\n")
+        return self.runner.run(options + list(args), timeout).stdout.rstrip("\n")
 
     def snapshot(self):
-        values = self.query("-g", ",".join(DEVICE_FIELDS), "device", "show", self.interface).split("\n")
+        values = self.query("-g", ",".join(DEVICE_FIELDS), "device", "show", self.interface).splitlines()
         if len(values) != len(DEVICE_FIELDS):
             raise RecoveryError("Cannot determine Wi-Fi device state")
         try:
@@ -129,10 +130,26 @@ class NetworkManager:
                 "radio": self.query("radio", "wifi")}
 
     def profile(self, profile_uuid):
-        values = self.query("-g", ",".join(PROFILE_FIELDS), "connection", "show", "uuid", profile_uuid).split("\n")
-        if len(values) != len(PROFILE_FIELDS):
+        # Named fields preserve empty optional settings on open/hotel networks.
+        output = self.query("--mode", "multiline", "-f", ",".join(PROFILE_FIELDS),
+                            "connection", "show", "uuid", profile_uuid)
+        values = {key: "" for key in PROFILE_FIELDS}
+        for line in output.splitlines():
+            key, separator, value = line.partition(":")
+            if separator and key in values:
+                values[key] = value
+        if not values["connection.type"]:
             raise RecoveryError("Cannot determine saved profile settings")
-        return dict(zip(PROFILE_FIELDS, values))
+        return values
+
+    def saved_wifi_profiles(self):
+        listing = self.query("-f", "UUID,TYPE", "connection", "show")
+        profiles = set()
+        for line in listing.splitlines():
+            profile_uuid, separator, kind = line.partition(":")
+            if separator and kind == "802-11-wireless" and valid_uuid(profile_uuid):
+                profiles.add(profile_uuid.lower())
+        return profiles
 
     def has_saved_password(self, profile_uuid):
         value = self.query("-g", "802-11-wireless-security.psk", "connection", "show",
@@ -156,18 +173,12 @@ def validate_profile(profile, interface, expected_ssid=None, active=False):
     if profile["connection.type"] != "802-11-wireless":
         raise RecoveryError("Profile is not Wi-Fi")
     ssid = profile["802-11-wireless.ssid"]
-    if ssid not in TRUSTED_SSIDS or (expected_ssid is not None and ssid != expected_ssid):
-        raise RecoveryError("Profile is not an allowed home/work network")
+    if not ssid or (expected_ssid is not None and ssid != expected_ssid):
+        raise RecoveryError("Profile SSID is missing or changed during recovery")
     if profile["connection.interface-name"] not in ("", "--", interface):
         raise RecoveryError("Profile belongs to another interface")
     if profile["connection.autoconnect"] != "yes":
         raise RecoveryError("Profile autoconnect is disabled")
-    if not blank(profile["connection.permissions"]):
-        raise RecoveryError("Profile is restricted to a user session")
-    if profile["802-11-wireless-security.key-mgmt"] != "wpa-psk":
-        raise RecoveryError("Only the existing WPA-PSK saved-password setup is supported")
-    if profile["802-11-wireless-security.psk-flags"].split()[:1] != ["0"]:
-        raise RecoveryError("Password is not system-managed")
     try:
         stamp = int(profile["connection.timestamp"])
     except ValueError:
@@ -175,6 +186,43 @@ def validate_profile(profile, interface, expected_ssid=None, active=False):
     if stamp < 0 or (stamp == 0 and not active):
         raise RecoveryError("Profile has no recorded successful connection")
     return ssid, stamp
+
+
+def eligible_profiles(nm, snapshot, history):
+    # Query the live saved list only when recovery is being considered. Never
+    # choose an arbitrary nearby network or cache an installation-time allowlist.
+    saved = nm.saved_wifi_profiles()
+    relevant = set(history["failures"])
+    if snapshot["uuid"]:
+        relevant.add(snapshot["uuid"])
+    eligible = {}
+    for profile_uuid in sorted(relevant & saved):
+        try:
+            ssid, _ = validate_profile(nm.profile(profile_uuid), nm.interface)
+            eligible[profile_uuid] = ssid
+        except RecoveryError:
+            # Deleted, disabled, never-working, or unreadable profiles cannot
+            # authorize a reconnect. Other unresolved failures remain eligible.
+            continue
+    return eligible
+
+
+def credentials_available(nm, profile_uuid, profile):
+    # Let NetworkManager use its own storage/agent for the saved authentication
+    # method. Never copy a password out of a user's keyring or supply a new one.
+    if profile["802-11-wireless-security.key-mgmt"] in ("wpa-psk", "sae"):
+        try:
+            flags = int(profile["802-11-wireless-security.psk-flags"].split()[0])
+        except (ValueError, IndexError):
+            return False
+        if flags < 0 or flags > 7 or flags & 2:
+            return False  # A deliberately unsaved password requires the user.
+        if flags & (1 | 4):
+            return True  # Existing secret agent, or no secret required.
+        return nm.has_saved_password(profile_uuid)
+    # Open, OWE, and enterprise/certificate profiles retain their existing
+    # NetworkManager behavior; interactive portal/MFA requests are not solved.
+    return True
 
 
 def new_history():
@@ -332,11 +380,12 @@ def recover_once(nm, state, config, save, history_reader=update_history, clock=t
     if not history_reader(nm.runner, state, nm.interface):
         return skip("Reading remaining journal history; no recovery attempted")
     snapshot = nm.snapshot()
-    selected, reason = candidate(snapshot, state["history"], config["profiles"])
+    allowed = eligible_profiles(nm, snapshot, state["history"])
+    selected, reason = candidate(snapshot, state["history"], allowed)
     if selected is None:
         return skip(reason)
     profile = nm.profile(selected)
-    ssid, stamp = validate_profile(profile, nm.interface, config["profiles"][selected])
+    ssid, stamp = validate_profile(profile, nm.interface, allowed[selected])
     if snapshot["state"] != 60 and state["history"]["failures"][selected]["real_us"] <= stamp * 1_000_000:
         state["history"]["failures"].pop(selected, None)
         return skip("Failure predates the profile's last successful connection")
@@ -344,7 +393,7 @@ def recover_once(nm, state, config, save, history_reader=update_history, clock=t
     visible = nm.ssids()
     now = clock()
     if ssid not in visible and (state["last_scan"] is None or now - state["last_scan"] >= COOLDOWN_SECONDS):
-        again, _ = candidate(nm.snapshot(), state["history"], config["profiles"])
+        again, _ = candidate(nm.snapshot(), state["history"], allowed)
         if again != selected:
             return skip("State changed before scan; deferred")
         state["last_scan"] = now
@@ -368,17 +417,20 @@ def recover_once(nm, state, config, save, history_reader=update_history, clock=t
         return "backoff"
     if not history_reader(nm.runner, state, nm.interface):
         return skip("Journal changed; deferred")
-    again, _ = candidate(nm.snapshot(), state["history"], config["profiles"])
+    snapshot = nm.snapshot()
+    allowed = eligible_profiles(nm, snapshot, state["history"])
+    again, _ = candidate(snapshot, state["history"], allowed)
     if (again != selected or state["first_seen"] is None
             or state["history"]["reset_us"] > state["first_seen"] * 1_000_000):
         return skip("Connection state changed; deferred")
-    validate_profile(nm.profile(selected), nm.interface, config["profiles"][selected])
-    if ssid not in nm.ssids() or not nm.has_saved_password(selected):
+    current_profile = nm.profile(selected)
+    validate_profile(current_profile, nm.interface, ssid)
+    if ssid not in nm.ssids() or not credentials_available(nm, selected, current_profile):
         return skip("Saved password or network unavailable; deferred")
     if nm.runner.remaining() < 55:
         return skip("Insufficient time for bounded activation; deferred")
     # Last read immediately before activation; never compete with another profile.
-    again, _ = candidate(nm.snapshot(), state["history"], config["profiles"])
+    again, _ = candidate(nm.snapshot(), state["history"], allowed)
     if again != selected:
         return skip("Connection state changed immediately before recovery")
     state["last_attempt"] = clock()
@@ -464,13 +516,10 @@ def owned(path):
 
 
 def validate_config(config):
-    if (not isinstance(config, dict) or config.get("version") != 2
+    if (not isinstance(config, dict) or config.get("version") != 3
             or not re.fullmatch(r"[A-Za-z0-9_.-]{1,15}", config.get("interface", ""))
-            or not isinstance(config.get("profiles"), dict) or not config["profiles"]):
-        raise RecoveryError("Invalid installed configuration")
-    for key, value in config["profiles"].items():
-        if not valid_uuid(key) or value not in TRUSTED_SSIDS:
-            raise RecoveryError("Invalid allowed profile configuration")
+            or config.get("profile_mode") != "dynamic"):
+        raise RecoveryError("Install this version to enable dynamic Wi-Fi profile discovery")
     return config
 
 
@@ -509,7 +558,7 @@ def check():
             save(state)
 
 
-def discover(runner, interface=None, selected_profiles=None):
+def discover(runner, interface=None):
     discovery = NetworkManager(runner, "")
     if not interface:
         listing = discovery.query("-f", "DEVICE,TYPE,STATE", "device", "status")
@@ -519,49 +568,17 @@ def discover(runner, interface=None, selected_profiles=None):
             if len(parts) == 3 and parts[1] == "wifi" and parts[2] in ("connected", "connected (externally)"):
                 interfaces.append(parts[0])
         if len(interfaces) != 1:
-            raise RecoveryError("Connect to the trusted Wi-Fi first; if multiple adapters are connected, add --interface NAME")
+            raise RecoveryError("Connect to Wi-Fi first; if multiple adapters are connected, add --interface NAME")
         interface = interfaces[0]
     if not re.fullmatch(r"[A-Za-z0-9_.-]{1,15}", interface):
         raise RecoveryError("Unsupported interface name")
     nm = NetworkManager(runner, interface)
     current = nm.snapshot()
     if (current["type"] != "wifi" or current["state"] != 100 or current["radio"] != "enabled"
-            or current["autoconnect"] != "yes" or not valid_uuid(current["uuid"])):
-        raise RecoveryError("Install while the intended Wi-Fi adapter is connected with autoconnect enabled")
-    active_profile = nm.profile(current["uuid"])
-    active_ssid, _ = validate_profile(active_profile, interface, active=True)
-    if not nm.has_saved_password(current["uuid"]):
-        raise RecoveryError("The working connection has no system-managed saved password")
-    if selected_profiles:
-        candidates = list(dict.fromkeys(value.lower() for value in selected_profiles))
-        if current["uuid"] not in candidates:
-            raise RecoveryError("Explicit --profile list must include the currently working profile UUID")
-    else:
-        listing = nm.query("-f", "UUID,TYPE", "connection", "show")
-        candidates = [line.split(":")[0].lower() for line in listing.splitlines()
-                      if line.endswith(":802-11-wireless")]
-    profiles = {}
-    for profile_uuid in candidates:
-        if not valid_uuid(profile_uuid):
-            raise RecoveryError("Invalid profile UUID")
-        try:
-            profile = nm.profile(profile_uuid)
-            ssid, _ = validate_profile(profile, interface, active=profile_uuid == current["uuid"])
-            # Default enrollment covers this currently verified SSID and duplicates.
-            # Other networks require explicit --profile selection while connected.
-            if not selected_profiles and ssid != active_ssid:
-                continue
-            if not nm.has_saved_password(profile_uuid):
-                raise RecoveryError("No system-managed saved password")
-            profiles[profile_uuid] = ssid
-        except RecoveryError as error:
-            if selected_profiles or profile_uuid == current["uuid"]:
-                raise
-            log(f"Excluded saved profile {profile_uuid}: {error}")
-    if current["uuid"] not in profiles:
-        raise RecoveryError("Could not verify the working profile")
-    return validate_config({"version": 2, "host": socket.gethostname(),
-                            "interface": interface, "profiles": profiles})
+            or not valid_uuid(current["uuid"])):
+        raise RecoveryError("Install while the intended Wi-Fi adapter is connected")
+    return validate_config({"version": 3, "host": socket.gethostname(),
+                            "interface": interface, "profile_mode": "dynamic"})
 
 
 def unit_texts(interface):
@@ -605,7 +622,7 @@ def control(runner, *args, accepted=(0,)):
     return runner.run([SYSTEMCTL, *args], timeout=20, accepted=accepted)
 
 
-def install(interface=None, selected_profiles=None):
+def install(interface=None):
     require_root()
     for tool in (NMCLI, SYSTEMCTL, JOURNALCTL, "/usr/bin/python3"):
         if not Path(tool).is_file():
@@ -614,9 +631,8 @@ def install(interface=None, selected_profiles=None):
     if legacy.exists():
         raise RecoveryError("Earlier recovery timer found. First run: sudo python3 /usr/local/libexec/puddlejumper-wifi-recovery.py --uninstall")
     runner = Runner(240)
-    config = discover(runner, interface, selected_profiles)
-    for key, ssid in config["profiles"].items():
-        print(f"Allowed: {config['interface']} / {ssid} / {key}")
+    config = discover(runner, interface)
+    print(f"Interface: {config['interface']}; profiles: discovered dynamically, any SSID")
     # Check journal access before writing files; never force a network outage.
     trial = fresh_state(boot_id(), time.monotonic())
     update_history(runner, trial, config["interface"])
@@ -678,8 +694,7 @@ def status():
     config = installed_config()
     runner = Runner(40)
     print(f"Version: {VERSION}; interface: {config['interface']}")
-    for profile_uuid, ssid in config["profiles"].items():
-        print(f"Allowed: {ssid} / {profile_uuid}")
+    print("Profiles: discovered dynamically; newly saved Wi-Fi networks included automatically")
     for operation in ("is-enabled", "is-active"):
         result = control(runner, operation, NAME + ".timer", accepted=(0, 1, 3, 4))
         print(f"Timer {operation}: {result.stdout.strip()}")
@@ -720,14 +735,13 @@ def main():
     sub = parser.add_subparsers(dest="action", required=True)
     installer = sub.add_parser("install", help="Install using this machine's existing working Wi-Fi")
     installer.add_argument("--interface", help="Wi-Fi interface; automatically detected if omitted")
-    installer.add_argument("--profile", action="append", help="Allow an existing UUID; repeat to specify all allowed profiles")
     sub.add_parser("status", help="Show installed configuration and timer state")
     sub.add_parser("uninstall", help="Remove this addition")
     sub.add_parser("check", help="Internal timer entry point; use install for setup")
     args = parser.parse_args()
     try:
         if args.action == "install":
-            install(args.interface, args.profile)
+            install(args.interface)
         else:
             globals()[args.action]()
         return 0
