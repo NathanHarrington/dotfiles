@@ -4,3 +4,4 @@ tmux_generators/
 .codex
 __pycache__
 /.tmp/
+tmp/
